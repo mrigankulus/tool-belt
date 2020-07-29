@@ -1,0 +1,441 @@
+<br><br>
+
+<div class="columns with-borders" ng-if="EventTypeDetail.eventType.id">
+
+    <section class="flex-2">
+
+        <div class="alert alert-warning allow-ng-animate default-animation" ng-if="!EventTypeDetail.eventType.allowExternalUsers">
+            <p>This event type will <strong>not</strong> notify <strong>external users</strong> unless specified at event time. This can be changed in <a ui-sref="^.settings">settings</a>.</p>
+        </div>
+
+
+        <!-- SMS Template -->
+        <div class="form-group event-type-template-section" ng-if="EventTypeCompose.shouldShowSmsTemplate()">
+
+            <div class="pull-right">
+                <a class="btn btn-link btn-sm"
+                   ng-if="EventTypeCompose.shouldShowSmsTemplateBody()"
+                   ng-click="EventTypeCompose.removeSmsTemplate()">
+                    <i class="fa fa-trash error"></i>
+                </a>
+
+                <a class="btn btn-link btn-sm"
+                   ng-if="!EventTypeCompose.shouldShowSmsTemplateBody()"
+                   ng-click="EventTypeCompose.addSmsTemplate()">
+                    <i class="fa fa-plus-circle"></i>
+                </a>
+            </div>
+
+            <label>
+                <i class="fa fa-mobile"></i>
+                <span ng-if="EventTypeCompose.shouldShowSmsTemplateBody()">SMS Content</span>
+                <span ng-if="!EventTypeCompose.shouldShowSmsTemplateBody()"
+                      ng-click="EventTypeCompose.addSmsTemplate()"
+                      class="clickable">SMS Content</span>
+            </label>
+
+            <section ng-if="EventTypeCompose.shouldShowSmsTemplateBody()">
+                <p><small>This will be used for SMS Texts. HTML is not supported in this field.</small></p>
+
+                <label class="secondary-label">Message</label>
+
+                <div class="token-supported-input-wrapper">
+                    <token-supported-message></token-supported-message>
+
+                    <textarea msd-elastic
+                              mentio
+                              id="smsMessageInput"
+                              ng-model="EventTypeCompose.smsContentTemplate.content"
+                              rows="1"
+                              placeholder="Add tokens by typing curly braces"
+                              class="no-textarea"></textarea>
+                </div>
+
+                <token-typeahead-menu input-id="'smsMessageInput'"
+                                      starter-token-list="EventTypeCompose.allTokens"></token-typeahead-menu>
+            </section>
+
+        </div>
+
+
+        <!-- InApp Template -->
+        <div class="form-group event-type-template-section">
+            <label><i class="fa fa-bell-o"></i> In-App Content</label>
+
+            <p><small>This will be used for In-app Notifications. HTML is not supported in this field.</small></p>
+
+            <label class="secondary-label">Message</label>
+
+            <div class="token-supported-input-wrapper">
+                <token-supported-message></token-supported-message>
+
+                <textarea msd-elastic
+                          mentio
+                          id="inAppMessageInput"
+                          ng-model="EventTypeCompose.smallContentTemplate.content"
+                          rows="1"
+                          placeholder="Add tokens by typing curly braces"
+                          class="no-textarea"></textarea>
+            </div>
+
+            <token-typeahead-menu input-id="'inAppMessageInput'"
+                                  starter-token-list="EventTypeCompose.allTokens"></token-typeahead-menu>
+
+        </div>
+
+
+        <!-- Feed Template -->
+        <div class="form-group event-type-template-section">
+            <div class="pull-right">
+                <a class="btn btn-link btn-sm"
+                   ng-if="EventTypeCompose.shouldShowFeedTemplateBody()"
+                   ng-click="EventTypeCompose.removeFeedTemplate()">
+                    <i class="fa fa-trash error"></i>
+                </a>
+
+                <a class="btn btn-link btn-sm"
+                   ng-if="!EventTypeCompose.shouldShowFeedTemplateBody()"
+                   ng-click="EventTypeCompose.addFeedTemplate()">
+                    <i class="fa fa-plus-circle"></i>
+                </a>
+            </div>
+
+            <label>
+                <i class="fa fa-comments-o"></i>
+                <span ng-if="EventTypeCompose.shouldShowFeedTemplateBody()">Feed Content</span>
+                <span ng-if="!EventTypeCompose.shouldShowFeedTemplateBody()"
+                      ng-click="EventTypeCompose.addFeedTemplate()"
+                      class="clickable">
+                  Feed Content &nbsp;&middot;&nbsp;
+                  <small style="font-weight: normal;">Defaults to InApp template.</small>
+              </span>
+            </label>
+
+            <section ng-if="EventTypeCompose.shouldShowFeedTemplateBody()">
+                <p><small>This will be used for the Activity Feed. HTML is not supported in the subject field. This field is supported in the wwt-activity-feed from v4.2.7.</small></p>
+
+                <label class="secondary-label">Subject</label>
+
+                <div class="token-supported-input-wrapper">
+                    <token-supported-messge></token-supported-message>
+
+                    <textarea msd-elastic
+                              mentio
+                              mentio-typed-text="typedTerm"
+                              id="feedTextSubjectInput"
+                              ng-model="EventTypeCompose.feedContentTemplate.subject"
+                              rows="1"
+                              placeholder="Subject"
+                              class="no-textarea"></textarea>
+                </div>
+
+                <token-typeahead-menu input-id="'feedTextSubjectInput'"
+                                      starter-token-list="EventTypeCompose.allTokens"></token-typeahead-menu>
+
+                <br>
+
+                <label class="secondary-label">Message</label>
+
+                <p>
+                    <small>
+                        Not Recommended
+                        <i class="fa fa-question-circle muted"
+                           uib-popover="Try to only use the subject where possible. This field is mainly here to support basic things like line breaks and links. While this field supports some HTML, a lot of styling will be stripped. This field should remain as clean and simple as possible. You should feel free to use this feature if you have a good use case, but consider that this will show up in different UIs in different formats."
+                           popover-trigger="mouseenter"
+                           popover-popup-delay="300"></i>
+                    </small>
+                </p>
+
+                <div class="token-supported-input-wrapper">
+                    <token-supported-message></token-supported-message>
+
+                    <textarea msd-elastic
+                              mentio
+                              id="feedContentTemplateMessageInput"
+                              ng-model="EventTypeCompose.feedContentTemplate.content"
+                              rows="1"
+                              placeholder="Add tokens by typing curly braces"
+                              class="no-textarea"></textarea>
+                </div>
+
+                <token-typeahead-menu input-id="'feedContentTemplateMessageInput'"
+                                      starter-token-list="EventTypeCompose.allTokens"></token-typeahead-menu>
+            </section>
+        </div>
+
+
+        <!-- Email Template -->
+        <div class="form-group event-type-template-section" ng-if="EventTypeDetail.eventType.tokens">
+            <div class="pull-right">
+                <a class="btn btn-link btn-sm"
+                   ng-if="EventTypeCompose.shouldShowEmailTemplateBody()"
+                   ng-click="EventTypeCompose.removeEmailTemplate()">
+                    <i class="fa fa-trash error"></i>
+                </a>
+
+                <a class="btn btn-link btn-sm"
+                   ng-if="!EventTypeCompose.shouldShowEmailTemplateBody()"
+                   ng-click="EventTypeCompose.addEmailTemplate()">
+                    <i class="fa fa-plus-circle"></i>
+                </a>
+            </div>
+
+            <label>
+                <i class="fa fa-envelope-o"></i>
+                <span ng-if="EventTypeCompose.shouldShowEmailTemplateBody()">Email Content</span>
+                <span ng-if="!EventTypeCompose.shouldShowEmailTemplateBody()"
+                      ng-click="EventTypeCompose.addEmailTemplate()"
+                      class="clickable">
+                  Email Content
+              </span>
+            </label>
+
+            <section ng-if="EventTypeCompose.shouldShowEmailTemplateBody()">
+
+                <p><small>This will be used for email message content.</small></p>
+
+                <div uib-dropdown>
+                    <a href uib-dropdown-toggle>{{ EventTypeCompose.getActiveEmailTemplate()._id || 'Default Template' }} <i class="fa fa-caret-down"></i></a>
+
+                    <ul class="dropdown-menu" uib-dropdown-menu>
+                        <li ng-repeat="template in EventTypeCompose.emailContentTemplates"
+                            ng-class="{'active': template.uiState.isActiveInView}">
+
+                            <a class="clickable"
+                               ng-click="EventTypeCompose.setEmailTemplateAsActive(template)">
+                                {{ template.uiState.isDefault ? 'Default Template' : (template._id || 'new')}}
+                            </a>
+                        </li>
+
+                        <li><a class="clickable" ng-click="EventTypeCompose.prepNewEmailTemplate()"><i class="fa fa-plus-circle"></i> Create New</a></li>
+                    </ul>
+                </div>
+
+                <br>
+
+                <div ng-repeat="template in EventTypeCompose.emailContentTemplates" ng-if="template.uiState.isActiveInView">
+
+                    <div ng-if="!template.uiState.isDefault">
+                        <label>Condition</label>
+                        <p><small>Use a condition based on your tokens to determine when this template will be used.</small></p>
+
+                        <div class="columns with-borders">
+                            <section class="flex-2">
+                                <ui-select required="true"
+                                           ng-model="template.condition.tokenPath"
+                                           ui-select-focus-input
+                                           title="Select a Token">
+
+                                    <ui-select-match placeholder="Select a Token...">{{ $select.selected.propertyPath }}</ui-select-match>
+
+                                    <ui-select-choices repeat="token.propertyPath as token in EventTypeDetail.eventType.tokens | filter:$select.search | orderBy: 'tokenName'">
+                                        {{ token.propertyPath }}
+                                    </ui-select-choices>
+
+                                </ui-select>
+                            </section>
+
+                            <section>
+                                <ui-select required="true"
+                                           ng-model="template.condition.operator"
+                                           ui-select-focus-input
+                                           title="Select a Operator">
+
+                                    <ui-select-match placeholder="Select an Operator...">{{ $select.selected }}</ui-select-match>
+
+                                    <ui-select-choices repeat="operator in ['==', '!='] | filter:$select.search">
+                                        {{ operator }}
+                                    </ui-select-choices>
+
+                                </ui-select>
+                            </section>
+
+                            <section class="flex-2">
+                                <input class="no-input" placeholder="Value" ng-model="template.condition.value">
+                            </section>
+                        </div>
+
+                        <br>
+
+                        <label>Template ID</label>
+                        <p><small>The ID is a technical distinction and will not be seen by users.</small></p>
+
+                        <textarea class="no-textarea" rows="1" placeholder="my-sweet-template" ng-model="template._id" ng-change="EventTypeCompose.validateEmailTemplateId(template)"></textarea>
+
+                        <br>
+                    </div>
+
+                    <label class="secondary-label">Subject</label>
+
+                    <div class="token-supported-input-wrapper">
+                        <token-supported-messge></token-supported-message>
+
+                        <textarea msd-elastic
+                                  mentio
+                                  mentio-typed-text="typedTerm"
+                                  id="emailTextSubjectInput"
+                                  ng-model="template.subject"
+                                  rows="1"
+                                  placeholder="Subject"
+                                  class="no-textarea"></textarea>
+                    </div>
+
+                    <token-typeahead-menu input-id="'emailTextSubjectInput'"
+                                          starter-token-list="EventTypeCompose.allTokens"></token-typeahead-menu>
+
+                    <br>
+
+                    <label class="secondary-label">Message</label>
+
+                    <div class="token-supported-input-wrapper">
+                        <token-supported-message></token-supported-message>
+
+                        <textarea msd-elastic
+                                  mentio
+                                  mentio-typed-text="typedTerm"
+                                  ng-model="template.content"
+                                  id="emailTextInput"
+                                  rows="4"
+                                  placeholder="Add tokens by typing curly braces"
+                                  class="no-textarea"></textarea>
+                    </div>
+
+                    <div class="" ng-if="!template.uiState.isDefault">
+                        <br>
+                        <a class="btn btn-danger btn-sm" ng-click="EventTypeCompose.deleteEmailTemplate(template._id)">
+                            <i class="fa fa-trash"></i> Delete Conditional Template
+                        </a>
+                    </div>
+
+                    <token-typeahead-menu input-id="'emailTextInput'"
+                                          starter-token-list="EventTypeCompose.allTokens"></token-typeahead-menu>
+                </div>
+                <br ng-if="!EventTypeCompose.hasReceiptTemplate()">
+
+                <a class="btn btn-link btn-sm" ng-if="!EventTypeCompose.hasReceiptTemplate()" ng-click="EventTypeCompose.createReceiptTemplate()">
+                    Add Receipt Template
+                     <i class="fa fa-question-circle"
+                        popover-trigger="mouseenter"
+                        popover-popup-delay="600"
+                        uib-popover="Add an email receipt template to send an email to the user who triggered the event. Ex: 'You're request has been received and is being processed.'"></i>
+                </a>
+            </token-supported-messge>
+        </div>
+
+        <div class="form-group event-type-template-section" ng-if="EventTypeCompose.hasReceiptTemplate()">
+
+            <label>Receipt Template Content</label>
+
+            <p><small>This will be used to send an email "receipt" to the user requesting the action.</small></p>
+
+            <p><small><i class="fa fa-warning"></i> You'll need to include the user object in your message to as "actorUser" to satisfy the "actorUserName" token. Check the playground for hints as to what your message should look like.</small></p>
+
+            <label class="secondary-label">Subject</label>
+
+            <div class="token-supported-input-wrapper">
+                <token-supported-message></token-supported-message>
+
+                <textarea msd-elastic
+                          mentio
+                          mentio-typed-text="typedTerm"
+                          id="emailTextSubjectInput"
+                          ng-model="EventTypeCompose.receiptContentTemplate.subject"
+                          rows="1"
+                          placeholder="Subject"
+                          class="no-textarea"></textarea>
+            </div>
+
+            <token-typeahead-menu input-id="'emailTextSubjectInput'"
+                                  starter-token-list="EventTypeCompose.allTokens"></token-typeahead-menu>
+
+            <br>
+
+            <label class="secondary-label">Message</label>
+
+            <div class="token-supported-input-wrapper">
+                <token-supported-message></token-supported-message>
+
+                <textarea msd-elastic
+                          mentio
+                          mentio-typed-text="typedTerm"
+                          ng-model="EventTypeCompose.receiptContentTemplate.content"
+                          id="emailTextInput"
+                          rows="4"
+                          placeholder="Add tokens by typing curly braces"
+                          class="no-textarea"></textarea>
+            </div>
+
+            <token-typeahead-menu input-id="'emailTextInput'"
+                                  starter-token-list="EventTypeCompose.allTokens"></token-typeahead-menu>
+
+            <br>
+            <a class="btn btn-link btn-sm" ng-click="EventTypeCompose.removeReceipt()">Delete Receipt Template</a>
+
+        </div>
+        <!-- end receipt form -->
+
+
+        <div class="form-actions sticky-bottom split" ng-if="!EventTypeCompose.isPromptingToPauseNotification && !EventTypeCompose.isPromptingToResumeNotification">
+
+            <section>
+                <button class="btn btn-primary" ng-click="EventTypeCompose.update()"> Save
+                    <i class="fa fa-spinner fa-spin" ng-if="EventTypeCompose.isWorking"></i>
+                    <i class="fa fa-thumbs-up" ng-if="EventTypeCompose.isFinishedWorking"></i>
+                </button>
+            </section>
+
+            <section>
+                <a class="btn btn-link" ng-if="!EventTypeDetail.eventType.pauseNotifications"
+                   ng-click="EventTypeCompose.isPromptingToPauseNotification = true"> Disable Notifications
+                    <i class="fa fa-question-circle" popover-trigger="mouseenter" popover-popup-delay="300"
+                       uib-popover="Disable Notifications will temporarily disable all notifications from being sent for {{ EventTypeDetail.eventType.title }}."></i>
+                </a>
+
+                <a class="btn btn-link" ng-if="EventTypeDetail.eventType.pauseNotifications"
+                   ng-click="EventTypeCompose.isPromptingToResumeNotification = true"> Resume Notifications
+                    <i class="fa fa-question-circle" popover-trigger="mouseenter" popover-popup-delay="300"
+                       uib-popover="Resume Notifications will re-enable all notifications for {{ EventTypeDetail.eventType.title }}."></i>
+                </a>
+            </section>
+
+        </div>
+
+        <div class="form-actions split inline-prompt" ng-if="EventTypeCompose.isPromptingToPauseNotification">
+            <section>
+                <button type="submit" class="btn btn-warning"
+                        ng-click="EventTypeCompose.pauseNotifications()"> Disable</button>
+                <a class="btn btn-link" ng-click="EventTypeCompose.closePauseNotificationsForms()"> Cancel</a>
+            </section>
+
+            <section>
+                <p>Are you sure you want to <strong>Disable</strong> Notifications <br> for <strong>{{ EventTypeDetail.eventType.title }}</strong> Event Type?</p>
+            </section>
+        </div>
+
+        <div class="form-actions split inline-prompt" ng-if="EventTypeCompose.isPromptingToResumeNotification">
+            <section>
+                <button type="submit" class="btn btn-warning" ng-click="EventTypeCompose.resumeNotifications()"> Resume</button>
+                <a class="btn btn-link" ng-click="EventTypeCompose.closePauseNotificationsForms()"> Cancel</a>
+            </section>
+
+            <section>
+                <p>Are you sure you want to <strong>Resume</strong> Notifications <br> for <strong>{{ EventTypeDetail.eventType.title }}</strong> Event Type?</p>
+            </section>
+        </div>
+
+    </section>
+
+    <section>
+        <ng-include src="'events/child-views/tokens/eventTypeComposeTokens.html'"
+                    ng-controller="EventTypeComposeTokensCtrl as EventTypeComposeTokens"></ng-include>
+
+        <br>
+
+        <hr class="double-line">
+
+        <ng-include src="'events/child-views/actions/eventTypeComposeActions.html'"
+                    ng-controller="EventTypeComposeActionsCtrl as EventTypeComposeActions"></ng-include>
+
+    </section>
+
+</div>

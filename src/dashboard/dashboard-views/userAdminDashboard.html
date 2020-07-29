@@ -1,0 +1,98 @@
+<div class="user-admin-dashboard container">
+
+    <ng-include src="'dashboard/widgets/welcomeBlock.html'" ng-controller="WelcomeBlockCtrl as WelcomeBlock"></ng-include>
+
+    <div class="user-admin-dashboard-header columns" hl-sticky offset-top="95">
+
+        <section>
+            <h4 class="application">Recent Applications</h4>
+        </section>
+
+        <section>
+            <h4 class="partner">Recent Partners</h4>
+        </section>
+
+        <section>
+            <h4 class="profile">Recent Groups</h4>
+        </section>
+
+        <section>
+            <h4 class="user">Recent Users</h4>
+        </section>
+
+    </div>
+
+    <div class="user-admin-recently-viewed columns">
+
+        <section>
+
+            <div class="cards-full allow-ng-animate default-animation application" ng-if="Dashboard.recentApps && Dashboard.recentApps.length">
+                <app-card app="app" ng-repeat="app in Dashboard.recentApps" analytics=" 'Dashboard', 'Recently Viewed Asset Clicked', 'Application' "></app-card>
+            </div>
+
+            <div class="recently-viewed-blank-slate" ui-sref="applications" auto-focus="#secondarySearchInput">
+                <i class="fa fa-search"></i>
+                <p>Search Applications</p>
+            </div>
+
+        </section>
+
+        <section>
+
+            <div class="cards-full allow-ng-animate default-animation" ng-if="Dashboard.recentPartners && Dashboard.recentPartners.length">
+                <partner-card partner="partner" ng-repeat="partner in Dashboard.recentPartners" analytics=" 'Dashboard', 'Recently Viewed Asset Clicked', 'Partner' "></partner-card>
+            </div>
+
+            <div class="recently-viewed-blank-slate" ui-sref="partners" auto-focus="#secondarySearchInput">
+                <i class="fa fa-search"></i>
+                <p>Search Partners</p>
+            </div>
+
+        </section>
+
+        <section>
+
+            <div class="cards-full allow-ng-animate default-animation" ng-if="Dashboard.recentGroups && Dashboard.recentGroups.length">
+
+                <section class="card-outer asset-card" ng-repeat="group in Dashboard.recentGroups">
+
+                    <a class="card-inner clickable"
+                       analytics=" 'Dashboard', 'Recently Viewed Asset Clicked', 'Group' "
+                       ui-sref="groups.groupDetail({id: group.id})" tabindex="0">
+
+                        <div class="columns">
+                            <section class="flex-3">
+                                <h3 class="card-header">{{ group.title }}</h3>
+                                <p class="card-content">{{ group.description }}</p>
+                            </section>
+                        </div>
+
+                    </a>
+
+                </section>
+
+            </div>
+
+            <div class="recently-viewed-blank-slate" ui-sref="groups" auto-focus="#secondarySearchInput">
+                <i class="fa fa-search"></i>
+                <p>Search Groups</p>
+            </div>
+
+        </section>
+
+        <section>
+
+            <div class="cards-full allow-ng-animate default-animation" ng-if="Dashboard.recentUsers && Dashboard.recentUsers.length">
+                <user-card user="user" ng-repeat="user in Dashboard.recentUsers | orderBy: 'fullName'"></user-card>
+            </div>
+
+            <div class="recently-viewed-blank-slate" ui-sref="users" auto-focus="#secondarySearchInput">
+                <i class="fa fa-search"></i>
+                <p>Search Users</p>
+            </div>
+
+        </section>
+
+    </div>
+
+</div>

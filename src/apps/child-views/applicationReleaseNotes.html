@@ -1,0 +1,24 @@
+<br><br>
+
+<div class="blank-slate-tab">
+    <section>
+        <p>
+            If you are using the Vue or Angular Release Notes component in your app,
+            you can upload a markdown file here and then load this resource in using the URL above.
+            The component will render the markdown for you. Please see the respective component
+            for documentation on using a remote resource to load release notes.
+        </p>
+    </section>
+</div>
+
+<br><br>
+<section class="application-release-notes" ng-if="attachmentsSettings">
+    <wwt-att-single-file wwt-attachments-settings="attachmentsSettings"></wwt-att-single-file>
+</section>
+
+<h2>Usage</h2>
+
+<p>In the <a href="https://github.wwt.com/custom-apps/release-notes" target="_blank">Angular component</a>, you may want to look at <a href="https://github.wwt.com/custom-apps/order-status-ui" target="_blank">Order Status</a> as an example of loading in a remote resource for release notes.</p>
+<p>In the <a href="https://github.wwt.com/custom-apps/vue-wwt-release-notes" target="_blank">Vue Release Notes component</a>, you can copy this snippet. It has already been pre-filled with your application's name:</p>
+
+<pre>{{ vueComponentExample }}</pre>

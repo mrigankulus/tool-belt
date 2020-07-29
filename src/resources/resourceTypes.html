@@ -1,0 +1,95 @@
+<br>
+
+<div class="container resource allow-ng-animate default-animation" ng-if="ResourceTypes.canViewResources">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>
+                        Resource Types
+                         <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/resource-types" target="_blank">JSON</a>
+                    </h1>
+
+                    <p>Resource Types are main data objects of a particular WWT application. For example, in the Quote System application a resource type might be a quote. The Resource Types portion of the Resources API can serve as a normalized list of data objects for the various WWT applications.</p>
+
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95">
+                    <section>
+
+                        <div class="resource-types-search">
+                            <i class="fa fa-search"></i>
+
+                            <input id="secondarySearchInput"
+                                   type="text"
+                                   class="no-input"
+                                   ng-model="ResourceTypes.resourceTypeSearchText"
+                                   tabindex="0"
+                                   placeholder="Search Resource Types" />
+                        </div>
+
+                    </section>
+
+                    <section class="item-detail-header-actions">
+                        <a class="btn btn-link btn-xs" ui-sref="importExport">Import/Export</a>
+
+                        <button class="btn btn-primary btn-xs" ng-click="wwtFocusPanelSVC.togglePanel('newResourceTypeForm')" auto-focus="#resourceTypeTitle">
+                            <i class="fa fa-plus"></i> Add New Resource Type
+                        </button>
+                    </section>
+                </div>
+
+                <div class="primary-loader" ng-class="{active: ResourceTypes.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+                <section>
+                    <h3 class="divider-title" ng-if="ResourceTypes.recentResourceTypes.length && !ResourceTypes.resourceTypeSearchText"><span>Recently Viewed</span></h3>
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="ResourceTypes.resourceTypes && ResourceTypes.resourceTypes.length">
+
+                        <section class="card-outer" ng-repeat="resourceType in ResourceTypes.recentResourceTypes">
+
+                            <a class="card-inner clickable" ui-sref="resourceTypeDetail({id: resourceType.id})" tabindex="0">
+                                <h3 class="card-header">{{ resourceType.title }}</h3>
+
+                                <p class="card-content">{{ resourceType.description }}</p>
+                            </a>
+
+                        </section>
+
+                    </div>
+                </section>
+
+                <section>
+                    <h3 class="divider-title" ng-if="ResourceTypes.resourceTypes.length && !ResourceTypes.resourceTypeSearchText"><span>All</span></h3>
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="ResourceTypes.resourceTypes && ResourceTypes.resourceTypes.length">
+                        <section class="card-outer" ng-repeat="resourceType in ResourceTypes.resourceTypes | filter: ResourceTypes.resourceTypeSearchText | orderBy: 'title'">
+                            <a class="card-inner clickable" ui-sref="resourceTypeDetail({id: resourceType.id})" tabindex="0">
+                                <h3 class="card-header">{{ resourceType.title }}</h3>
+
+                                <p class="card-content">{{ resourceType.description }}</p>
+                            </a>
+
+                        </section>
+
+                    </div>
+                </section>
+
+            </section>
+        </main>
+
+    </article>
+
+    <wwt-focus-panel panel-name="'newResourceTypeForm'"
+                     position="'right'"
+                     header-text="'New Resource Type'"
+                     header-icon="'plus-circle'"
+                     backdrop="true">
+
+        <ng-include src="'resources/newResourceType.html'" ng-controller="NewResourceTypeCtrl as NewResourceType"></ng-include>
+    </wwt-focus-panel>
+
+</div>

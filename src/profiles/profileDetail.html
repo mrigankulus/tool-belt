@@ -1,0 +1,74 @@
+<br>
+
+<div class="container allow-ng-animate default-animation" ng-if="ProfileDetail.canViewProfiles">
+    <article class="item-detail profile">
+        <main>
+            <header class="item-header">
+                <section>
+                    <div class="asset-icon"><i>P</i></div>
+                </section>
+
+                <section>
+                    <h1>{{ ProfileDetail.profile.name }}</h1>
+
+                    <p>{{ ProfileDetail.profile.description }}</p>
+
+                    <p>
+                        <a class="clickable" ng-click="ProfileDetail.historyPanelIsOpen = true"><i class="fa fa-history"></i> History</a>
+
+                        &nbsp;
+                        |
+                        &nbsp;
+
+                        <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/profiles/{{ ProfileDetail.profile.id }}" target="_blank">JSON</a>
+                    </p>
+                </section>
+
+                <section class="item-header-watch-button">
+                    <dtb-resource-watcher dtb-resource-watcher-settings="ProfileDetail.watcherSettings"></dtb-resource-watcher>
+                </section>
+            </header>
+
+            <div class="alert alert-warning" style="margin-top: 20px;" ng-if="ProfileDetail.groupDetailUrl">
+                <div class="pull-right" style="margin-top: -5px;">
+                    <a ng-href="{{ ProfileDetail.groupDetailUrl }}" class="btn btn-primary btn-sm pull-right">Manage Group</a>
+                    <a ng-href="{{ aboutProfileGroupConversionUrl }}" class="btn btn-link pull-right">More Info</a>
+                </div>
+                Profiles have been converted to groups. Please <a ng-href="{{ ProfileDetail.groupDetailUrl }}">manage the group</a> instead as the profile section will be removed in an upcoming release.
+            </div>
+
+            <section class="item-detail-content allow-ng-animate default-animation" ng-if="ProfileDetail.profile && ProfileDetail.profile.name">
+                <div class="item-detail-content-header short" hl-sticky offset-top="95">
+                    <ul class="nav nav-tabs">
+                        <li ng-repeat="tab in ProfileDetail.tabs"
+                            ui-sref-active="active"
+                            ng-class="{'pull-right': tab.slug === 'settings'}">
+
+                            <a ui-sref="profileDetail.{{ tab.slug }}" style="text-transform: capitalize;">
+                                <i class="fa fa-cog" ng-if="tab.slug === 'settings'"></i>
+                                 {{ ProfileDetail.getFriendlyTabTitle(tab.displayName) }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <ui-view></ui-view>
+            </section>
+        </main>
+    </article>
+</div>
+
+<div class="slide-in-panel sip-right allow-ng-animate"
+     ng-if="ProfileDetail.historyPanelIsOpen">
+
+    <header class="sip-header">
+        <h3>History</h3>
+        <i class="fa fa-history"></i>
+    </header>
+
+    <section class="sip-body" wwt-scroll-trap="historyPanelScrollTrap">
+        <wwt-resource-event-stream wwt-resource-event-stream-settings="ProfileDetail.resourceEventStreamSettings"></wwt-resource-event-stream>
+    </section>
+</div>
+
+<div class="page-overlay allow-ng-animate" ng-if="ProfileDetail.historyPanelIsOpen" ng-click="ProfileDetail.historyPanelIsOpen = false"></div>

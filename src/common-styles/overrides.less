@@ -1,0 +1,411 @@
+// ----- Attachmnets
+// -------------------------
+.att-list {
+    min-height: 175px;
+    margin-top: 10px;
+}
+
+.att.lgPanel {
+    flex: 0 1 33%;
+}
+
+.att dt {
+    min-height: 175px;
+}
+
+.att-blank-slate {
+    margin-top: 50px;
+}
+
+
+// ------- bootstrap tooltips
+// -----------------------------------
+.tooltip {
+    font-weight: 500;
+}
+
+
+// ------- bootstrap alerts
+// -----------------------------------
+.alert {
+    border-radius: 0;
+
+    &.allow-ng-animate {
+        transition: all 0.3s;
+
+        &.ng-enter,
+        &.ng-leave.ng-leave-active {
+            opacity: 0;
+        }
+
+        &.ng-leave,
+        &.ng-enter.ng-enter-active {
+            opacity: 1;
+        }
+
+    }
+}
+
+// ------- bootstrap nav-pills
+// -----------------------------------
+.nav-pills-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.nav-pills>li>a {
+    color: #8C8C8C;
+    padding: 5px 10px;
+    border-radius: 0;
+    border-bottom: 1px solid transparent;
+
+    &:hover {
+        background: none;
+        border-bottom: 1px solid #f5f5f5;
+    }
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus {
+    background: none;
+    color: #8C8C8C;
+    border-bottom: 1px solid #ccc;
+}
+
+// ------- bootstrap panels
+// -----------------------------------
+.panel {
+    border-radius: 0;
+    box-shadow: 0 0;
+}
+
+.panel-default > .panel-heading {
+    background: rgba(245, 245, 245, 0.39);
+}
+
+.panel-new {
+    border-style: dashed;
+}
+
+.panel-highlight-on-hover {
+    transition: all 0.3s;
+    opacity: 0.2;
+}
+
+.panel:hover {
+    .panel-highlight-on-hover {
+        opacity: 1;
+    }
+}
+
+.panel[drop] {
+    position: relative;
+
+    &:after {
+        content: "Drop Permission to add to this role.";
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: rgba(255, 255, 255, 0.75);
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: 0.3s;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    &.drag-over-accept:after {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.panel-prompt {
+    position: absolute;
+    background: @errorColor;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 60px;
+    color: #fff;
+    font-weight: 600;
+    z-index: 1;
+    transition: all 0.3s;
+    opacity: 1;
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+}
+
+.permissions-panels {
+    display: flex;
+    flex-wrap: wrap;
+
+    > * {
+        flex: 1 48%;
+        max-width: 48%;
+        height: 290px;
+        border-top-right-radius: 3px;
+        border-top-left-radius: 3px;
+
+        &:nth-child(odd) {
+            margin-right: 4%;
+        }
+    }
+
+    [draggable] {
+        cursor: move;
+        cursor: -webkit-grab;
+    }
+
+    .panel-heading .fa-cog {
+        color: #ccc;
+    }
+
+    h5 {
+        .muted;
+        text-transform: uppercase;
+        // text-align: center;
+        font-size: 12px;
+    }
+
+    .panel-heading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 40px;
+        width: 100%;
+        z-index: 1;
+    }
+
+    .panel-default > .panel-heading {
+        color: #F4F4F4;
+        background: #393f45;
+        font-weight: 600;
+    }
+
+    .panel-default > .panel-heading .muted {
+        color: rgba(202, 201, 201, 0.5);
+        transition: all 0.3s;
+
+        &:hover {
+            color: rgba(202, 201, 201, 0.7);
+        }
+    }
+
+    .nav-tabs {
+        position: absolute;
+        top: 40px;
+        padding-left: 8px;
+        background: #f4f7f9;
+        text-transform: uppercase;
+        font-size: 12px;
+        z-index: 1;
+    }
+
+    .panel-body {
+        padding-top: 105px;
+
+        &.is-editing {
+            padding-top: 50px;
+            height: 100%;
+            overflow: auto;
+        }
+    }
+
+    .app-permissions-link {
+        padding: 8px 12px 4px;
+        position: absolute;
+        top: 78px;
+        right: 0;
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 1px 3px #fff;
+        width: 100%;
+        font-size: 13px;
+        color: #7c848c;
+        text-align: right;
+
+        &.is-form-toggled {
+            background: #fff;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            box-shadow: 0 3px 3px -3px #ccc;
+            text-align: left;
+        }
+
+        span.clickable:hover {
+            color: #0a6aa6;
+        }
+    }
+
+    .nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
+        border-top-color: transparent;
+    }
+}
+
+// ------- emojis
+// -----------------------------------
+@import (inline) "../../node_modules/ng-emoticons/dist/ng-emoticons.min.css";
+
+.emoticon {
+    // make it a little smaller without having to deal with
+    // tweaking the sprite
+    transform: scale(.84);
+}
+
+@media (-webkit-min-device-pixel-ratio: 1.5), not all, not all, (min-resolution: 144dpi) {
+  .emoticon {
+    background-image: url(img/emojis@2x.png);
+  }
+}
+
+@media (-webkit-min-device-pixel-ratio: 1), not all, not all, not all, (min-resolution: 96dpi) {
+  .emoticon {
+    background-image: url(img/emojis.png);
+  }
+}
+
+// ---------- wwt-focus-panel
+// ----------------------------------------
+.focus-panel-container.fp-right,
+.focus-panel-container.fp-left {
+    top: 95px;
+}
+
+.focus-panel-overlay {
+    background: rgba(255, 255, 255, 0.40);
+}
+
+.focus-panel-container {
+    width: 35%;
+    min-width: 460px;
+    transition: all .2s;
+}
+
+// ------- Select2 Overrides
+// -----------------------------------
+.ui-select-container[theme="select2"].direction-up .ui-select-dropdown .select2-search,
+.ui-select-container.select2.direction-up .ui-select-dropdown .select2-search {
+    margin-top: 0;
+}
+
+.ui-select-container[theme="select2"].direction-up .ui-select-dropdown,
+.ui-select-container.select2.direction-up .ui-select-dropdown {
+    border-radius: 0;
+    box-shadow: 0 0;
+}
+
+.direction-up .select2-drop .select2-search input,
+.direction-up .select2-drop.select2-drop-above .select2-search input {
+    border-top: none;
+}
+
+
+// ------- Cron Job selector overrides
+// -----------------------------------
+.cron-select-wrap .cron-select {
+    width: 90px;
+    height: 30px;
+}
+
+// ------- Activity Feed
+// ------------------------------------
+.wwt-activity-feed {
+    wwt-resource-watcher {
+        // todo: remove this when there is a toggle in component
+        // to ignore it. https://github.wwt.com/custom-apps/wwt-activity-feed/issues/3
+        display: none !important;
+    }
+}
+
+// ------- App Toolbar POC overrides
+// ------------------------------------
+.navigation {
+    top: 42px;
+}
+
+
+highchart {
+    display: block;
+}
+
+// ------- wwt-tasks overrides
+// ------------------------------------
+.task-list-item {
+    padding-left: 0;
+}
+
+.tl-complete-task {
+    display: none !important;
+}
+
+.task-list-item-actions {
+    // if/when we want to allow editing from this view.
+    display: none !important;
+}
+
+.task-list-item-meta>* {
+    display: inherit;
+    max-width: inherit;
+    white-space: inherit;
+    overflow: inherit;
+    text-overflow: inherit;
+
+    span:after {
+        content: "\b7\a0";
+    }
+
+    span:last-child:after {
+        content: "";
+    }
+}
+
+// ------- wwt-icon-font overrides
+// ------------------------------------
+
+[class^='wwt-icon-'] {
+    display: inline-block;
+    width: 1.7em;
+    text-align: center;
+}
+
+// ------- wwt-messenger overrides inside vue-groups
+// ------------------------------------
+.vue-edit-group-form .messenger-content:before {
+    display: none;
+}
+
+.multiselect__input:focus, .multiselect__single:focus {
+    box-shadow: 0 0;
+}
+
+.group-member-list {
+    max-height: 50vh;
+
+    + .el-pagination {
+        padding-top: 20px;
+    }
+}
+
+.sip-body .group-member-list {
+    max-height: none;
+}
+
+.el-popover {
+    word-break: normal;
+    text-align: left;
+}

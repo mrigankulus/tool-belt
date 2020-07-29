@@ -1,0 +1,124 @@
+<br>
+
+<div class="container allow-ng-animate default-animation" ng-if="CronJobDetail.canViewCronJobs && CronJobDetail.job">
+    <article class="item-detail cron-job">
+        <main>
+            <header class="item-header">
+                <section>
+                    <div class="asset-icon"><i class="fa fa-list"></i></div>
+                </section>
+
+                <section>
+                    <h1>{{ CronJobDetail.job.id }}</h1>
+                    <p>Next run in: <span countdown="" date="{{ CronJobDetail.job.nextRun }}"></span></p>
+
+                    <p><a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/crontriggers/triggers/{{ CronJobDetail.job.id }}" target="_blank">JSON</a></p>
+                </section>
+            </header>
+
+            <section class="item-detail-content columns with-borders">
+
+                <section style="padding-left: 0;">
+                    <br>
+                    <h4>History</h4>
+
+                    <hr class="dashed">
+
+                    <div class="cards full">
+
+                        <section class="card-outer asset-card status-card"
+                                 ng-repeat="run in CronJobDetail.job.history | orderBy: '-dateCreated' | limitTo: CronJobDetail.currentLimit">
+
+                            <div class="card-inner" ng-class="{success: run.state === 'SUCCESS'}">
+                                <h3 class="card-header">
+                                    <span class="label label-default">{{ run.method }}</span>
+                                    {{ run.dateCreated | friendlyDate }}
+                                </h3>
+
+                                <div class="card-content">
+                                    <small>{{ run.url }}</small>
+                                </div>
+
+                                <p><json-formatter json="run"></json-formatter></p>
+                            </div>
+
+                        </section>
+                    </div>
+
+                    <div class="text-center">
+                        <a class="btn btn-link"
+                           ng-if="CronJobDetail.shouldShowShowMore()"
+                           ng-click="CronJobDetail.showMore()">
+                            Show More
+                        </a>
+                    </div>
+                </section>
+
+                <section>
+                    <br>
+                    <h4>Settings</h4>
+
+                    <hr class="dashed">
+
+                    <form name="updateJobForm" ng-submit="CronJobDetail.updateJob()">
+                        <div class="alert alert-danger allow-ng-animate" ng-if="CronJobDetail.isHttps()">
+                            <p ng-if="CronJobDetail.isHttps()">http instead of https please.</p>
+                        </div>
+
+                        <div class="form-group required">
+                            <label>ID</label>
+                            <input ng-model="CronJobDetail.job.id" placeholder="Job ID" required disabled="true" />
+                        </div>
+
+                        <div class="form-group required">
+                            <label>URL</label>
+                            <input ng-model="CronJobDetail.job.url" placeholder="URL" required />
+                        </div>
+
+                        <div class="form-group required">
+                            <label>Method</label>
+                            <br>
+                            <div class="no-select">
+                                <select ng-model="CronJobDetail.job.method">
+                                    <option value="">HTTP Method</option>
+                                    <option value="POST">POST</option>
+                                    <option value="PUT">PUT</option>
+                                    <option value="GET">GET</option>
+                                    <option value="DELETE">DELETE</option>
+                                </select>
+
+                                <span>{{ CronJobDetail.job.method || 'Select' }} <i class="fa fa-caret-down"></i></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group required">
+                            <label>Schedule</label>
+                            <br>
+                            <cron-selection ng-model="CronJobDetail.job.schedule" config="{quartz: true}"></cron-selection>
+                            <br>
+                            <input ng-model="CronJobDetail.job.schedule" placeholder="Schedule" required />
+                        </div>
+
+                        <hr class="dashed">
+
+                        <div class="form-actions split">
+                            <section>
+                                <button type="submit"
+                                        class="btn btn-primary"
+                                        ng-disabled="!updateJobForm.$valid">
+                                    Save
+                                     <i class="fa fa-spinner fa-spin" ng-if="CronJobDetail.isWorking"></i>
+                                     <i class="fa fa-thumbs-up" ng-if="CronJobDetail.didJustSave"></i>
+                                </button>
+                            </section>
+
+                            <section>
+                                <a class="btn btn-link" ng-click="CronJobDetail.deleteJob()">Delete</a>
+                            </section>
+                        </div>
+                    </form>
+                </section>
+            </section>
+        </main>
+    </article>
+</div>

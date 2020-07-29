@@ -1,0 +1,35 @@
+<ng-include src="'dashboard/aboutModal.html'"></ng-include>
+
+<section ng-if="WelcomeBlock.isOpen()">
+    <div class="dashboard-welcome-block">
+
+        <button class="btn btn-link" ng-click="WelcomeBlock.closeWelcome()"><i class="fa fa-times"></i></button>
+
+        <div class="columns">
+            <section class="flex-none">
+                <i class="wwt-icon-dev-tool-belt"></i>
+            </section>
+
+            <section>
+                <h1>Welcome to the Dev Tool Belt!</h1>
+
+                <p>The Dev Tool Belt allows you to create, manage, and discover the tools we build for each other, and for our business. Would you like to get your application in the app switcher? Would you like to find out what the <a ui-sref="componentDetail({id: 'vue-app-switcher'})">app switcher</a> is? Explore the Tool Belt!</p>
+
+                <hr class="dashed">
+
+                <div class="columns">
+                    <section>
+                        <a class="btn btn-primary" ui-sref="dashboard.about">About the Tool Belt</a>
+                    </section>
+
+                    <section>
+                        <a href="//github.wwt.com/custom-apps/dev-tool-belt/issues" target="_blank" class="btn btn-link pull-right"><i class="fa fa-github"></i> Have ideas?</a>
+                    </section>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <br>
+</section>

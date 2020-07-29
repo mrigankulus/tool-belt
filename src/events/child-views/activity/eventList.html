@@ -1,0 +1,91 @@
+<br>
+
+<ol class="breadcrumb">
+    <li class="active">Events for {{ EventTypeDetail.eventType.title }}</li>
+</ol>
+
+<div class="primary-loader" ng-class="{active: EventList.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="blank-slate-tab" ng-if="EventList.eventsHaveLoaded && !EventList.events.length">
+    <i class="fa fa-bar-chart-o"></i>
+
+    <section>
+        <h2>No Activity Yet</h2>
+
+        <p>There has been no activity for {{ EventTypeDetail.eventType.title }}.</p>
+    </section>
+</div>
+
+<div class="cards allow-ng-animate default-animation" ng-if="EventList.events.length">
+
+    <section class="card-outer status-card" style="width: 100%;" ng-repeat="event in EventList.events | orderBy: '-who.creationDate'">
+
+        <a class="card-inner clickable"
+           ui-sref="^.eventDetail({eventId: event.id})"
+           tabindex="0"
+           ng-class="EventList.getEventStatus(event)">
+
+            <div class="columns with-borders vertical-center">
+                <section>
+                    <h3 class="card-header">{{ event.who.creationDate | date:'medium' }}</h3>
+                    <p>{{ event.inAppMessage }}</p>
+                    <p>Resource: {{ EventList.getResourceId(event) }}</p>
+                    <!-- <p>todo: How do we get parsed small message content?</p> -->
+
+                </section>
+
+                <section>
+                    <div class="alert alert-warning text-center" ng-if="!event.notificationRequests || !event.notificationRequests.length">
+                        No notificationRequest has been created for this event. This is probably due to no users being subscribed to this resource.
+                    </div>
+
+                    <ul class="counts" ng-if="event.notificationRequests && event.notificationRequests.length">
+
+                        <li>
+                            <span class="count">{{ ::EventList.getAffectedUsersCount(event) }}</span>
+                            <span class="count-label">users affected</span>
+                        </li>
+
+                        <li ng-if="::EventList.getEmailSentCount(event)">
+                            <span class="count">{{ ::EventList.getEmailSentCount(event) }}</span>
+                            <span class="count-label">emails sent</span>
+                        </li>
+
+                        <li ng-if="::EventList.getEmailPooledCount(event)">
+                            <span class="count">{{ ::EventList.getEmailPooledCount(event) }}</span>
+                            <span class="count-label">emails pooled</span>
+                        </li>
+
+                        <li ng-if="::EventList.getEmailFailedCount(event)">
+                            <span class="count error">{{ ::EventList.getEmailFailedCount(event) }}</span>
+                            <span class="count-label">emails failed</span>
+                        </li>
+
+                        <li ng-if="::EventList.getInAppSentCount(event)">
+                            <span class="count">{{ ::EventList.getInAppSentCount(event) }}</span>
+                            <span class="count-label">in app sent</span>
+                        </li>
+
+                        <li ng-if="::EventList.getEmailPendingCount(event)">
+                            <span class="count">{{ ::EventList.getEmailPendingCount(event) }}</span>
+                            <span class="count-label">emails pending</span>
+                        </li>
+
+                        <li ng-if="::EventList.getReceipt(event)">
+                            <span class="count"><i class="fa fa-check"></i></span>
+                            <span class="count-label">Receipt Sent</span>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </a>
+
+    </section>
+
+    <div class="text-center" style="width: 100%;" ng-if="EventList.nextPage">
+        <hr class="dashed">
+        <a class="btn btn-link" ng-click="EventList.goToNextPage()">
+            Show More <i class="fa fa-spinner fa-spin" ng-if="EventList.isLoadingNextPage"></i>
+        </a>
+    </div>
+</div>

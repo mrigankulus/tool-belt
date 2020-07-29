@@ -1,0 +1,8 @@
+<div class="partner-profiles-info">
+    <dl>
+        <dt>{{ user.fullName }} has {{ user._profiles.length || 'No' }} Profile<span ng-if="!user._profiles.length || user._profiles.length > 1">s</span>
+        tied to {{ PartnerDetail.partner.name }}</dt>
+        <dd ng-repeat="profile in user._profiles"> - {{ profile.name }}</dd>
+        <dd ng-if="!user._profiles.length">Drag and drop to assign profiles to users.</dd>
+    </dl>
+</div>

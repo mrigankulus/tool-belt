@@ -1,0 +1,149 @@
+<br>
+<br>
+
+<ng-include src="'apis/noPermissions.tpl.html'" class="blank-slate-tab" ng-if="!APIDetail.canEditApis && APIDetail.permissionsHaveLoaded"></ng-include>
+
+<div class="blank-slate-tab" ng-if="APIDetail.canEditApis">
+    <i class="fa fa-exchange"></i>
+
+    <section>
+        <p>
+            <strong>Overrides</strong> allow you to
+            <strong>proxy</strong> user requests to this api to a specific location (ex.
+            <small>
+                <code>localhost</code>
+            </small>).</p>
+    </section>
+</div>
+
+<br>
+<hr class="dashed">
+<br>
+
+<ul class="formatted-list" ng-if="APIDetail.canEditApis">
+    <li ng-if="!APIOverrides.isAddingOverride">
+        <button class="btn btn-link btn-xs" ng-click="APIOverrides.openAddOverrideForm()">
+            <i class="fa fa-plus-circle"></i> Add Override
+        </button>
+    </li>
+
+
+    <!-- New Override Form -->
+    <li class="columns with-padding vertical-center" ng-if="APIOverrides.isAddingOverride">
+
+        <section class="flex-3">
+            <user-typeahead target-model-parent="APIOverrides.newOverride" title="Target User" on-select-user="APIOverrides.setOverrideEndPointSuggestionsForUser"></user-typeahead>
+        </section>
+
+        <section class="flex-5">
+            <div class="input-with-suggestions">
+
+                <div class="no-select" ng-if="APIOverrides.overrideEndPointSuggestions && APIOverrides.overrideEndPointSuggestions.length"
+                    uib-popover="Select recently used override url's" popover-trigger="mouseenter" popover-popup-delay="300"
+                    popover-append-to-body="true">
+
+                    <select ng-model="APIOverrides.chosenEnpointSuggestion" class="clickable" ng-change="APIOverrides.onEnpointChosen(APIOverrides.chosenEnpointSuggestion)">
+
+                        <option ng-repeat="enpoint in APIOverrides.overrideEndPointSuggestions" value="{{ enpoint }}">{{ enpoint }}</option>
+                    </select>
+
+                    <i class="fa fa-lightbulb-o"></i>
+                </div>
+
+                <input class="no-input" placeholder="http://<your-ip-address>:<your-port>" ng-model="APIOverrides.newOverride.endPoint" title="Override URL"
+                />
+                <i class="fa fa-question-circle" uib-popover="Your override url will be http://<your-ip-address>:<your-port>. To
+                                find your IP address on a Mac, go to terminal and type `ifconfig | grep 'inet 10.'`" popover-title="Override URL"
+                    popover-trigger="mouseenter" popover-popup-delay="300" popover-append-to-body="true"></i>
+            </div>
+        </section>
+
+        <section class="flex-1">
+            <div class="form-actions">
+                <button class="btn btn-default btn-xs" ng-click="APIOverrides.createOverride(APIOverrides.newOverride)" ng-disabled="!APIOverrides.overrideIsValid(APIOverrides.newOverride)"
+                    ng-if="!APIOverrides.overrideForUserAlreadyExists(APIOverrides.newOverride)">Save</button>
+
+                <!-- we need the extra input so we can show the tooltip with the dupe user info -->
+                <button class="btn btn-default btn-xs" uib-tooltip="There is already an override for this user on this API." tooltip-append-to-body="true"
+                    ng-if="APIOverrides.overrideForUserAlreadyExists(APIOverrides.newOverride)">
+
+                    Save
+                    <i class="fa fa-warning"></i>
+                </button>
+
+                <button class="btn btn-link btn-xs" ng-click="APIOverrides.isAddingOverride = false">Cancel</button>
+            </div>
+        </section>
+
+    </li>
+    <!-- /New Override Form -->
+
+
+    <!-- Overrides List -->
+    <li ng-repeat="override in APIOverrides.overrides">
+
+        <!-- Override In Non-Edit Mode -->
+        <div ng-if="!override.isEditing" class="columns with-padding vertical-center">
+            <section class="flex-3">
+                <div class="columns vertical-center">
+                    <section class="flex-1">
+                        <wwt-user-image image-size="small" user-name="(override.user.ldapUserId || override.user.userName)"></wwt-user-image>
+                    </section>
+
+                    <section class="flex-3 truncate">
+                        {{ override.user.userName }}
+                    </section>
+                </div>
+            </section>
+
+            <section class="flex-5 break-all">
+                {{ override.endPoint }}
+            </section>
+
+            <section class="flex-1">
+                <div class="toggle-switch-small">
+                    <input type="checkbox" ng-model="override.isEnabledFlag" class="toggle-switch-small-checkbox" ng-click="APIOverrides.toggleOverrideState(override)"
+                        id="overrideSwitch{{ $index }}">
+
+                    <label class="toggle-switch-small-label" for="overrideSwitch{{ $index }}"></label>
+                </div>
+            </section>
+
+            <section class="flex-1 formatted-list-show-on-hover">
+                <button class="btn btn-link btn-xs" ng-click="APIOverrides.openEditForm(override)">
+                    <i class="fa fa-pencil"></i>
+                </button>
+
+                <button class="btn btn-link btn-xs" ng-click="APIOverrides.deleteOverride(override)">
+
+                    <i class="fa fa-trash"></i>
+                </button>
+            </section>
+        </div>
+
+
+        <!-- Edit Override Form -->
+        <div ng-if="override.isEditing" class="columns with-padding vertical-center">
+            <section class="flex-3">
+                <user-typeahead target-model-parent="override"></user-typeahead>
+            </section>
+
+            <section class="flex-5">
+                <input class="no-input" placeholder="End Point" ng-model="override.endPoint"></input>
+            </section>
+
+            <section class="flex-1">
+                <div class="form-actions">
+                    <button class="btn btn-default btn-xs" ng-click="APIOverrides.updateOverride(override)">Save</button>
+                    <button class="btn btn-link btn-xs" ng-click="APIOverrides.cancelEditing(override)">Cancel</button>
+                </div>
+            </section>
+        </div>
+
+    </li>
+    <!-- Overrides List -->
+
+</ul>
+
+<br>
+<br>

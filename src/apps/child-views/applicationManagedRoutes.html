@@ -1,0 +1,55 @@
+<br><br>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="ApplicationManagedRoutes.isUpdateAllDomains">
+
+    <form class="columns vertical-center with-padding" ng-submit="ApplicationManagedRoutes.updateDomains()">
+
+        <section></section>
+
+        <section class="flex-2">
+            <br>
+            <div class="form-group">
+                <label>Enter a New Domain and Port to update your overrides for this app.</label>
+                <input ng-model="ApplicationManagedRoutes.newDomain" class="no-input" placeholder="<your-ip-address>:<your-port>">
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!ApplicationManagedRoutes.newDomain">
+
+                    Save
+                     <i class="fa fa-spinner fa-spin" ng-if="ApplicationManagedRoutes.isSavingDomain"></i>
+                </button>
+                <a class="btn btn-link" ng-click="ApplicationManagedRoutes.isUpdateAllDomains = false;">Cancel</a>
+            </div>
+        </section>
+    </form>
+
+</section>
+
+
+<div class="blank-slate-tab">
+    <section>
+        <p><strong>Managed Routes</strong> are <a ui-sref="apis">API Routes</a> with a sub-domain prefix that matches this application's name: <strong>{{ Application.application.appName }}</strong>.</p>
+
+        <div class="text-center" ng-if="ApplicationManagedRoutes.overrides.length">
+            <br>
+            <a class="btn btn-default btn-xs" ng-click="ApplicationManagedRoutes.isUpdateAllDomains = true">Update All Override Domains</a>
+        </div>
+    </section>
+</div>
+
+<br>
+
+<div class="blank-slate-tab" ng-if="ApplicationManagedRoutes.apisHaveLoaded && !ApplicationManagedRoutes.apis.length">
+    <section>
+        <p>This application has no managed routes.</p>
+    </section>
+</div>
+
+<div class="cards allow-ng-animate default-animation" ng-if="ApplicationManagedRoutes.apis && ApplicationManagedRoutes.apis.length">
+    <api-card api="api" ng-repeat="api in ApplicationManagedRoutes.apis" on-toggle-override="ApplicationManagedRoutes.onToggleOverride"></api-card>
+</div>

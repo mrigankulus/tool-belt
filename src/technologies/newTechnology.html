@@ -1,0 +1,36 @@
+<main class="container new-asset-form">
+    <form name="NewTechnologyForm" ng-submit="NewTechnology.create()" class="allow-ng-animate">
+        <div class="form-group required">
+            <label id="name">NAME</label>
+            <input ng-model="NewTechnology.new.name" id="technologyTitle" required="true" />
+        </div>
+
+        <div class="form-group required">
+            <label id="icon">ICON NAME</label>
+
+            <wwt-icon-type-ahead target-model="NewTechnology.new.iconName" placeholder="'Ex: thumbs-up'"></wwt-icon-type-ahead>
+        </div>
+
+        <div class="form-group">
+            <label>KEYWORDS</label>
+
+            <keywords-typeahead keyword-parent-object="NewTechnology.new"></keywords-typeahead>
+        </div>
+
+        <div class="form-group required">
+            <label id="description">DESCRIPTION</label>
+            <br>
+            <textarea msd-elastic rows="3" ng-model="NewTechnology.new.shortDescription" required="true"></textarea>
+        </div>
+
+        <div class="form-actions split fixed-footer">
+            <section>
+                <button type="submit" class="btn btn-primary" ng-disabled="!NewTechnologyForm.$valid"> Submit
+                    <span ng-if="NewTechnology.isWorking"><i class="fa fa-spinner fa-spin"></i></span>
+                </button>
+                <a class="btn btn-link" ng-click="Components.closeAddComponentForm()"> Cancel</a>
+            </section>
+        </div>
+
+    </form>
+</main>

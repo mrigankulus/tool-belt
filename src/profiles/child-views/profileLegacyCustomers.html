@@ -1,0 +1,102 @@
+<br><br>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="ProfileLegacyCustomers.isAdding">
+
+    <form class="columns vertical-center with-padding" ng-submit="ProfileLegacyCustomers.addCustomerToProfile()">
+
+        <section></section>
+
+        <section class="flex-2">
+            <br>
+            <div class="form-group">
+                <ui-select required="true"
+                           ng-model="ProfileLegacyCustomers.newCustomer"
+                           ui-select-focus-input
+                           title="Search"
+                           class="no-select2">
+
+                    <ui-select-match placeholder="Search...">{{ $select.selected }}</ui-select-match>
+
+                    <ui-select-choices refresh="ProfileLegacyCustomers.search($select.search)"
+                                       refresh-delay="200"
+                                       repeat="customer in ProfileLegacyCustomers.availableCustomers | filter:$select.search | orderBy: 'title'">
+                        {{ customer }}
+                    </ui-select-choices>
+
+                </ui-select>
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!ProfileLegacyCustomers.newCustomer">
+
+                    Save
+                     <i class="fa fa-spinner fa-spin" ng-if="ProfileLegacyCustomers.isSaving"></i>
+                </button>
+                <a class="btn btn-link" ng-click="ProfileLegacyCustomers.isAdding = false;">Cancel</a>
+            </div>
+        </section>
+
+    </form>
+
+</section>
+
+<div class="item-detail-overlay" ng-if="ProfileLegacyCustomers.isAdding" ng-click="ProfileLegacyCustomers.isAdding = false"></div>
+
+<div class="item-detail-content-header" ng-if="!ProfileLegacyCustomers.isLoading && !ProfileLegacyCustomers.shouldShowBlankSlate()">
+    <section>
+
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="ProfileLegacyCustomers.searchText"
+                   ng-model-options="{ debounce: 300 }"
+                   tabindex="0"
+                   placeholder="Search">
+
+        </div>
+
+    </section>
+
+    <section class="item-detail-header-actions">
+        <a class="btn btn-link btn-xs pull-right" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/profiles/{{ ProfileDetail.profile.id }}/customers" target="_blank">JSON</a>
+
+        <button class="btn btn-primary btn-xs" ng-click="ProfileLegacyCustomers.isAdding = true" ng-if="ProfileDetail._callerRights.write">
+            <i class="fa fa-plus"></i> Add Customer to Profile
+        </button>
+    </section>
+</div>
+
+
+<div class="blank-slate-tab" ng-if="ProfileLegacyCustomers.shouldShowBlankSlate()">
+    <i class="fa fa-info-circle"></i>
+
+    <section>
+        <p>No customers have been added to the <strong>{{ ProfileDetail.profile.name }}</strong>
+            Profile. <span ng-if="ProfileDetail._callerRights.write"><strong><a ng-click="ProfileLegacyCustomers.isAdding = true">Add a customer</a></strong> to assign them this profile.</span></p>
+    </section>
+</div>
+
+<div class="cards allow-ng-animate default-animation" ng-if="ProfileLegacyCustomers.customers.length">
+    <section class="card-outer asset-card" ng-repeat="customerAssociation in ProfileLegacyCustomers.customers | filter:ProfileLegacyCustomers.searchText">
+
+        <div class="card-trash" ng-if="ProfileDetail._callerRights.write">
+            <i class="fa fa-trash"
+               ng-click="ProfileLegacyCustomers.removeCustomer(customerAssociation)"
+               uib-tooltip="Remove Role from Profile."
+               tooltip-popup-delay="500"
+               tooltip-append-to-body="true"></i>
+        </div>
+
+        <a class="card-inner">
+            <h3 class="card-header">{{ customerAssociation.customer.name }}</h3>
+        </a>
+
+    </section>
+</div>

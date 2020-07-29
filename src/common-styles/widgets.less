@@ -1,0 +1,280 @@
+@widget-border-color: #f2f2f2;
+
+.widget {
+    border: 1px solid @widget-border-color;
+    min-height: 110px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #808080;
+    background: #fff;
+
+    &:hover {
+        .fa-cog {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    header {
+        padding: 0 20px;
+        flex: 1;
+        min-height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        border-bottom: 1px solid @widget-border-color;
+        position: relative;
+
+        .widget-icon {
+            font-size: 22px;
+        }
+
+        img {
+            width: 27px;
+        }
+
+        .fa-cog {
+            padding: 3px;
+            font-size: 14px;
+            color: #CCC;
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            cursor: pointer;
+            opacity: 0;
+            transform: scale(.5);
+            transition: all .2s;
+
+            &:hover {
+                color: #777;
+            }
+        }
+
+    }
+
+    main {
+        flex: 3;
+        min-height: 60px;
+        width: 100%;
+        position: relative;
+    }
+
+    h3 {
+        font-size: 17px;
+        font-weight: 500;
+        margin: 0;
+        padding-right: 5px;
+        .text-overflow();
+    }
+
+    .counts {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        > section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            border-right: 1px solid @widget-border-color;
+            max-width: 50%;
+            min-height: 72px;
+
+            &:last-child {
+                border-right: none;
+            }
+        }
+
+        .count {
+            font-size: 30px;
+            flex: 3 0 48px;
+            padding-top: 5px;
+
+            .fa-spinner {
+                font-size: 20px;
+            }
+
+            span {
+                display: block;
+                opacity: 1;
+                transform: scale(1);
+                transition: all .2s;
+
+                &.ng-enter,
+                &.ng-leave.ng-leave-active {
+                    opacity: 0;
+                    transform: scale(0.75);
+                }
+
+                &.ng-leave,
+                &.ng-enter.ng-enter-active {
+                    opacity: 1;
+                    transform: scale(1);
+                }
+            }
+        }
+
+        .count-type {
+            .text-overflow();
+            max-width: 100%;
+            font-size: 12px;
+            text-align: center;
+            line-height: 15px;
+            flex: 1;
+            padding: 0 5px;
+            padding-bottom: 10px;
+        }
+    }
+
+    .widget-content {
+        padding: 10px 20px;
+
+        a {
+            color: #656565;
+            border-bottom: 1px solid;
+            .text-overflow();
+            display: block;
+
+            &:hover {
+                text-decoration: none;
+                color: #000;
+            }
+        }
+
+        .time {
+            margin-left: 16px;
+            font-size: 12px;
+            font-style: italic;
+        }
+    }
+
+    .fa-github {
+        color: #656565;
+    }
+
+    .fa-lightbulb-o {
+        color: @vision-color;
+    }
+}
+
+.widget .repo-connect-form {
+    h3 {
+        display: none;
+    }
+
+    .btn {
+        .btn-xs;
+    }
+
+    .form-group {
+        max-width: 175px;
+    }
+}
+
+.jenkins-build-status {
+    height: 10px;
+    width: 10px;
+    background: #38B348;
+    display: inline-block;
+    border-radius: 50%;
+    float: left;
+    margin-right: 7px;
+    margin-top: 6px;
+
+    &.error {
+        background: @errorColor;
+    }
+
+    &.warning {
+        background: @warningColor;
+    }
+
+    &.no-status {
+        background: #ccc;
+    }
+}
+
+.af-resource-feed .jenkins-build-status {
+    float: none;
+    margin-left: 6px;
+}
+
+.widget.relatables-blank-slate {
+    transition: all 0.3s;
+
+    &:hover {
+        background: #FAFAFA;
+    }
+
+    h4 {
+        margin-bottom: 3px;
+    }
+
+    p {
+        padding: 0 27px;
+        text-align: center;
+        margin: 5px 0;
+        color: #C1C1C1;
+        font-size: 12px;
+        line-height: 14px;
+    }
+
+    > ul {
+        padding: 0;
+        margin: 4px 0;
+        list-style-type: none;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        border-top: 1px solid @widget-border-color;
+
+        li {
+            max-width: 100px;
+            font-size: 25px;
+            margin-right: 12px;
+
+            &:nth-child(3) {
+                margin-right: 0;
+            }
+
+            img {
+                height: 30px;
+            }
+        }
+    }
+}
+
+.widget-error {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: @errorColor;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
+    opacity: 1;
+    font-weight: bold;
+    padding: 10px;
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+
+    .btn-link {
+        text-decoration: underline;
+        color: #fff;
+    }
+}

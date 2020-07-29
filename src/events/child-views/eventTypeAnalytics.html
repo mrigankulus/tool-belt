@@ -1,0 +1,26 @@
+<br><br>
+
+<analyze-report-frame ng-if="EventTypeAnalytics.reportId"
+                      report-id="EventTypeAnalytics.reportId"
+                      select="EventTypeAnalytics.reportSelect"
+                      get-detail-params="EventTypeAnalytics.getDetailParams"></analyze-report-frame>
+
+<div style="position: relative;">
+    <div ng-if="EventTypeAnalytics.fromDate && EventTypeAnalytics.toDate" class="columns with-padding vertical-center right-analytics-filters">
+        <section>
+            <input type="date" class="no-input" ignore-mouse-wheel ng-model="EventTypeAnalytics.fromDate" ng-change="EventTypeAnalytics.init()">
+        </section>
+
+        <section>
+            <input type="date" class="no-input" ignore-mouse-wheel ng-model="EventTypeAnalytics.toDate" ng-change="EventTypeAnalytics.init()">
+        </section>
+    </div>
+
+    <br>
+
+    <div class="chart-wrapper">
+        <div class="chart-inner" ng-if="!EventTypeAnalytics.isLoading">
+            <highchart id="chart1" ng-if="EventTypeAnalytics.chartConfig" config="EventTypeAnalytics.chartConfig"></highchart>
+        </div>
+    </div>
+</div>

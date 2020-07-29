@@ -1,0 +1,140 @@
+<i class="fa fa-spinner fa-spin" ng-if="role.isLoadingPermissions"></i>
+
+<div class="panel-prompt allow-ng-animate" ng-if="role.isPromptingToDelete">
+    <h4 class="text-center">Are you sure?</h4>
+
+    <p class="text-center">Deleting this permission will delete it from all roles.</p>
+
+    <div class="form-actions">
+        <a class="wwt-mini-btn alpha-btn"
+           ng-click="ManagePermissions.confirmDelete(role)">Delete</a>
+
+        <a class="wwt-mini-btn cancel" ng-click="role.isPromptingToDelete = false">Cancel</a>
+    </div>
+</div>
+
+<ul class="formatted-list" ng-if="!role.isLoadingPermissions">
+
+    <li ng-repeat="permission in role.permissions | orderBy: 'name'" ng-if="permission.name">
+
+        <div class="columns" ng-if="!permission.isEditing">
+
+            <section>
+
+                <span draggable="true"
+                      effect-allowed="copy"
+                      draggable-type="custom-object"
+                      draggable-data="permission">
+
+                    <i class="fa fa-th-large formatted-list-highlight-on-hover" uib-tooltip="Drag a permission to another role to add an association to that role." tooltip-placement="top-left" tooltip-popup-delay="500"></i>
+
+                    &nbsp;&nbsp;
+
+                    {{ permission.name }}
+
+                </span>
+
+                &nbsp;&nbsp;
+
+                <span uib-dropdown>
+                    <i class="fa fa-caret-down clickable formatted-list-show-on-hover" uib-dropdown-toggle></i>
+
+                    &nbsp;
+
+                    <ul class="dropdown-menu" uib-dropdown-menu>
+                        <li>
+                            <a class="clickable" ng-click="permission.isEditing = true" auto-focus="#permissionName{{ role.id }}">
+                                <i class="fa fa-pencil"></i>
+                                 Edit
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="clickable" ng-click="ManagePermissions.removePermissionFromRole(role, permission)">
+                                <i class="fa fa-trash-o"></i>
+                                 Remove from Role
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="clickable" ng-click="ManagePermissions.promptToDeletPermission(role, permission)">
+                                <i class="fa fa-trash"></i>
+                                 Delete
+                             </a>
+                        </li>
+                    </ul>
+                </span>
+
+            </section>
+        </div>
+
+        <form ng-submit="ManagePermissions.updatePermission(permission)" ng-if="permission.isEditing">
+
+            <div class="columns vertical-center">
+
+                <section>
+                    <div class="form-group">
+                        <input class="no-input" ng-model="permission.name" id="permissionName{{ role.id }}" placeholder="Ex. Internal Sales Rep" required="true"></input>
+                    </div>
+                </section>
+
+                <section>
+                    <div class="form-actions">
+                        <button class="btn btn-default btn-xs"
+                                type="submit">
+
+                            Save
+                             <i class="fa fa-spinner fa-spin" ng-if="permission.isSaving"></i>
+                        </button>
+                        <a class="btn btn-link btn-xs" ng-click="permission.isEditing = false">Cancel</a>
+                    </div>
+                </section>
+
+            </div>
+
+        </form>
+    </li>
+
+    <div class="app-permissions-link" ng-class="{ 'is-form-toggled' : role.isAddingPermission }">
+        <span ng-click="role.isAddingPermission = true"
+              ng-if="!role.isAddingPermission"
+              auto-focus="#newPermissionName{{ role.id }}"
+              class="clickable">
+            <i class="fa fa-plus-circle"></i> Add New Permission
+        </span>
+
+        <form ng-submit="ManagePermissions.createPermissionForRole(role)" ng-if="role.isAddingPermission">
+
+            <div class="columns vertical-center">
+                <section class="columns vertical-center">
+                    <input class="no-input"
+                           ng-model="ManagePermissions.newPermission.name"
+                           id="newPermissionName{{ role.id }}"
+                           placeholder="Name"
+                           required="true"
+                           tabindex="0"></input>
+
+                    <i class="fa fa-warning error flex-none"
+                       uib-tooltip="That permission already exists on another role. Drag and drop it here to reuse it, or use another name."
+                       ng-if="ManagePermissions.permissionAlreadyExists(ManagePermissions.newPermission)"></i>
+                </section>
+
+                <section>
+                    <div class="form-actions">
+                        <button class="btn btn-default btn-xs"
+                                type="submit"
+                                tabindex="0"
+                                ng-disabled="!ManagePermissions.newPermissionIsValid()">
+
+                            Save
+                             <i class="fa fa-spinner fa-spin" ng-if="role.isSavingNewPermission"></i>
+                        </button>
+
+                        <a class="btn btn-link btn-xs" tabindex="0" ng-click="role.isAddingPermission = false">Cancel</a>
+                    </div>
+                </section>
+
+            </div>
+        </form>
+    </div>
+</ul>

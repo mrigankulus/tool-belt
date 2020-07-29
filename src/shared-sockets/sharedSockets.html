@@ -1,0 +1,124 @@
+<br>
+
+<div class="container allow-ng-animate default-animation" ng-if="Sockets.canViewSockets">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>
+                        Shared Sockets
+                         <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/shared-sockets" target="_blank">JSON</a>
+                    </h1>
+
+                    <p>These are open websockets utilizing the <a ui-sref="componentDetail({id: 'wwt-ng-sockets'})">wwt-ng-sockets</a> component and the <a href="https://dev-tool-belt.apps-dev.wwt.com/api/4448" target="_blank">shared-sockets API</a>.</p>
+
+                </section>
+            </header>
+
+
+            <section class="item-detail-content">
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95">
+
+                    <section class="search-section">
+
+                        <div class="resource-types-search">
+                            <i class="fa fa-search"></i>
+
+                            <input type="text"
+                                   class="no-input"
+                                   ng-model="Sockets.socketsSearchText"
+                                   tabindex="0"
+                                   id="secondarySearchInput"
+                                   placeholder="Search Sockets"></input>
+                        </div>
+
+                    </section>
+
+                    <section class="item-detail-header-actions">
+                        <p>
+                            Open Sockets: {{ Sockets.sockets.length | number }}
+                            &nbsp;|&nbsp;
+                            Active Users: {{ Sockets.socketsByUser.length | number }}
+
+                            <!--
+                            &nbsp;|&nbsp;
+
+                            <a class="clickable"
+                                    title="Attempt to correct orphaned sockets."
+                                    ng-click="Sockets.mapSocketsByUser()">Correct</a>
+                            -->
+                        </p>
+                    </section>
+
+                </div>
+
+                <div class="primary-loader" ng-class="{active: Sockets.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+                <div class="cards half allow-ng-animate default-animation" ng-if="Sockets.socketsByUser && Sockets.socketsByUser.length">
+
+                    <section class="card-outer asset-card"
+                             ng-if="userSockets[0] && userSockets[0].user"
+                             ng-repeat="userSockets in Sockets.socketsByUser | filter: Sockets.socketsSearchText | limitTo: Sockets.socketsLimit">
+
+                        <div class="card-inner">
+
+                            <div class="columns with-borders small-borders">
+                                <section>
+                                    <wwt-user-image user-name="userSockets[0].user.userName"></wwt-user-image>
+                                </section>
+
+                                <section class="flex-5" ng-init="userSockets[0].channelLimit = 6">
+                                    <a ng-repeat="channel in Sockets.getChannelsForUserSockets(userSockets) | limitTo: userSockets[0].channelLimit"
+                                       class="clickable"
+                                       style="display: block; font-size: 12px;"
+                                       ng-click="Sockets.openChannelDetail(channel)">{{ channel }}</a>
+
+                                    <small ng-if="Sockets.getChannelsForUserSockets(userSockets).length > userSockets[0].channelLimit">
+                                        <a class="clickable" ng-click="userSockets[0].channelLimit = userSockets[0].channelLimit + 10">...more</a>
+                                    </small>
+                                </section>
+
+                                <section class="text-center">
+                                    <a style="font-size: 20px"
+                                       class="clickable"
+                                       ng-click="Sockets.openUserSocketsPanel(userSockets)">{{ userSockets.length || 0 }}</a>
+                                    <p>Socket{{ userSockets.length > 1 ? 's' : '' }}</p>
+                                </section>
+                            </div>
+
+                        </div>
+
+                    </section>
+
+                </div>
+
+                <hr ng-if="Sockets.shouldShowShowMore()">
+
+                <p class="text-center" ng-if="Sockets.shouldShowShowMore()">
+                    <button class="btn btn-link" ng-click="Sockets.showMore()" ng-click="Sockets.showMore()">Show All</button>
+                </p>
+            </section>
+        </main>
+
+    </article>
+
+</div>
+
+<wwt-focus-panel panel-name="'socketChannelDetailPanel'"
+                 position="'right'"
+                 header-text="Sockets.activeChannel"
+                 header-icon="'info'"
+                 backdrop="true">
+
+    <ng-include src="'shared-sockets/channelDetail.html'" ng-controller="ChannelDetailCtrl as ChannelDetail"></ng-include>
+</wwt-focus-panel>
+
+<wwt-focus-panel panel-name="'userScoketsPanel'"
+                 position="'right'"
+                 header-text="'Sockets for @' + Sockets.activeUserSockets[0].user.userName"
+                 header-icon="'info'"
+                 backdrop="true">
+
+    <ng-include src="'shared-sockets/userSockets.html'" ng-controller="UserSocketsCtrl as UserScockets"></ng-include>
+</wwt-focus-panel>

@@ -1,0 +1,83 @@
+<br>
+
+<div class="container resource allow-ng-animate default-animation" ng-if="ResourceTypeDetail.canViewResources">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section>
+                    <div class="asset-icon"><i>R</i></div>
+                </section>
+
+                <section>
+                    <h1>{{ ResourceTypeDetail.resourceType.title }}</h1>
+
+                    <p>{{ ResourceTypeDetail.resourceType.description }}</p>
+
+                    <p>
+                        <a ui-sref="importExport"><i class="fa fa-arrows-v"></i> Import/Export</a>
+                        &nbsp;
+                        |
+                        &nbsp;
+                        <a class="clickable" ng-click="ResourceTypeDetail.historyPanelIsOpen = true"><i class="fa fa-history"></i> History</a>
+                        &nbsp;
+                        |
+                        &nbsp;
+                        <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/resource-types/{{ ResourceTypeDetail.resourceType.id }}" target="_blank">JSON</a>
+                    </p>
+
+                </section>
+
+                <!--
+                <section class="item-header-watch-button">
+                    <dtb-resource-watcher dtb-resource-watcher-settings="ResourceTypeDetail.watcherSettings"></dtb-resource-watcher>
+                </section>
+                -->
+            </header>
+
+            <div class="item-detail-content-warning error allow-ng-animate default-animation"
+                 ng-if="ResourceTypeDetail.hasErrors()">
+
+                <i class="fa fa-warning"></i>
+
+                <p ng-if="ResourceTypeDetail.resourceType.deleted"><strong>Deleted!</strong> This resource type has been deleted. Would you like to <strong><a ng-click="ResourceTypeDetail.restore()">restore</a></strong> it? <i class="fa fa-spinner fa-spin" ng-if="ResourceTypeDetail.isRestoring"></i></p>
+
+                <p ng-if="ResourceTypeDetail.shouldShowMultplePathWarning()">This resource type has event types with <strong>multiple paths</strong> to their <strong>resource id</strong>. This will cause user subscriptions to fail. Please update event types to use the same path to resource id.</p>
+            </div>
+
+            <section class="item-detail-content" ng-class="{'error': ResourceTypeDetail.hasErrors()}">
+                <div class="item-detail-content-header short" hl-sticky offset-top="95">
+                    <ul class="nav nav-tabs">
+                        <li ng-repeat="tab in ResourceTypeDetail.tabs"
+                            ui-sref-active="active"
+                            ng-class="{'pull-right': tab.slug === 'settings'}">
+
+                            <a ui-sref="resourceTypeDetail.{{ tab.slug }}">
+                                <i class="fa fa-cog" ng-if="tab.slug === 'settings'"></i>
+                                 {{ ResourceTypeDetail.getFriendlyTitle(tab.displayName) }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <ui-view></ui-view>
+
+            </section>
+        </main>
+
+    </article>
+</div>
+
+<div class="slide-in-panel sip-right allow-ng-animate"
+     ng-if="ResourceTypeDetail.historyPanelIsOpen">
+
+    <header class="sip-header">
+        <h3>History</h3>
+        <i class="fa fa-history"></i>
+    </header>
+
+    <section class="sip-body" wwt-scroll-trap="historyPanelScrollTrap">
+        <wwt-resource-event-stream wwt-resource-event-stream-settings="ResourceTypeDetail.resourceEventStreamSettings"></wwt-resource-event-stream>
+    </section>
+</div>
+
+<div class="page-overlay allow-ng-animate" ng-if="ResourceTypeDetail.historyPanelIsOpen" ng-click="ResourceTypeDetail.historyPanelIsOpen = false"></div>

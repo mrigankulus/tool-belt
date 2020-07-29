@@ -1,0 +1,32 @@
+.counts {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    color: #848484;
+    display: flex;
+    justify-content: center;
+
+    > li {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0 5px;
+    }
+
+    .count {
+        font-size: 25px;
+
+        &.success {
+            color: @successColor;
+        }
+
+        &.error {
+            color: @errorColor;
+        }
+    }
+
+    .count-label {
+        font-size: 12px;
+    }
+}

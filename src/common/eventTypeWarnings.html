@@ -1,0 +1,8 @@
+<div class="event-type-warning">
+    <dl>
+        <dt>Warnings for {{ eventType.title }}</dt>
+        <dd ng-if="eventType.pauseNotifications == true"><i class="fa fa-warning"></i> Notifications are disabled</dd>
+        <dd ng-if="eventType.amqpExchange == null"><i class="fa fa-warning"></i> RabbitMQ Exchange is missing</dd>
+        <dd ng-if="eventType.resourceType == null"><i class="fa fa-warning"></i> Resource Type is missing</dd>
+    </dl>
+</div>

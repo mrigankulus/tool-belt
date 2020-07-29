@@ -1,0 +1,84 @@
+<br>
+<div class="item-detail-content-header" hl-sticky offset-top="95">
+    <section>
+
+        <div class="resource-types-search">
+            <i class="fa fa-search" ng-if="!$ctrl.isSearching"></i>
+            <i class="fa fa-spin fa-spinner" ng-if="$ctrl.isSearching"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="$ctrl.searchText"
+                   ng-model-options="{ debounce: 300 }"
+                   ng-change="$ctrl.search($ctrl.searchText)"
+                   tabindex="0"
+                   placeholder="Search Groups">
+
+        </div>
+
+    </section>
+    <section class="item-detail-header-actions">
+        <button class="btn btn-primary btn-xs" ng-click="wwtFocusPanelSVC.togglePanel('newGroupPanel')">
+            <i class="fa fa-plus"></i> Add Group
+        </button>
+    </section>
+</div>
+
+<section ng-if="$ctrl.loaded && !$ctrl.groups.length">
+    <br><br>
+
+    <div class="blank-slate-tab">
+        <i class="fa fa-users"></i>
+
+        <section>
+            <h2>No Groups</h2>
+
+            <p>There were not groups found.</p>
+        </section>
+    </div>
+</section>
+
+<section ng-if="$ctrl.recentGroups.length && !$ctrl.searchText">
+    <h3 class="divider-title"><span>Recently Viewed</span></h3>
+
+    <div class="cards allow-ng-animate default-animation" ng-if="$ctrl.recentGroups.length">
+        <group-card class="card-outer" group="group" ng-repeat="group in $ctrl.recentGroups | orderBy: 'title' | filter: $ctrl.searchText"></group-card>
+    </div>
+</section>
+
+<section class="allow-ng-animate default-animation" ng-if="$ctrl.groups.length">
+    <h3 class="divider-title" ng-if="$ctrl.recentGroups.length && !$ctrl.searchText"><span>All</span></h3>
+
+    <div class="cards">
+        <group-card class="card-outer" group="group" ng-repeat="group in $ctrl.groups"></group-card>
+    </div>
+</section>
+
+<div class="pagination-wrapper" ng-if="$ctrl.pagination && $ctrl.pagination.pages > 1">
+    <ul uib-pagination=""
+        v-if="$ctrl.pagination && $ctrl.pagination.total"
+        total-items="$ctrl.pagination.total"
+        ng-model="$ctrl.currentPageNumber"
+        max-size="8"
+        class="pagination-sm"
+        boundary-link-numbers="false"
+        rotate="true"
+        ng-change="$ctrl.onPageChange()"></ul>
+</div>
+
+<wwt-focus-panel panel-name="'newGroupPanel'"
+                 position="'right'"
+                 header-text="'New Group'"
+                 header-icon="'plus-circle'"
+                 backdrop="true">
+
+    <section class="fp-container">
+        <div id="vue-add-group-form" ng-controller="AddGroupFormCtrl">
+            <vue-add-group-form
+                ng-non-bindable>
+                <add-group-form @group-created="viewDetails" :show-types="true" />
+            </vue-add-group-form>
+        </div>
+    </section>
+</wwt-focus-panel>

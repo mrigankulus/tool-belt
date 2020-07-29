@@ -1,0 +1,617 @@
+.dashboard-loader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    z-index: 1;
+    color: #949494;
+    font-size: 32px;
+    transition: all 0.3s;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+        margin: 0;
+        padding-left: 10px;
+    }
+
+    &.active {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.dashboard-chart-container {
+    background: #fff;
+    position: relative;
+    height: 40px;
+
+    &.has-error {
+        display: flex;
+    }
+
+    &.active {
+        height: 300px;
+    }
+
+    .analytics-loader {
+        position: absolute;
+        z-index: 1;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.51);
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 20px;
+        color: #838383;
+
+        transition: all 0.3s;
+        opacity: 0;
+        visibility: hidden;
+
+        &.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    article,
+    #mainChart {
+        height: 100%;
+    }
+
+    article {
+        padding: 20px;
+    }
+
+    header {
+        h3 {
+            margin: 0;
+            font-size: 19px;
+            color: #838383;
+            padding: 10px 20px;
+        }
+
+        .fa-chevron-down,
+        .fa-chevron-up {
+            cursor: pointer;
+            position: absolute;
+            z-index: 1;
+            right: 15px;
+            top: 11px;
+            font-size: 15px;
+            color: #A9A9A9;
+        }
+    }
+}
+
+.dashboard-widgets {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dashboard-widget-outer {
+    padding: 10px;
+    flex: 1 1 50%;
+    max-width: 50%;
+    max-height: 300px;
+
+    // needs to be odd to account for the github activity widget
+    // which needs to be in the DOM for drag n drop sorting to work.
+    &:nth-child(even) {
+        padding-right: 0;
+    }
+
+    &.large {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    &.github-activity {
+        max-height: 100%;
+    }
+}
+
+.dashboard-widget-inner {
+    background: #fff;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+
+    > header,
+    > main {
+        padding: 10px 20px;
+    }
+
+    > header {
+        border-bottom: 1px solid #F3F3F3;
+        font-size: 19px;
+        color: #838383;
+
+        .drag-icon {
+            cursor: -webkit-grab;
+            position: absolute;
+            right: 11px;
+            top: 11px;
+            transition: all .3s;
+            opacity: 0;
+        }
+    }
+
+    > main {
+        height: 180px;
+        position: relative;
+        overflow: auto;
+    }
+
+    &:after {
+        content: "'";
+        color: transparent;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 8px;
+        background: #fff;
+        box-shadow: 0px -5px 9px 11px rgba(255, 255, 255, 1);
+    }
+
+    .toggle-switch-small {
+        // todo: this nudging probably belongs somewhere else.
+        margin-top: 3px;
+    }
+}
+
+.dashboard-widget-inner:hover {
+    > header .drag-icon {
+        opacity: 1;
+        transition-delay: 0.5s;
+    }
+}
+
+.dashboard-widgets-side {
+    max-width: 350px;
+    min-width: 320px;
+
+    .dashboard-widget-outer {
+        max-width: none;
+        padding-left: 0;
+        padding-right: 10px;
+
+        // todo: this is breking stuff, but i think we need it.
+        // max-height: none;
+
+        .alert {
+            padding: 2px 7px;
+            font-size: 12px;
+            margin: 4px 0;
+            margin-bottom: 9px;
+        }
+
+        a {
+            color: #1F1F1F;
+            display: inline-block;
+            word-break: break-all;
+            word-break: break-word;
+
+            &:hover {
+                color: #000;
+            }
+        }
+    }
+
+    .dashboard-widget-inner > main {
+        height: auto;
+        min-height: 200px;
+
+        .fa-cog {
+            color: #A4A9AF;
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s;
+            opacity: 0;
+
+            &:hover {
+                opacity: 1;
+                color: rgba(164, 169, 175, 1);
+            }
+        }
+
+        &:hover {
+            .fa-cog {
+                opacity: 1;
+                color: rgba(164, 169, 175, 0.52);
+            }
+        }
+
+        .github-activity-settings ul {
+            padding: 0;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 9px;
+        }
+    }
+}
+
+.dasbhoard-widget-related-list {
+    list-style-type: none;
+    padding: 0 0 5px;
+
+    a {
+        color: #737373;
+        font-size: 16px;
+        transition: all 0.3s;
+
+        &:hover {
+            color: #000;
+        }
+    }
+
+    .fa-lightbulb-o {
+        color: @vision-color;
+    }
+
+    hr {
+        margin: 6px 0;
+    }
+
+    li {
+        margin-bottom: 3px;
+    }
+}
+
+.application .dashboard-widget-inner > header .clickable,
+.api .dashboard-widget-inner > header .clickable,
+.component .dashboard-widget-inner > header .clickable {
+    text-shadow: 1px 1px 1px rgba(150, 150, 150, 0.32);
+}
+
+.application .dashboard-widget-inner > header {
+    background: @application-color;
+    color: #fff;
+}
+
+.api .dashboard-widget-inner > header {
+    background: @api-color;
+    color: #fff;
+}
+
+.domain-update-toggle {
+    position: absolute;
+    right: 8px;
+    z-index: 2;
+}
+
+.component .dashboard-widget-inner > header {
+    background: @component-color;
+    color: #fff;
+}
+
+.new-widget {
+    width: 100%;
+    max-width: none;
+    padding-right: 0;
+
+    ng-include {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: rgba(57, 63, 69, 0.55);
+        text-shadow: 0 1px #fff;
+
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .dashboard-widget-inner {
+        border: 2px dashed #ccc;
+        padding-bottom: 0;
+
+        > main {
+            height: 150px;
+
+            .fa-thumb-tack {
+                font-size: 33px;
+            }
+        }
+
+        > header > span {
+            cursor: pointer;
+        }
+
+        &:after {
+            display: none;
+        }
+    }
+
+    p {
+        font-size: 16px;
+    }
+
+    .fa-chevron-down,
+    .fa-chevron-up {
+        position: absolute;
+        right: 14px;
+        color: rgba(57, 63, 69, 0.55);
+        top: 13px;
+        z-index: 1;
+        cursor: pointer;
+    }
+
+    .select2-container .select2-choice .select2-arrow b:after, .select2-container .select2-choices .select2-arrow b:after,
+    .select2-container.select2-dropdown-open .select2-arrow b:after {
+        content: "\f002";
+    }
+}
+
+.dashboard-widget-outer.myApiRouteOverrides {
+    .endpoint {
+        word-break: break-all;
+    }
+
+    .columns > section {
+        margin-right: 5px;
+    }
+}
+
+.dashboard-welcome-block {
+    background: #fff;
+    position: relative;
+    padding: 20px;
+
+    .wwt-icon-dev-tool-belt {
+        font-size: 100px;
+        color: #717171;
+    }
+
+    h1 {
+        color: #717171;
+        font-size: 22px;
+    }
+
+    > .btn-link {
+        position: absolute;
+        right: 0;
+        top: 0;
+        font-size: 18px;
+    }
+}
+
+.help-modal {
+    position: fixed;
+    width: 95%;
+    height: 95%;
+    top: 2.5%;
+    left: 2.5%;
+    z-index: 1031;
+    background: #fff;
+    overflow: hidden;
+
+    .hm-header {
+        display: flex;
+        align-items: center;
+        border-bottom: 1px solid #ccc;
+        height: 50px;
+        background: #fff;
+        width: 100%;
+
+        h3 {
+            margin: 0;
+            padding: 0 10px;
+        }
+
+        .btn-link {
+            position: absolute;
+            right: 0;
+            top: 3px;
+            font-size: 20px;
+        }
+    }
+
+    .hm-body {
+        height: calc(~'100% - 50px');
+        overflow: auto;
+    }
+
+    h4 {
+        text-align: center;
+        padding: 10px;
+        color: #fff;
+        font-size: 22px;
+        font-weight: 600;
+        margin: 26px 0;
+
+        &.applications {
+            background: @application-color;
+        }
+
+        &.apis {
+            background: @api-color;
+        }
+
+        &.components {
+            background: @component-color;
+        }
+    }
+
+    h5 {
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+}
+
+.help-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    opacity: 0.3;
+    z-index: 1030;
+}
+
+@media only screen and (min-width: @break-point-extra-large) {
+    .dashboard-widget-outer {
+        max-width: 33%;
+
+        // since we're going three across on this size, the
+        // last item in a row is different.
+        &:nth-child(even) {
+            padding-right: 10px;
+        }
+
+        &:nth-child(3n+3) {
+            padding-right: 0;
+        }
+
+        &.new-widget {
+            max-width: none;
+        }
+
+        &.large {
+            max-width: 66%;
+        }
+    }
+}
+
+.info-image {
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    display: block;
+    height: 185px;
+    width: 100%;
+    background-size: cover;
+    margin-bottom: 33px;
+    border: 1px solid #eee;
+    transition: all 0.3s;
+
+    &:hover {
+        border-color: #ccc;
+    }
+}
+
+.user-admin-dashboard {
+
+    .user-admin-dashboard-header {
+        > section {
+            position: relative;
+            padding: 0 18px 0 16px;
+        }
+
+        h4 {
+            margin: 10px 0;
+            padding: 8px 0;
+            font-size: 16px;
+            color: #777;
+            text-align: center;
+            border-bottom: 2px solid;
+            border-left: 3px solid;
+            text-transform: uppercase;
+
+            &.application {
+                border-color: @application-color;
+            }
+
+            &.partner {
+                border-color: @partner-color;
+            }
+
+            &.profile {
+                border-color: @profile-color;
+            }
+
+            &.user {
+                border-color: @user-color;
+            }
+        }
+
+    }
+
+    .user-admin-recently-viewed {
+        > section {
+            position: relative;
+            padding: 0 15px;
+        }
+
+        .cards-full .card-outer {
+            padding-bottom: 0;
+        }
+    }
+
+    .recently-viewed-blank-slate {
+        margin: 10px 0;
+        height: 45px;
+        width: 100%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+
+        i {
+            margin-right: 8px;
+            font-size: 24px;
+            color: #ccc;
+            text-shadow: 1px 1px #fff;
+        }
+
+        p {
+            margin: 4px 4px 0 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #bbb;
+            text-shadow: 1px 1px #fff;
+            transition: all 0.2s;
+        }
+
+        &:hover {
+            background: #fafafa;
+
+            p {
+                color: #999;
+            }
+        }
+    }
+
+    .columns.is-sticky {
+        padding: 8px 0 0;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2);
+        transition: all 0.2s;
+        z-index: 999 !important;
+
+        h4 {
+            border-left: none;
+        }
+    }
+
+}
+
+@media only screen and (max-width: @break-point-medium) {
+    .dashboard-widget-outer {
+        max-width: none;
+        flex: 1 100%;
+        padding-right: 0;
+
+        // since we're going three across on this size, the
+        // last item in a row is different.
+        &:nth-child(even) {
+            padding-right: 0;
+        }
+
+        &:nth-child(3n+3) {
+            padding-right: 0;
+        }
+    }
+}

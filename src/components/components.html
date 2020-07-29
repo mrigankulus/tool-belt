@@ -1,0 +1,120 @@
+<br>
+
+<div class="container component">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>
+                        Components
+                         <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/components" target="_blank">JSON</a>
+                    </h1>
+
+                    <p>Maybe you need to upload files in AngularJS? Or interact with the security service in Grails? Look here first!
+
+                    <br>
+
+                    Is something missing? Consider putting your own component together and adding it to the list to share it with the rest of the group!</p>
+
+                </section>
+
+                <section class="item-header-watch-button top">
+                    <dtb-resource-watcher dtb-resource-watcher-settings="Components.watcherSettings"></dtb-resource-watcher>
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95">
+                    <section class="search-section">
+
+                        <div class="resource-types-search">
+                            <i class="fa fa-search"></i>
+
+                            <input type="text"
+                                   class="no-input"
+                                   ng-model="Components.componentSearchText"
+                                   tabindex="0"
+                                   id="secondarySearchInput"
+                                   placeholder="Search Components" />
+                        </div>
+
+                        <!-- todo: if we want to filter by tech
+                        <span uib-dropdown>
+                            <button class="btn btn-xs btn-link"
+                                    ng-class="{'btn-active': Components.techFilter}"
+                                    uib-dropdown-toggle>
+                                {{ Components.techFilter ? Components.techFilter.name : 'All Tech'}}
+                                 <i class="fa fa-caret-down"></i>
+                            </button>
+
+                            <ul class="dropdown-menu" uib-dropdown-menu>
+                                <li><a href ng-click="Components.techFilter = ''">All</a></li>
+
+                                <li class="divider"></li>
+
+                                <li ng-repeat="tech in Components.technologies">
+                                    <a href ng-click="Components.techFilter = tech">{{tech.name}}</a>
+                                </li>
+                            </ul>
+
+                        </span>
+                        -->
+
+                    </section>
+
+                    <section class="item-detail-header-actions">
+                        <a ng-if="Components.canEditComponents" class="btn btn-link btn-xs" ui-sref="importExport">Import/Export</a>
+
+                        <button ng-if="Components.canEditComponents" class="btn btn-primary btn-xs" ng-click="Components.openAddComponentForm()">
+                            <i class="fa fa-plus"></i> Add New Component
+                        </button>
+                    </section>
+                </div>
+
+                <div class="primary-loader" ng-class="{active: Components.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+                <section ng-if="Components.recentComponents.length && !Components.componentSearchText">
+                    <h3 class="divider-title"><span>Recently Viewed</span></h3>
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="Components.recentComponents.length && !Components.componentSearchText">
+
+                        <component-card component="component" ng-repeat="component in Components.recentComponents"></component-card>
+
+                    </div>
+                </section>
+
+                <section>
+                    <h3 class="divider-title" ng-if="Components.recentComponents.length && !Components.componentSearchText"><span>All</span></h3>
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="Components.components && Components.components.length">
+
+                        <component-card component="component" ng-repeat="component in Components.components | filter: Components.componentSearchText | orderBy: 'name' | limitTo: Components.componentsLimit"></component-card>
+                    </div>
+
+                    <hr ng-if="Components.shouldShowShowMore()">
+
+                    <p class="text-center" ng-if="Components.shouldShowShowMore()">
+                        <button class="btn btn-link" ng-click="Components.showMore()" ng-click="Components.showMore()">Show All</button>
+                    </p>
+                </section>
+
+            </section>
+        </main>
+
+    </article>
+
+    <div class="slide-in-panel sip-right allow-ng-animate" ng-if="Components.isAddComponentForm">
+        <header class="sip-header">
+            <h3>New Component</h3>
+            <i class="fa fa-plus-circle"></i>
+        </header>
+
+        <section class="sip-body">
+            <ng-include src="'components/newComponent.html'" ng-controller="NewComponentCtrl as NewComponent"></ng-include>
+        </section>
+    </div>
+
+    <div class="page-overlay allow-ng-animate" ng-if="Components.isAddComponentForm" ng-click="Components.closeAddComponentForm()"></div>
+
+</div>

@@ -1,0 +1,63 @@
+.api-request-list {
+    margin-top: 20px;
+    background: rgba(204, 204, 204, 0.3);
+    box-shadow: inset 0px 0px 1px 0px rgba(0,0,0,0.54);
+    padding: 8px;
+
+    > section {
+        // todo: can't decide if I like this.
+        // max-height: 500px;
+        // overflow: auto;
+    }
+
+    .json-formatter-row {
+        max-width: 650px;
+        overflow: auto;
+    }
+}
+
+.api-request-card {
+    background: #FAFAFA;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    position: relative;
+    border-bottom: none;
+
+    &:last-of-type {
+        border-bottom: 1px solid #ccc;
+    }
+
+    h4 {
+        padding-right: 35px;
+    }
+
+    p {
+        color: #9D9E9F;
+        word-break: break-all;
+    }
+}
+
+.api-request-status-badge {
+    background: #ccc;
+    width: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    right: 0;
+    position: absolute;
+
+    &.success {
+        background: @successColor;
+    }
+
+    &.serverError {
+        background: @errorColor;
+    }
+
+    &.clientError {
+        background: @warningColor;
+    }
+}

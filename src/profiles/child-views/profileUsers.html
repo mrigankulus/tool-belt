@@ -1,0 +1,113 @@
+<br><br>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="ProfileUsers.isAddingUser">
+
+    <form class="columns vertical-center with-padding" ng-submit="ProfileUsers.addUserToProfile()">
+
+        <section></section>
+
+        <section class="flex-2">
+            <br>
+            <div class="form-group">
+                <user-typeahead target-model-parent="ProfileUsers.newUser"
+                                on-select-user="ProfileUsers.onSelectUserFromTypeAhead"
+                                get-should-disable-user-selection-reason="ProfileUsers.getShouldDisableUserSelectionReason"
+                                placeholder="'Select a User'"></user-typeahead>
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!ProfileUsers.newUser">
+
+                    Save
+                     <i class="fa fa-spinner fa-spin" ng-if="ProfileUsers.isSavingUser"></i>
+                </button>
+                <a class="btn btn-link" ng-click="ProfileUsers.isAddingUser = false;">Cancel</a>
+            </div>
+        </section>
+    </form>
+
+</section>
+
+<div class="item-detail-overlay" ng-if="ProfileUsers.isAddingUser" ng-click="ProfileUsers.isAddingUser = false"></div>
+
+<div class="item-detail-content-header" ng-if="!ProfileUsers.isLoadingUsers && !ProfileUsers.shouldShowBlankSlate()">
+    <section>
+
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="ProfileUsers.usersSearchText"
+                   ng-model-options="{ debounce: 300 }"
+                   tabindex="0"
+                   placeholder="Search Users">
+
+        </div>
+
+    </section>
+
+    <section class="item-detail-header-actions">
+        <a class="btn btn-link btn-xs pull-right" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/profiles/{{ ProfileDetail.profile.id }}/users" target="_blank">JSON</a>
+
+        <button class="btn btn-primary btn-xs" ng-click="ProfileUsers.isAddingUser = true" ng-if="ProfileDetail._callerRights.write">
+            <i class="fa fa-plus"></i> Add User
+        </button>
+    </section>
+</div>
+
+<div class="primary-loader" ng-class="{active: ProfileUsers.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="blank-slate-tab" ng-if="ProfileUsers.shouldShowBlankSlate()">
+    <i class="fa fa-info-circle"></i>
+
+    <section>
+        <p>No Users have been added to the <strong>{{ ProfileDetail.profile.name }}</strong> Profile. <br>
+            <span ng-if="ProfileDetail._callerRights.write"><strong><a ng-click="ProfileUsers.isAddingUser = true">Add a User</a></strong> to assign them this profile.</span></p>
+    </section>
+</div>
+
+<div class="cards allow-ng-animate default-animation" ng-if="!ProfileUsers.shouldShowBlankSlate()">
+
+    <user-card user="user" ng-repeat="user in ProfileUsers.users | filter: ProfileUsers.usersSearchText | orderBy: 'userName' | limitTo: ProfileUsers.usersLimit">
+
+        <div class="card-trash" ng-if="ProfileDetail._callerRights.write">
+            <i class="fa fa-trash"
+               ng-click="user.isPromptingToDelete = true"
+               uib-tooltip="Remove User from Profile."
+               tooltip-popup-delay="500"
+               tooltip-append-to-body="true"></i>
+        </div>
+
+        <div class="card-danger-prompt allow-ng-animate default-animation" ng-if="user.isPromptingToDelete">
+            <p class="text-center">Are you sure?</p>
+
+            <div class="form-actions">
+                <a class="wwt-mini-btn alpha-btn"
+                   ng-click="ProfileUsers.removeUser(user)">
+
+                    Delete <i class="fa fa-spinner fa-spin" ng-if="user.isProcessing"></i>
+                </a>
+
+                <a class="wwt-mini-btn cancel" ng-click="user.isPromptingToDelete = false">Cancel</a>
+            </div>
+        </div>
+
+    </user-card>
+
+</div>
+
+<div class="text-center" ng-if="ProfileUsers.users.length > ProfileUsers.usersLimit">
+    <hr class="dashed">
+
+    <a class="btn btn-link"
+       ng-click="ProfileUsers.usersLimit = ProfileUsers.usersLimit + ProfileUsers.usersLimitStart">
+
+        Show More
+    </a>
+</div>

@@ -1,0 +1,134 @@
+        <div class="tokens">
+            <label>Tokens
+                <i class="fa fa-question-circle"
+                   uib-popover-html="'Tokens are fields that are replaced with your data when your event occurs. <a href=\'https://github.wwt.com/custom-apps/notifications-api/blob/master/tokenBestPractices.md\' target=\'_blank\'>More about tokens.</a>'"
+                   popover-trigger="mouseenter"
+                   popover-popup-close-delay="500"
+                   popover-popup-delay="300"></i>
+            </label>
+
+            <section class="tokens-list-area">
+
+                <div class="form-group search-input">
+                    <i class="fa fa-search" auto-focus="#tokensSearchInput"></i>
+                    <input id="tokensSearchInput" placeholder="Search tokens..." class="no-input"
+                           ng-model="EventTypeCompose.searchTokens" ng-model-options="{ debounce: 200 }">
+                    <i class="fa search-reset" ng-if="EventTypeCompose.searchTokens.length" ng-click="EventTypeCompose.resetSearchInput()">&times;</i>
+                </div>
+
+                <div class="token">
+                    <ul>
+                        <li class="default-token allow-ng-animate"
+                            uib-popover="You get this token without the need to provide it in your message. {{ token.description }}"
+                            popover-title="Default Token"
+                            popover-trigger="mouseenter"
+                            popover-popup-delay="600"
+                            ng-repeat="token in EventTypeCompose.defaultTokens | orderBy:'tokenName' | filter:EventTypeCompose.searchTokens">{{ token.tokenName }}
+                        </li>
+
+                        <li class="allow-ng-animate" auto-focus="#editTokenNameInput"
+                            uib-popover="Property Path: {{ token.propertyPath }}" popover-trigger="mouseenter" popover-popup-delay="600"
+                            ng-repeat="token in EventTypeDetail.eventType.tokens | orderBy:'tokenName' | filter:EventTypeCompose.searchTokens"
+                            ng-click="EventTypeCompose.isEditingToken = token; wwtFocusPanelSVC.togglePanel('editTokenForm')">{{ token.tokenName }}
+                        </li>
+                    </ul>
+                </div>
+
+            </section>
+
+            <hr class="dashed" ng-if="EventTypeDetail.eventType.tokens.length">
+
+            <button class="btn btn-primary btn-xs pull-right" auto-focus="#editTokenNameInput"
+                    ng-click="EventTypeCompose.isEditingToken = {isNew: true}; wwtFocusPanelSVC.togglePanel('editTokenForm')">
+                        <i class="fa fa-plus"></i> Add New Token
+            </button>
+
+        </div>
+
+<wwt-focus-panel panel-name="'editTokenForm'"
+                 position="'right'"
+                 header-text="'Edit Token'"
+                 header-icon="'pencil'"
+                 backdrop="true">
+
+    <form name="editTokenForm" ng-submit="EventTypeCompose.saveToken(EventTypeCompose.isEditingToken)">
+        <section class="fp-container">
+            <div class="form-group required">
+                <label id="editTokenName">Token Name
+                    <i class="fa fa-question-circle" uib-popover="Token Name should be entered in camelCase." popover-trigger="mouseenter"
+                       popover-popup-delay="300" popover-append-to-body="true"></i>
+                </label>
+                <input id="editTokenNameInput" type="text" placeholder="Ex: tokenName (camelCase)"
+                       ng-model="EventTypeCompose.isEditingToken.tokenName" required="required" /></div>
+
+            <div class="form-group required">
+                <label id="editPropertyPath">Token Property Path
+                    <i class="fa fa-question-circle" uib-popover="The property Path to {{ EventTypeCompose.isEditingToken.tokenName || 'your token' }}" popover-trigger="mouseenter"
+                       popover-popup-delay="300" popover-append-to-body="true"></i>
+                </label>
+                <input type="text" placeholder="Ex: tokenName.path"
+                       ng-model="EventTypeCompose.isEditingToken.propertyPath" required="required" /></div>
+
+            <div class="form-group inline-switch-group">
+                <section>
+                    <label>
+                        Is Event Time?
+                         <i class="fa fa-question-circle"
+                            uib-popover="This indicates that the token will only have a value at the time of the event. For example, a token like 'actorUserName' won't have a value until the event occurs. Tokens like this need to be handled differently down stream."
+                            popover-trigger="mouseenter"
+                            popover-popup-delay="300"
+                            popover-append-to-body="true"></i></label>
+                </section>
+
+                <section>
+                    <div class="switch">
+                        <input type="checkbox" id="isEventTimeCheckbox" ng-model="EventTypeCompose.isEditingToken.isEventTime">
+                            <label for="isEventTimeCheckbox">
+                                <span></span>
+                            </label>
+                        </input>
+                    </div>
+                </section>
+            </div>
+
+
+            <a class="clickable" ng-click="EventTypeCompose.copyTokenToAllEvents(EventTypeCompose.isEditingToken)">
+                <b>Copy to All</b>
+                 <i class="fa fa-warning"
+                    uib-popover=""
+                    uib-popover-template="'events/child-views/tokens/tokenCopyWarning.html'"
+                    popover-trigger="mouseenter"
+                    popover-popup-delay="300" popover-append-to-body="true"></i>
+            </a> event types of the <b>"{{ EventTypeDetail.eventType.resourceType.title }}"</b> resource type.
+        </section>
+
+        <section class="fp-footer">
+            <div class="form-actions split" ng-if="!EventTypeCompose.isPromptingToDeleteToken">
+                <section>
+                    <button type="submit" class="btn btn-primary" ng-disabled="!editTokenForm.$valid"
+                            analytics=" 'Event Type Actions', 'Token Updated' "> Save Token</button>
+                    <a class="btn btn-link" ng-click="EventTypeCompose.closeTokenForms()"> Cancel</a>
+                </section>
+
+                <section>
+                    <a class="btn btn-link" ng-click="EventTypeCompose.isPromptingToDeleteToken = true"> Delete</a>
+                </section>
+            </div>
+
+            <div class="form-actions split inline-prompt delete" ng-if="EventTypeCompose.isPromptingToDeleteToken">
+                <section>
+                    <button type="submit" class="btn btn-danger"
+                            ng-click="EventTypeCompose.deleteToken(EventTypeCompose.isEditingToken)"
+                            analytics=" 'Event Type Actions', 'Token Deleted' "> Delete</button>
+                    <a class="btn btn-link" ng-click="EventTypeCompose.isPromptingToDeleteToken = false"> Cancel</a>
+                </section>
+
+                <section>
+                    <p>Are you sure you want to delete <strong>{{ EventTypeCompose.isEditingToken.tokenName }}</strong>?</p>
+                </section>
+            </div>
+        </section>
+
+    </form>
+
+</wwt-focus-panel>

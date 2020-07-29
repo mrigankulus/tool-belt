@@ -1,0 +1,75 @@
+<br>
+
+<div class="container user allow-ng-animate default-animation" ng-if="Users.canViewUsers">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>Users</h1>
+
+                    <p>Manage settings and permissions for internal and external users.</p>
+
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95">
+                    <section>
+
+                        <div class="resource-types-search">
+                            <i class="fa fa-search" ng-if="!Users.isSearching"></i>
+                            <i class="fa fa-spin fa-spinner" ng-if="Users.isSearching"></i>
+
+                            <input id="secondarySearchInput"
+                                   type="text"
+                                   class="no-input"
+                                   ng-model="Users.usersSearchText"
+                                   ng-change="Users.searchUsers()"
+                                   ng-model-options="{ debounce: 300 }"
+                                   tabindex="0"
+                                   placeholder="Search Users">
+
+                        </div>
+
+                    </section>
+                    <section ng-if="Users.isDeveloper" class="item-detail-header-actions">
+                        <button class="btn btn-primary btn-xs" ng-click="Users.showAddUserForm()"><i class="fa fa-plus"></i> Add User</button>
+                    </section>
+                </div>
+
+                <section class="item-detail-content-header-form large add-external-user allow-ng-animate" ng-if="Users.isAddingUser">
+                    <new-user-form on-cancel-new-user="Users.onCancelNewUser"></new-user-form>
+                </section>
+
+                <div class="item-detail-overlay" ng-if="Users.isAddingUser" ng-click="Users.isAddingUser = false"></div>
+
+                <section ng-if="!Users.users || !Users.users.length">
+                    <br><br>
+
+                    <div class="blank-slate-tab">
+                        <i class="fa fa-users"></i>
+
+                        <section>
+                            <h2>Search for Users</h2>
+
+                            <p>Search for users to manage their settings and permissions.</p>
+                        </section>
+                    </div>
+                </section>
+
+                <p class="muted text-center" ng-if="Users.shouldShowRecentUsersText()">
+                    <br>
+                    These are users you've <strong>viewed recently.</strong> Try the search if the user you're looking for is not in this list.
+                    <br>
+                </p>
+
+                <div class="cards">
+                    <user-card user="user" ng-repeat="user in Users.users | orderBy: 'fullName'"></user-card>
+                </div>
+
+            </section>
+        </main>
+
+    </article>
+</div>

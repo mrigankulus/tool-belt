@@ -1,0 +1,36 @@
+<form class="repo-connect-form"
+      ng-submit="VisionConnect.connectBoard()"
+      ng-class="{inline: inline}">
+
+    <h3 ng-if="!inline">Connect Vision Board</h3>
+
+    <div class="form-group">
+        <ui-select ng-model="selectedVisionGroup"
+                   limit="30"
+                   ui-select-focus-input
+                   autofocus="true"
+                   ng-change="VisionConnect.onSelectVisionGroup($select.selected)">
+
+            <ui-select-match placeholder="Add Vision Board..." allow-clear="true">
+                {{ $select.selected.name }}
+            </ui-select-match>
+
+            <ui-select-choices repeat="group in VisionConnect.availableVisionGroups | filter: $select.search | limitTo:$select.limit">
+                <div>
+                     <span ng-bind-html="group.name | highlight: $select.search"></span>
+                </div>
+            </ui-select-choices>
+
+        </ui-select>
+    </div>
+
+    <footer class="form-actions">
+        <section>
+            <button class="btn btn-primary"
+                    type="submit"
+                    ng-disabled="!VisionConnect.newBoard || !VisionConnect.newBoard.id">Connect</button>
+
+            <button class="btn btn-link" type="button" ng-click="VisionConnect.onCancel()">Cancel</button>
+        </section>
+    </footer>
+</form>

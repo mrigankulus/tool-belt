@@ -1,0 +1,131 @@
+<br>
+
+<div class="item-detail-content-header" ng-if="ResourceTypeEventTypes.eventTypes && ResourceTypeEventTypes.eventTypes.length">
+    <section>
+
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="ResourceTypeEventTypes.eventTypeSearchText"
+                   tabindex="0"
+                   placeholder="Search Event Types" />
+        </div>
+
+    </section>
+
+    <section class="item-detail-header-actions">
+        <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/resource-types/{{ ResourceTypeDetail.resourceType.id }}/event-types" target="_blank">JSON</a>
+
+        <button class="btn btn-primary btn-xs" ng-click="wwtFocusPanelSVC.togglePanel('newEventTypeForm')" auto-focus="#eventTypeTitle">
+            <i class="fa fa-plus"></i> Add New Event Type</button>
+    </section>
+</div>
+
+<div class="primary-loader" ng-class="{active: ResourceTypeEventTypes.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="columns with-borders">
+    <section class="flex-2">
+
+        <h2 class="item-detail-sub-section-title">Custom Event Types</h2>
+
+        <p class="muted">Use custom event types to notify your users of updates to resources that belong to this resource type.</p>
+
+        <br>
+
+        <div class="blank-slate-tab" ng-if="shouldShowEventTypesBlankSlate">
+            <i class="fa fa-info-circle"></i>
+
+            <section>
+                <p>No <strong>Event Types</strong> have been added to the <strong>{{ ResourceTypeDetail.resourceType.title }}</strong>
+                    Resource Type. Add a <strong><a ng-click="wwtFocusPanelSVC.togglePanel('newEventTypeForm')" auto-focus="#eventTypeTitle">New Event Type</a></strong>
+                    to get started.</p>
+            </section>
+        </div>
+
+        <div class="cards half">
+
+            <section class="card-outer" ng-if="!shouldShowEventTypesBlankSlate"
+                     ng-repeat="eventType in ResourceTypeEventTypes.eventTypes | filter: {title: ResourceTypeEventTypes.eventTypeSearchText} | orderBy: 'title'">
+
+                <a class="card-inner clickable"
+                   ng-if="!eventType.isUnusedDefault"
+                   ui-sref="eventTypeDetail({id: eventType.id})"
+                   tabindex="0">
+
+                    <h3 class="card-header">{{ eventType.title }}</h3>
+
+                    <p class="card-content">{{ eventType.description }}</p>
+                </a>
+
+                <a class="card-inner clickable error"
+                   ng-if="eventType.isUnusedDefault"
+                   ng-click="ResourceTypeEventTypes.useDefaultEventType(eventType)">
+
+                    <h3 class="card-header">
+                        {{ eventType.title }}
+                        &nbsp;
+                        <i class="fa fa-spinner fa-spin" ng-if="eventType.isCreating"></i>
+                    </h3>
+
+                    <p class="card-content">{{ eventType.description }}</p>
+
+                    <p class="card-content error">This is a default event type that is not being used by this resource type. Clicking this event type will create it for this resource type.</p>
+                </a>
+
+            </section>
+        </div>
+
+    </section>
+
+    <section>
+
+        <h2 class="item-detail-sub-section-title">Default Event Types</h2>
+
+        <p class="muted">Default event types are automatically created for every resource type.</p>
+
+        <div class="cards full">
+            <section class="card-outer"
+                     ng-repeat="eventType in ResourceTypeEventTypes.defaultEventTypes | filter: {title: ResourceTypeEventTypes.eventTypeSearchText} | orderBy: 'title'">
+
+                <a class="card-inner clickable"
+                   ng-if="!eventType.isUnusedDefault"
+                   ui-sref="eventTypeDetail({id: eventType.id})"
+                   tabindex="0">
+
+                    <h3 class="card-header">{{ eventType.title }}</h3>
+
+                    <p class="card-content">{{ eventType.description }}</p>
+                </a>
+
+                <a class="card-inner clickable error"
+                   ng-if="eventType.isUnusedDefault"
+                   ng-click="ResourceTypeEventTypes.useDefaultEventType(eventType)">
+
+                    <h3 class="card-header">
+                        {{ eventType.title }}
+                        &nbsp;
+                        <i class="fa fa-spinner fa-spin" ng-if="eventType.isCreating"></i>
+                    </h3>
+
+                    <p class="card-content">{{ eventType.description }}</p>
+
+                    <p class="card-content error">This is a default event type that is not being used by this resource type. Clicking this event type will create it for this resource type.</p>
+                </a>
+
+            </section>
+        </div>
+
+    </section>
+</div>
+
+<wwt-focus-panel panel-name="'newEventTypeForm'"
+                 position="'right'"
+                 header-text="'New Event Type'"
+                 header-icon="'plus-circle'"
+                 backdrop="true">
+
+    <ng-include src="'events/newEventType.html'" ng-controller="NewEventTypeCtrl as NewEventType"></ng-include>
+</wwt-focus-panel>

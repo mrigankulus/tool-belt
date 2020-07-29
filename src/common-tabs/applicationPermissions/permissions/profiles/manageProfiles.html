@@ -1,0 +1,145 @@
+<i class="fa fa-spinner fa-spin" ng-if="role.isLoadingProfiles"></i>
+
+<ul class="formatted-list">
+    <li ng-repeat="profile in ManageProfiles.profiles | orderBy: 'name'">
+        <section ng-if="!profile.isEditing">
+            {{ profile.name }}
+             &nbsp;
+             <span class="badge formatted-list-highlight-on-hover clickable"
+                   ng-if="profile.users && profile.users"
+                   ng-click="ApplicationPermissions.activeProfile = profile">
+                <i class="fa fa-users"></i> {{ ManageProfiles.getUsersCountForProfile(profile) }}
+            </span>
+
+            &nbsp;
+
+            <span uib-dropdown>
+                <i class="fa fa-caret-down clickable formatted-list-show-on-hover" uib-dropdown-toggle></i>
+
+                &nbsp;
+
+                <ul ng-if="ApplicationPermissions.isDeveloper" class="dropdown-menu" uib-dropdown-menu>
+                    <li>
+                        <a class="clickable" ui-sref="groups.groupDetail({id: 'wwt-profile:' + {{ profile.id }} })">
+                             View Group
+                        </a>
+                    </li>
+
+                    <!-- Removing this with the conversion from profile to groups
+                        but keeping it around a bit just in case.
+                    <li class="divider"></li>
+
+                    <li>
+                        <a class="clickable" ng-click="profile.isEditing = true" ng-if="!ManageProfiles.disableDeleteProfile(profile)">
+                            <i class="fa fa-pencil"></i>
+                             Edit
+                        </a>
+                    </li>
+                    -->
+
+                    <li>
+                        <a class="clickable" ng-click="ManageProfiles.removeProfileFromRole(role, profile)" ng-if="profile._callerRights.write">
+                            <i class="fa fa-trash-o"></i>
+                             Remove from Role
+                        </a>
+                    </li>
+
+                </ul>
+
+                <ul ng-if="!ApplicationPermissions.isDeveloper" class="dropdown-menu" uib-dropdown-menu>
+                    <li>
+                        <a class="clickable" ui-sref="profileDetail({profileId: {{ profile.id }} })">
+                             View Profile
+                        </a>
+                    </li>
+                </ul>
+
+            </span>
+        </section>
+
+        <section ng-if="profile.isEditing">
+            <form name="profileEditForm" ng-submit="ManageProfiles.updateProfile(profile)">
+
+                <div class="columns align-bottom">
+                    <section>
+
+                        <input class="no-input" ng-model="profile.name" required>
+
+                        <input class="no-input" ng-model="profile.description" placeholder="Short Description" required>
+                    </section>
+
+                    <section>
+                        <div class="form-actions">
+                            <button class="btn btn-default btn-xs"
+                                    type="submit"
+                                    tabindex="0"
+                                    ng-disabled="!profileEditForm.$valid">
+
+                                Save
+                                 <i class="fa fa-spinner fa-spin" ng-if="profile.isUpdating"></i>
+                            </button>
+
+                            <a class="btn btn-link btn-xs" tabindex="0" ng-click="profile.isEditing = false">Cancel</a>
+                        </div>
+                    </section>
+
+                </div>
+            </form>
+        </section>
+    </li>
+
+    <div ng-if="ApplicationPermissions.isDeveloper" class="app-permissions-link" ng-class="{ 'is-form-toggled' : role.isLinkingProfile }">
+        <span class="clickable" ng-if="!role.isLinkingProfile" ng-click="role.isLinkingProfile = true">
+            <i class="fa fa-plus-circle"></i> Link a Group
+        </span>
+
+        <form name="profileConnectForm" ng-submit="ManageProfiles.linkProfileToRole(role, role.newProfile)" ng-if="role.isLinkingProfile">
+
+            <div class="columns align-bottom">
+                <section style="max-width: 225px;">
+
+                    <ui-select class="no-select2"
+                               ng-model="role.newProfile"
+                               limit="20"
+                               ui-select-focus-input
+                               required
+                               on-select="ManageProfiles.onProfileSelect(role.newProfile)">
+
+                        <ui-select-match placeholder="Select a Profile Group" allow-clear="true">
+                            {{ $select.selected.name }}
+                        </ui-select-match>
+
+                        <ui-select-choices repeat="profile in ApplicationPermissions.allProfiles | filter: $select.search | limitTo:$select.limit"
+                                refresh="ManageProfiles.refreshProfileResults($select)"
+                                refresh-delay="0">
+
+                            <div>
+                                <span ng-if="profile.userEntered"><strong>Create: </strong> {{ profile.name }}</span>
+                                <span ng-if="!profile.userEntered" ng-bind-html="profile.name | highlight: $select.search"></span>
+                            </div>
+                        </ui-select-choices>
+
+                    </ui-select>
+
+                    <input class="no-input" ng-if="role.newProfile.shouldShowNewProfileForm" ng-model="role.newProfile.description" placeholder="Short Description" required>
+                </section>
+
+                <section>
+                    <div class="form-actions">
+                        <button class="btn btn-default btn-xs"
+                                type="submit"
+                                tabindex="0"
+                                ng-disabled="!profileConnectForm.$valid">
+
+                            Save
+                             <i class="fa fa-spinner fa-spin" ng-if="role.isSavingLinkedProfile"></i>
+                        </button>
+
+                        <a class="btn btn-link btn-xs" tabindex="0" ng-click="role.isLinkingProfile = false">Cancel</a>
+                    </div>
+                </section>
+
+            </div>
+        </form>
+    </div>
+</ul>

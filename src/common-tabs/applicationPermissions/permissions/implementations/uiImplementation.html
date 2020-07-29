@@ -1,0 +1,49 @@
+<h3 class="lead text-center">Create Roles and add Permissions to them.</h3>
+
+<p>Check for permissions in your code. Add your permissions to different roles for your app. Then create (or use existing) Groups and attach your roles (basically dynamic groups of permissions) to those Groups.</p>
+
+<p>A <strong>Role</strong> defines a set of capabilities - something like <mark>User</mark> or <mark>Admin</mark>. <strong>Permissions</strong> are those capabilities - something like <mark>canView</mark> or <mark>canEdit</mark>. A <strong>Group</strong> represents a group of users - something like <mark>Internal Sales Rep</mark> or <mark>Buyer</mark>. Putting it together, an <mark>Internal Sales Rep</mark> <mark>User</mark> <mark>canView</mark> things. A <mark>Buyer</mark> <mark>Admin</mark> <mark>canEdit</mark> things. The benefit of these abstractions is that you can change what a user can do by manipulating their role rather than changing the permissions in your code.</p>
+
+<br>
+
+<p><strong class="uppercase">{{ ApplicationPermissions.getAppName() }}</strong> will use the <strong>permission</strong> (ex. <mark>canEdit</mark>) to check the user's capabilities.</p>
+
+<hr class="dashed">
+
+<h4>Get permissions for the <strong>current user</strong> for an <strong>application</strong>.</h4>
+
+<pre>var url = '<a ng-href="https://apirouter.apps-dev.wwt.com/user?appName={{ ApplicationPermissions.getAppName() }}" target="_blank">https://apirouter.apps-dev.wwt.com/user?appName={{ ApplicationPermissions.getAppName() }}</a>';
+
+$http.get(url).then(function (repsonse) {
+    var permissions = response.data;
+});</pre>
+
+<hr class="dashed">
+
+<h4>Give it a try!</h4>
+
+<p>Try grabbing some permissions from an application (use an <code>?appName</code> you know you have permissions for).</p>
+
+<pre>var url = '<a ng-href="https://apirouter.apps-dev.wwt.com/user?appName={{ ApplicationPermissions.getAppName() }}" target="_blank">https://apirouter.apps-dev.wwt.com/user?appName={{ ApplicationPermissions.getAppName() }}</a>';
+
+$http.get(url).then(function (repsonse) {
+    var permissions = response.data;
+
+    console.log('permissions are...', permissions);
+
+    if (permissions.indexOf('canApproveQuote') > -1) {
+        console.log('You can approve quotes!');
+    } else {
+        console.log('You cannot approve quotes.');
+    }
+});</pre>
+
+<br>
+
+<p><code>permissions</code> is now an array of the user's permissions for {{ ApplicationPermissions.getAppName()}}. Something like - <code>['canView', 'canEdit']</code></p>
+
+<hr class="dashed">
+
+<h4 class="lead text-center">More Questions?</h4>
+
+<p class="text-center">Don't be shy to post questions on the <a href="https://github.wwt.com/custom-apps/user-service/issues" target="_blank">user repo <i class="fa fa-github"></i></a>.</p>

@@ -1,0 +1,87 @@
+<br>
+
+<div class="container allow-ng-animate default-animation" ng-if="!PartnerDetail.isLoading">
+    <article class="item-detail partner" ng-if="PartnerDetail.isPartnerActive">
+        <main>
+            <header class="item-header">
+                <section>
+                    <div class="asset-icon"
+                         ng-class="{ 'partner-customer' : PartnerDetail.partner.type == 'CUSTOMER',
+                                     'partner-vendor' : PartnerDetail.partner.type == 'VENDOR',
+                                     'partner-manufacturer' : PartnerDetail.partner.type == 'MANUFACTURER'}">P</div>
+                </section>
+
+                <section>
+                    <h1>{{ PartnerDetail.partner.name }}</h1>
+
+                    <p>{{ PartnerDetail.partner.type }} | PARTNER GROUP ID: {{ PartnerDetail.partner.partnerGroupId }}</p>
+
+                    <p>
+                        <a class="clickable" ng-click="PartnerDetail.historyPanelIsOpen = true"><i class="fa fa-history"></i> History</a>
+
+                        &nbsp;
+                        |
+                        &nbsp;
+
+                        <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/partner/{{ PartnerDetail.partner.type.toLowerCase() }}s/{{ PartnerDetail.partner.partnerGroupId }}" target="_blank">JSON</a>
+                    </p>
+                </section>
+
+                <section class="item-header-watch-button">
+                    <dtb-resource-watcher dtb-resource-watcher-settings="PartnerDetail.watcherSettings"></dtb-resource-watcher>
+                </section>
+            </header>
+
+            <section class="item-detail-content allow-ng-animate default-animation" ng-if="PartnerDetail.partner && PartnerDetail.partner.name">
+                <div class="item-detail-content-header short" hl-sticky offset-top="95">
+                    <ul class="nav nav-tabs">
+                        <li ng-repeat="tab in PartnerDetail.tabs"
+                            ui-sref-active="active"
+                            ng-class="{'pull-right': tab.slug === 'settings'}">
+
+                            <a ui-sref="partnerDetail.{{ tab.slug }}">
+                                <i class="fa fa-cog" ng-if="tab.slug === 'settings'"></i>
+                                <span ng-if="tab.slug !== 'profiles-users'">{{ tab.displayName }}</span>
+                                <span ng-if="tab.slug === 'profiles-users'">Profiles / Users</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <ui-view></ui-view>
+            </section>
+        </main>
+    </article>
+
+    <div ng-if="!PartnerDetail.isPartnerActive">
+        <div class="partner-blank-slate">
+            <div class="blank-slate-tab">
+                <i class="fa fa-building-o"></i>
+
+                <section>
+                    <h2>Partner Not Found</h2>
+                    <p class="muted">The Partner does not exist, or has been expired. Please head over to
+                        <strong><a ng-href="https://partner-hub.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/#/"
+                                   target="_blank">Partner Hub</a></strong> to create a new Partner. Or, try your
+                        <strong><a class="clickable" ui-sref="partners" auto-focus="#secondarySearchInput"> search</a></strong> again.</p>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="slide-in-panel sip-right allow-ng-animate"
+     ng-if="PartnerDetail.historyPanelIsOpen">
+
+    <header class="sip-header">
+        <h3>History</h3>
+        <i class="fa fa-history"></i>
+    </header>
+
+    <section class="sip-body history-panel" wwt-scroll-trap="historyPanelScrollTrap">
+        <wwt-activity-feed type="resourceHistory"
+                   resource="PartnerDetail.resourceEventStreamSettings"></wwt-activity-feed>
+    </section>
+</div>
+
+<div class="page-overlay allow-ng-animate" ng-if="PartnerDetail.historyPanelIsOpen" ng-click="PartnerDetail.historyPanelIsOpen = false"></div>

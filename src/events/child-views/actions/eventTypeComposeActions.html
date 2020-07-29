@@ -1,0 +1,159 @@
+<div class="tokens">
+    <label>User Actions
+        <i class="fa fa-question-circle muted"
+           uib-popover="Add links to your notifications."
+           popover-trigger="mouseenter"
+           popover-popup-delay="300"></i>
+    </label>
+
+    <section class="tokens-list-area">
+
+        <div class="token-blank-slate" ng-if="!EventTypeDetail.eventType.notificationActions.length">
+            <p>No Actions have been added for <strong>{{ EventTypeDetail.eventType.title }}</strong> yet.
+            <strong ng-click="EventTypeCompose.currentAction = {new: true}" auto-focus="#actionButtonTextInput"><a>Add New Action</a></strong> to get started.</p>
+        </div>
+
+        <br>
+
+        <div dragula='"event-actions-bag"' dragula-model='EventTypeDetail.eventType.notificationActions'>
+            <span ng-repeat="action in EventTypeDetail.eventType.notificationActions">
+                <div class="btn btn-sm btn-default btn-dashed"
+                     ng-click="EventTypeCompose.currentAction = action">
+
+                     <i class="fa fa-link" ng-if="action.httpMethod === 'LINK'"></i>
+                    &nbsp;{{ action.buttonText }}
+
+                    <i class="fa fa-info-circle"
+                       ng-if="EventTypeComposeActions.isPrimaryLink(action)"
+                       uib-popover="Since this is your first link, it is the primary link (drag n drop to re-order). The primary link will be used when the user clicks on a notification in the in app drop down."
+                       popover-trigger="mouseenter"
+                       popover-popup-delay="300"></i>
+                </div>
+            </span>
+        </div>
+
+        <hr class="dashed" ng-if="EventTypeDetail.eventType.notificationActions.length">
+
+        <div class="btn btn-xs btn-primary pull-right"
+             ng-click="EventTypeCompose.currentAction = {new: true}"
+             ng-if="EventTypeDetail.eventType.notificationActions.length">
+
+            <i class="fa fa-plus"></i> Add New Action
+        </div>
+
+    </section>
+
+</div>
+
+<div class="slide-in-panel sip-right allow-ng-animate" ng-if="EventTypeCompose.currentAction">
+    <header class="sip-header">
+        <h3>Event Action</h3>
+        <i class="fa fa-plus-circle"></i>
+    </header>
+
+    <section class="sip-body">
+        <main class="container new-asset-form">
+            <form name="editActionForm" ng-submit="EventTypeComposeActions.saveAction(EventTypeCompose.currentAction)">
+                <div class="form-group" class="required">
+                    <label>Link Text</label>
+                    <input ng-model="EventTypeCompose.currentAction.buttonText" id="actionButtonTextInput" placeholder="Ex: Approve Timecard" required>
+                </div>
+
+                <div class="form-group" class="required">
+                    <label>Link URL</label>
+                    <p><small>Use double brackets to process tokens in your url.</small></p>
+
+                    <div class="columns vertical-center">
+                        <!-- defaulting to "LINK" for now
+                        <section class="flex-none">
+                            <div class="no-select">
+                                <select ng-model="EventTypeCompose.currentAction.httpMethod" required>
+                                    <option value="">HTTP Method</option>
+                                    <option value="POST">POST</option>
+                                    <option value="PUT">PUT</option>
+                                    <option value="GET">GET</option>
+                                    <option value="LINK" selected="true">LINK (open page)</option>
+                                </select>
+
+                                <span>{{ EventTypeCompose.currentAction.httpMethod || 'Select' }} <i class="fa fa-caret-down"></i></span>
+                            </div>
+
+                            &nbsp;&nbsp;
+
+                        </section>
+                        -->
+
+                        <section>
+                            <div class="token-supported-input-wrapper">
+                                <token-supported-message tooltip-placement="left"></token-supported-message>
+
+                                <textarea ng-model="EventTypeCompose.currentAction.urlTemplate"
+                                       placeholder="Ex: http://my-api.apps.wwt.com/my-action-endpoint"
+                                       rows="1"
+                                       id="actionUrlInput"
+                                       msd-elastic
+                                       mentio
+                                       required></textarea>
+                            </div>
+
+                            <token-typeahead-menu input-id="'actionUrlInput'"
+                                  starter-token-list="EventTypeCompose.allTokens"></token-typeahead-menu>
+                        </section>
+                </div>
+
+                <!-- Considering removing this
+                <div class="form-group" class="required">
+                    <label>Button Class</label>
+                    <p><small>Add styling to the button if you'd like to indicate a positive or negative action.</small></p>
+
+                    <div class="no-select">
+                        <select ng-model="EventTypeCompose.currentAction.buttonClass">
+                            <option value="">None</option>
+                            <option value="approve">approve</option>
+                            <option value="reject">reject</option>
+                        </select>
+
+                        <span>{{ EventTypeCompose.currentAction.buttonClass || 'None' }} <i class="fa fa-caret-down"></i></span>
+                    </div>
+
+                </div>
+                -->
+
+                <br>
+
+                <div class="form-group columns vertical-center">
+                    <section class="flex-none" style="margin-right: 10px;">
+                        <label>Internal Users Only</label>
+                    </section>
+
+                    <section class="flex-none">
+                        <div class="switch">
+                            <input type="checkbox" id="internalOnly" ng-model="EventTypeCompose.currentAction.internalOnly">
+                            <label for="internalOnly">
+                                <span></span>
+                            </label>
+                            </input>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="form-actions split fixed-footer">
+                    <section>
+                        <button class="btn btn-primary" type="submit" ng-disabled="!editActionForm.$valid"> Submit
+                            <i class="fa fa-spinner fa-spin" ng-if="EventTypeCompose.isWorking"></i>
+                            <i class="fa fa-thumbs-up" ng-if="EventTypeCompose.isFinishedWorking"></i>
+                        </button>
+                        <a class="btn btn-link" ng-click="EventTypeCompose.currentAction = ''"> Cancel</a>
+                    </section>
+
+                    <section>
+                        <a class="btn btn-link" ng-click="EventTypeComposeActions.deleteAction(EventTypeCompose.currentAction)"> Delete Action</a>
+                    </section>
+                </div>
+
+            </form>
+        </main>
+    </section>
+</div>
+
+<div class="page-overlay allow-ng-animate" ng-if="EventTypeCompose.currentAction" ng-click="EventTypeCompose.currentAction = ''"></div>

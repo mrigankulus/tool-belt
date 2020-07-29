@@ -1,0 +1,10 @@
+<div id="vue-edit-group-form" ng-controller="GroupSettingsCtrl">
+    <vue-edit-group-form
+        class="vue-edit-group-form"
+        ng-non-bindable>
+        <edit-group-form
+            :group-id="groupId"
+            :useErrorMessenger="false"
+            @group-deleted="viewGroups" />
+    </vue-edit-group-form>
+</div>

@@ -1,0 +1,20 @@
+<div class="user-creation-errors">
+
+    <dl ng-if="!newUser.firstName || !newUser.lastName || !newUser.email">
+        <dt>Missing User Information</dt>
+        <dd ng-if="!newUser.firstName"><i class="fa fa-warning"></i> First Name is missing</dd>
+        <dd ng-if="!newUser.lastName"><i class="fa fa-warning"></i> Last Name is missing</dd>
+        <dd ng-if="!newUser.email"><i class="fa fa-warning"></i> Email Address is missing</dd>
+    </dl>
+
+    <dl ng-if="newUser.isExistingUser">
+        <dt>User Already Exists</dt>
+        <dd><i class="fa fa-warning"></i> Existing Users can be added to the partner from the 'Add User' form.</dd>
+    </dl>
+
+    <dl ng-if="PartnerProfilesUsers.containsDuplicateEmail">
+        <dt>User Email Duplicate</dt>
+        <dd><i class="fa fa-warning"></i> The email address on this user has been entered on multiple users.</dd>
+    </dl>
+
+</div>

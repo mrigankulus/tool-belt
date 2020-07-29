@@ -1,0 +1,42 @@
+<br>
+
+<div class="item-detail-content-header">
+    <section class="search-section">
+
+        <div class="resource-types-search" ng-if="TechnologyComponents.components.length > 3">
+            <i class="fa fa-search"></i>
+
+            <input type="text"
+                   class="no-input"
+                   ng-model="TechnologyComponents.componentSearchText"
+                   tabindex="0"
+                   id="secondarySearchInput"
+                   placeholder="Search Components" />
+        </div>
+
+    </section>
+</div>
+
+<div class="primary-loader" ng-class="{active: TechnologyComponents.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="blank-slate-tab" ng-if="TechnologyComponents.componentsHaveLoaded && !TechnologyComponents.components.length">
+    <i class="fa fa-info-circle"></i>
+
+    <section>
+        <p>No <strong>Components</strong> have been added to <strong>{{ assetState.currentAsset.name }}</strong>
+            yet. You can add technology to a component from that component's settings tab.
+    </section>
+</div>
+
+<section>
+    <div class="cards third allow-ng-animate default-animation" ng-if="TechnologyComponents.components.length">
+
+        <component-card component="component" ng-repeat="component in TechnologyComponents.components | filter: TechnologyComponents.componentSearchText | orderBy: 'name' | limitTo: TechnologyComponents.componentsLimit"></component-card>
+    </div>
+
+    <hr ng-if="TechnologyComponents.shouldShowShowMore()">
+
+    <p class="text-center" ng-if="TechnologyComponents.shouldShowShowMore()">
+        <button class="btn btn-link" ng-click="TechnologyComponents.showMore()" ng-click="TechnologyComponents.showMore()">Show All</button>
+    </p>
+</section>

@@ -1,0 +1,53 @@
+<br><br>
+
+<div class="item-detail-content-header" hl-sticky offset-top="95">
+    <section>
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="$ctrl.searchText"
+                   tabindex="0"
+                   placeholder="Search Group Types" />
+        </div>
+
+    </section>
+
+    <section class="item-detail-header-actions">
+        <button class="btn btn-primary btn-xs" ng-click="wwtFocusPanelSVC.togglePanel('newGroupTypePanel')" auto-focus="#groupTypeName">
+            <i class="fa fa-plus"></i> Add New Group Type
+        </button>
+    </section>
+</div>
+
+<section class="allow-ng-animate default-animation" ng-if="$ctrl.groupTypes.length">
+    <div class="cards">
+        <div class="card-outer" ng-repeat="type in $ctrl.groupTypes | orderBy: 'name' | filter: $ctrl.searchText">
+            <a class="card-inner clickable" tabindex="0" ui-sref="groups.groupTypeDetail({id: type.id})">
+                <h3 class="card-header">{{ type.name }}</h3>
+            </a>
+        </div>
+    </div>
+</section>
+
+<section ng-if="$ctrl.reportId">
+    <hr class="dashed">
+
+    <analyze-report-frame ng-if="$ctrl.reportId"
+                          report-id="$ctrl.reportId"
+                          select="$ctrl.reportSelect"
+                          get-detail-params="$ctrl.getDetailParams"></analyze-report-frame>
+</section>
+
+<wwt-focus-panel panel-name="'newGroupTypePanel'"
+                 position="'right'"
+                 header-text="'New Group Type'"
+                 header-icon="'plus-circle'"
+                 backdrop="true">
+
+    <section class="fp-container">
+        <group-type-form on-create="$ctrl.onCreate"></group-type-form>
+    </section>
+</wwt-focus-panel>

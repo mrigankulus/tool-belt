@@ -1,0 +1,48 @@
+<div ng-if="$ctrl.eventTypes" class="allow-ng-animate default-animation columns with-borders">
+    <section class="cards-full">
+        <div ng-repeat="eventType in $ctrl.eventTypes" ng-click="$ctrl.openType(eventType)" class="card-outer">
+             <div class="card-inner clickable" ng-class="{'active': eventType.id === $ctrl.activeEventType.id, 'enabled': !$ctrl.taskType.eventIsDisabled(eventType.id)}">
+                <h3 class="card-header">
+                    {{ eventType.title }}
+                </h3>
+
+                <p class="card-content">{{ eventType.description | truncate }}</p>
+
+                <div class="columns vertical-center">
+                    <section class="flex-none">
+                        <div class="switch-wrapper">
+                            <section>
+                                <label for="eventTypeSwitch{{ eventType.id }}">Enabled</label>
+                            </section>
+
+                            <section>
+                                <div class="toggle-switch-small">
+                                    <input type="checkbox"
+                                           ng-checked="!$ctrl.taskType.eventIsDisabled(eventType.id)"
+                                           ng-click="$ctrl.taskType.toggleEventIsDisabled(eventType.id)"
+                                           class="toggle-switch-small-checkbox"
+                                           id="eventTypeSwitch{{ eventType.id }}">
+
+                                    <label class="toggle-switch-small-label" for="eventTypeSwitch{{ eventType.id }}"></label>
+                                </div>
+                            </section>
+                        </div>
+                    </section>
+
+                    <section class="flex-none" style="margin-left: 10px;" ng-if="$ctrl.hasCustomTemplate(eventType)">
+                        <p>Custom Template</p>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section>
+        <div ng-if="$ctrl.activeEventType">
+                <task-type-email-template event-type="$ctrl.activeEventType"
+                                          template="$ctrl.activeTemplate"
+                                          task-type="$ctrl.taskType"></task-type-email-template>
+        </div>
+    </section>
+</div>

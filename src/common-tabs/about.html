@@ -1,0 +1,13 @@
+<br><br>
+
+<repo-connect ng-if="About.canEdit && assetState.shouldShowRepoConnectForm()" on-repo-connected="assetState.oAddRepo"></repo-connect>
+
+<div class="blank-slate-tab" ng-if="!About.canEdit && About.permissionsHaveLoaded && assetState.shouldShowRepoConnectForm()">
+    <i class="fa fa-lock"></i>
+
+    <section>
+        <p>It looks like there is no connected repo and you don't have <strong>permission</strong> to add one. Please contact the service desk if you feel this is a mistake, or you'd like the required permissions.</p>
+    </section>
+</div>
+
+<div class="readme" marked="readme" ng-if="!assetState.shouldShowRepoConnectForm()"></div>

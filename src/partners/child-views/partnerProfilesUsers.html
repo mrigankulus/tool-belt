@@ -1,0 +1,15 @@
+<br><br>
+
+<div class="columns with-borders"
+     ng-class="{ 'is-single-column' : !PartnerProfilesUsers.profiles.length }">
+
+    <section class="partner-profiles-container"
+             ng-class="{ 'is-single-column' : !PartnerProfilesUsers.profiles.length && !PartnerProfilesUsers.users.length }">
+        <ng-include src="'partners/child-views/partnerProfiles.html'"></ng-include>
+    </section>
+
+    <section class="partner-users-container" ng-if="PartnerProfilesUsers.profiles.length || PartnerProfilesUsers.users.length">
+        <ng-include src="'partners/child-views/partnerUsers.html'"></ng-include>
+    </section>
+
+</div>

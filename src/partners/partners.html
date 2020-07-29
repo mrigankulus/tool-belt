@@ -1,0 +1,112 @@
+<br>
+
+<div class="container partner allow-ng-animate default-animation" ng-if="Partners.canViewPartners">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>Partners</h1>
+                    <p>Manage settings, users and profiles for partners.</p>
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95">
+                    <section class="search-section">
+
+                        <div class="resource-types-search">
+                            <i class="fa fa-search" ng-if="!Partners.isSearching"></i>
+                            <i class="fa fa-spin fa-spinner" ng-if="Partners.isSearching"></i>
+
+                            <input id="secondarySearchInput"
+                                   type="text"
+                                   class="no-input"
+                                   ng-model="Partners.partnersSearchText"
+                                   ng-change="Partners.searchPartners()"
+                                   ng-model-options="{ debounce: 300 }"
+                                   tabindex="0"
+                                   ng-focus="isInputFocused = true"
+                                   ng-blur="isInputFocused = false"
+                                   placeholder="Search Partners">
+
+                            <i ng-if="Partners.partnersSearchText.length"
+                               class="fa fa-times-circle clear-input"
+                               ng-click="Partners.clearInput()"></i>
+
+                            <span ng-if="isInputFocused && (Partners.partnersSearchText.length > 0 && Partners.partnersSearchText.length < 3)"
+                                  class="min-character-required allow-ng-animate">3 character min.</span>
+                        </div>
+
+                        <button class="btn btn-xs btn-link filter-toggle partner-{{ filter.type }}"
+                                ng-repeat="filter in Partners.filters"
+                                ng-class="{'btn-active': filter.active}"
+                                ng-click="filter.active = !filter.active">
+                            <span>{{ filter.title }}</span>
+                            <span>( {{ Partners.getGroupTypeCount(filter.type) || 0 }} )</span>
+                        </button>
+
+                    </section>
+
+                    <section>
+                        <button ng-if="Partners.canEditPartners" class="btn btn-primary btn-xs" ng-click="Partners.isAddingPartner = true" auto-focus="#newPartnerName">
+                            <i class="fa fa-plus"></i> Add New Partner
+                        </button>
+                    </section>
+                </div>
+
+                <section class="item-detail-content-header-form large allow-ng-animate" ng-if="Partners.isAddingPartner">
+                    <h1 class="text-center muted">Coming Soon!</h1>
+
+                    <p class="text-center muted">Creating a New Partner from the Dev Tool Belt is not yet supported. In the mean time, <br> head over to
+                        <strong><a ng-href="https://partner-hub.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/#/"
+                                   target="_blank">Partner Hub</a></strong> to create your Partner. Once created, it will show up in the
+                        <strong><a class="clickable" ng-click="Partners.isAddingPartner = false" auto-focus="#secondarySearchInput"> search</a></strong>.</p>
+
+                    <i class="fa close-panel" ng-click="Partners.isAddingPartner = false">&times;</i>
+
+                    <br>
+                </section>
+
+                <div class="item-detail-overlay" ng-if="Partners.isAddingPartner" ng-click="Partners.isAddingPartner = false"></div>
+
+                <br>
+
+                <section ng-if="!Partners.partnersSearchText.length && (!Partners.partners || !Partners.partners.length)">
+                    <br>
+
+                    <div class="blank-slate-tab">
+                        <i class="fa fa-building-o"></i>
+
+                        <section>
+                            <h2>Search for Partners</h2>
+                            <p><strong><a auto-focus="#secondarySearchInput">Search</a></strong> for partners to manage their settings, users and profiles.</p>
+                        </section>
+                    </div>
+                </section>
+
+                <section ng-if="Partners.partnersSearchText.length && !Partners.isSearching && (!Partners.partners || !Partners.partners.length)">
+                    <br>
+
+                    <div class="blank-slate-tab">
+                        <i class="fa fa-building-o"></i>
+
+                        <section>
+                            <h2>No Partners Found</h2>
+                            <p>"{{ Partners.partnersSearchText }}" did not return any results. Please refine your <strong><a auto-focus="#secondarySearchInput">search</a></strong>.</p>
+                        </section>
+                    </div>
+                </section>
+
+                <p class="muted text-center" ng-if="Partners.shouldShowRecentPartnersText">
+                    These are the partners you've <strong>recently viewed.</strong> Try the <strong><a auto-focus="#secondarySearchInput"> search</a></strong> if the partner you're looking for is not in this list.
+                </p>
+
+                <div class="cards allow-ng-animate default-animation">
+                    <partner-card partner="partner" ng-repeat="partner in Partners.partners | orderBy: 'objValue' | filter: Partners.filterPartners"></partner-card>
+                </div>
+            </section>
+        </main>
+
+    </article>
+</div>

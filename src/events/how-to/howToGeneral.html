@@ -1,0 +1,95 @@
+<br>
+
+<div class="container" style="width: 100%">
+    <iframe src="https://player.vimeo.com/video/188174940" width="100%" height="400" frameborder="0" style="padding: 0 20px;" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+    <br><br>
+
+    <div class="columns with-padding text-center">
+        <section>
+            <a class="info-image"
+               target="_blank"
+               href="https://github.wwt.com/custom-apps/wwt-in-app-notifications"
+               style="background-image: url('img/event-in-app-drop-down-example.png');     background-position: top;"></a>
+
+            <h5><strong>IN-APP NOTIFICATIONS</strong></h5>
+            <p>The in-app drop down should be in all applications as it will show the user all of their notifications.</p>
+        </section>
+
+        <section>
+            <a class="info-image"
+               target="_blank"
+               href="https://github.wwt.com/custom-apps/wwt-resource-event-stream"
+               style="background-image: url('img/event-stream-example.png')"></a>
+
+            <h5><strong>RESOURCE EVENT STREAM</strong></h5>
+            <p>A list of events for a given resource.</p>
+            <br><br>
+        </section>
+
+        <section>
+            <a class="info-image"
+               target="_blank"
+               href="https://github.wwt.com/custom-apps/wwt-resource-watcher"
+               style="background-image: url('img/event-subscribe-example.png'); background-position: top;"></a>
+
+            <h5><strong>RESOURCE WATCHER</strong></h5>
+            <p>A component to make it easy for users to watch your resources.</p>
+        </section>
+    </div>
+
+    <hr class="dashed">
+
+    <div class="columns with-borders">
+        <section class="flex-3">
+            <h3>Events &amp; Notifications</h3>
+
+            <p>The notifications service allows you to notify users of events that occur in your application, and records a history of those events to show the user a record of activity for your resources. In addition to saving you time in design and development, this service encourages a unified user experience and assembles this data into an ecosystem that can be leveraged for future applications.</p>
+
+            <br>
+
+            <h4>Create a Resource Type &amp; Event Types</h4>
+            <p>
+                Your <strong>resource type</strong> will represent the domain of your events (e.g. "Quote" or "Order").
+                <br>
+                Your <strong>event types</strong> are the definitions or templates of how your events will look in emails, the notifications drop down, and the resource event stream (e.g. "Quote Won" or "Order Shipped"). Use the tool belt to create <a ui-sref="resourceTypes">resource types</a> and <a ui-sref="eventTypes">event types</a>.
+            </p>
+
+            <h4>Sending Notifications</h4>
+            <p>
+                To send a notification, you'll publish an event to RabbitMQ using the exchange defined in your event type's settings. The notifications service has set up dynamic bindings to your exchange. It will pickup your events and process them accordingly. If sending RabbitMQ messages is not an option, the <a href="https://github.wwt.com/custom-apps/events-api" target="_blank">events-api</a> allows you to publish RabbitMQ events with an HTTP POST.
+            </p>
+
+            <p>
+                Users can subscribe to your event types to receive these notifications from the <a href="https://notifications.apps.wwt.com" target="_blank">notifications application</a>. You can also subscribe users from your resource and/or event types in the tool belt. For more advanced usage, use the <a href="https://dev-tool-belt.apps-dev.wwt.com/api/3985/documentation" target="_blank">subscriptions api</a> to subscribe users.
+            </p>
+
+            <br>
+
+            <h4>A Few Important Notes</h4>
+
+            <ul>
+                <li>If you're firing events from your API, you'll need to be connected to DEV (not SAND) for the process to work locally.</li>
+                <li>Emails triggered by events in DEV will go to your DEV email account. If you don't already have access to your DEV email account, you'll need to submit a request in service now.</li>
+                <li>Please don't be shy to <a href="https://github.wwt.com/custom-apps/dev-tool-belt/issues" target="_blank">create an issue</a> with any questions, concerns or feedback about the notifications service.</li>
+            </ul>
+        </section>
+
+        <section class="right-feature-links">
+            <a ui-sref="eventTypes.howTo.node">
+                <i class="wwt-icon-node-js"></i>
+                <h4>Publishing Events with Node</h4>
+            </a>
+
+            <a ui-sref="eventTypes.howTo.grails">
+                <i class="wwt-icon-grails"></i>
+                <h4>Publishing Events with Grails</h4>
+            </a>
+
+            <a ui-sref="eventTypes.howTo.ui">
+                <i class="wwt-icon-angular"></i>
+                <h4>Publishing Events with the Events API</h4>
+            </a>
+        </section>
+    </div>
+</div>

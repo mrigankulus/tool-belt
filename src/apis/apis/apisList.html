@@ -1,0 +1,89 @@
+<br>
+<section class="item-detail-content">
+    <div class="item-detail-content-header score-box-ranges" hl-sticky offset-top="95">
+
+        <section class="search-section">
+
+            <div class="resource-types-search">
+                <i class="fa fa-search"></i>
+
+                <input type="text" class="no-input" ng-model="ApisList.apiSearchText" tabindex="0"
+                    id="secondarySearchInput" placeholder="Search APIs">
+            </div>
+
+            <button class="btn btn-xs btn-link btn-my-overrides"
+                ng-class="{'btn-active': ApisList.isFilteringByOverrides}"
+                ng-click="ApisList.isFilteringByOverrides = !ApisList.isFilteringByOverrides">
+                <span>My Overrides</span>
+                <span class="count">{{ (ApisList.overridesForUser ? ApisList.overridesForUser.length : 0); }}</span>
+            </button>
+
+            <button class="btn btn-xs btn-link"
+                ng-if="ApisList.env == 'local' || ApisList.env == 'dev' || ApisList.env == 'test' || ApisList.env == 'tst'"
+                style="border-right: 1px solid #ccc; padding-right: 10px;"
+                ng-class="{'btn-active': ApisList.isFilteringByOverrides}"
+                ng-click="ApisList.scoreSortActivated = true; ApisList.scoreSortDirectionAsc = !ApisList.scoreSortDirectionAsc; ApisList.filterApiListByScore();">
+                <span ng-if="!ApisList.scoreSortActivated">Sort By Score</span>
+                <span ng-if="ApisList.scoreSortActivated">Sort:</span>
+                <span ng-if="!ApisList.scoreSortDirectionDesc && ApisList.scoreSortActivated" class="count">Low to
+                    High</span>
+                <span ng-if="ApisList.scoreSortDirectionDesc && ApisList.scoreSortActivated" class="count">High to
+                    Low</span>
+            </button>
+
+            <button class="btn btn-xs btn-link filter-toggle-scorecard score-card-{{ filter.type }}"
+                ng-if="ApisList.env == 'local' || ApisList.env == 'dev' || ApisList.env == 'test' || ApisList.env == 'tst'"
+                ng-repeat="filter in ApisList.scoreFilters" ng-class="{'btn-active': filter.active}"
+                ng-click="filter.active = !filter.active; ApisList.filterApisByScore(filter.type)">
+                <span class="{{ filter.type }}">{{ filter.title }} ({{ filter.count | number }}) </span>
+            </button>
+
+            <button class="btn btn-xs btn-link" ng-if="ApisList.filtersActivated"
+                ng-click="ApisList.clearApiListFilters();"><span class="count"><strong>Clear
+                        Filters</strong></span></button>
+        </section>
+
+        <section>
+            <button ng-if="ApisList.canEditApis" class="btn btn-primary btn-xs"
+                ng-click="wwtFocusPanelSVC.togglePanel('newApiForm')" auto-focus="#inputName">
+                <i class="fa fa-plus"></i> Add New API
+            </button>
+        </section>
+    </div>
+
+    <section ng-if="ApisList.recentApis.length && !ApisList.apiSearchText">
+        <h3 class="divider-title"><span>Recently Viewed</span></h3>
+
+        <div class="cards allow-ng-animate default-animation" ng-if="ApisList.recentApis && ApisList.recentApis.length">
+
+            <api-card api="api" ng-repeat="api in ApisList.recentApis | filter: ApisList.searchFilter"
+                on-toggle-override="ApisList.onToggleOverride"></api-card>
+
+        </div>
+    </section>
+
+    <section>
+        <h3 class="divider-title" ng-if="ApisList.recentApis.length && !ApisList.apiSearchText"><span>All</span></h3>
+
+        <div class="cards allow-ng-animate default-animation" ng-if="ApisList.apis && ApisList.apis.length">
+
+            <api-card api="api"
+                ng-repeat="api in ApisList.apis | filter: ApisList.searchFilter | limitTo: ApisList.apisLimit"
+                on-toggle-override="ApisList.onToggleOverride"></api-card>
+
+        </div>
+
+        <hr ng-if="ApisList.shouldShowShowMore()">
+
+        <p class="text-center" ng-if="ApisList.shouldShowShowMore()">
+            <button class="btn btn-link" ng-click="ApisList.showMore()" ng-click="ApisList.showMore()">Show All</button>
+        </p>
+    </section>
+
+    <wwt-focus-panel panel-name="'newApiForm'" position="'right'" header-text="'New API'" header-icon="'plus-circle'"
+        backdrop="true">
+
+        <ng-include src="'apis/apis/newApi.html'" ng-controller="NewApiCtrl as NewApi"></ng-include>
+    </wwt-focus-panel>
+
+</section>

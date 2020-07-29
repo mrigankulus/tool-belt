@@ -1,0 +1,28 @@
+<section class="card-outer">
+
+    <ng-transclude></ng-transclude>
+
+    <a class="card-inner clickable is-partner" tabindex="0"
+       ng-class="{ 'partner-customer' : partner.type == 'customer' || partner.type == 'CUSTOMER',
+                   'partner-vendor' : partner.type == 'vendor' || partner.type == 'VENDOR',
+                   'partner-manufacturer' : partner.type == 'manufacturer' || partner.type == 'MANUFACTURER' }"
+       ui-sref="partnerDetail({partnerId: partner.objAltValue || partner.partnerGroupId || partner.id})">
+
+        <div class="columns with-borders small-borders">
+
+            <!--<section>-->
+                <!--<i class="wwt-icon-wwt-logo"></i> todo: company logo here-->
+            <!--</section>-->
+
+            <section class="flex-5">
+
+                <h3 class="card-header">{{ partner.objValue || partner.name }}</h3>
+                <p class="card-content text-capitalize">{{ PartnerCard.getFriendlyPartnerType(partner) }}</p>
+
+            </section>
+
+        </div>
+
+    </a>
+
+</section>

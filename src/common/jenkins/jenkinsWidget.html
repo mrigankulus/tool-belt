@@ -1,0 +1,33 @@
+<div class="widget" ng-if="assetState.currentAsset.connectedJenkinsJobs && assetState.currentAsset.connectedJenkinsJobs.length">
+    <header>
+        <h3><a href="http://jenkins.wwt.com/" target="_blank">Jenkins</a></h3>
+
+        <div class="widget-icon"><img src="img/jenkins.png"></div>
+    </header>
+
+    <main>
+        <div class="widget-content">
+            <section ng-repeat="job in JenkinsWidget.jobs">
+
+                <div class="jenkins-build-status"
+                     ng-class="{
+                        'success': job.data.result === 'SUCCESS',
+                        'error': job.data.result === 'FAILURE',
+                        'warning': job.data.result === 'UNSTABLE',
+                        'no-status': !job.data.result
+                     }"></div>
+
+                <a style="max-width: 180px;" ng-href="{{ job.data.url }}" target="_blank" title="{{ job.data.fullDisplayName }}">
+
+                    {{job.data.fullDisplayName}}
+                </a>
+
+                <p class="time" ng-if="!job.data.timestamp">Last build not found.</p>
+                <p class="time" ng-if="job.data.timestamp">{{ job.data.timestamp | friendlyDate }}</p>
+            </section>
+        </div>
+
+    </main>
+</div>
+
+<br>

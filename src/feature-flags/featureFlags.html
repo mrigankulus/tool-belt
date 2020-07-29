@@ -1,0 +1,43 @@
+<br><br>
+
+<div class="container">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>Feature Flags</h1>
+
+                    <p>Tinker with experimental features with feature flags.</p>
+
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+                <br>
+                <div class="form-group" ng-repeat="flag in featureFlagsSVC.flags">
+                    <label>{{ flag.title }}</label>
+
+                    <p ng-if="flag.description">{{ flag.description }}</p>
+
+                    <br ng-if="!flag.description">
+
+                    <div class="switch">
+                        <input type="checkbox"
+                               id="flag{{ $index }}"
+                               ng-model="flag.value"
+                               ng-change="FeatureFlags.onFlagChange()">
+
+                        <label for="flag{{ $index }}">
+                            <span></span>
+                        </label>
+                        </input>
+                    </div>
+
+                    <hr class="dashed">
+
+                </div>
+            </section>
+        </main>
+
+    </article>
+</div>

@@ -1,0 +1,128 @@
+<br><br>
+
+<div class="blank-slate-tab" ng-if="!ProfilePartners.isLoadingPartners && (!ProfilePartners.partners || !ProfilePartners.partners.length)">
+    <i class="fa fa-info-circle"></i>
+
+    <section>
+        <p>No Active Partners have been added to the <strong>{{ ProfileDetail.profile.name }}</strong> Profile. <br>
+            <span ng-if="ProfileDetail._callerRights.write"><strong><a ng-click="ProfilePartners.isAddingPartner = true">Add a Partner</a></strong> to assign them this profile.</span></p>
+    </section>
+</div>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="ProfilePartners.isAddingPartner">
+
+    <form class="columns vertical-center with-padding"
+          ng-submit="ProfilePartners.addPartnerToProfile()"
+          name="newPartnerForm"
+          ng-if="ProfilePartners.isAddingPartner">
+
+        <section></section>
+
+        <section class="flex-2">
+            <br>
+            <div class="form-group relative-position">
+                <span ng-if="ProfilePartners.showMinCharLimitMsg" class="min-character-required allow-ng-animate">3 character min.</span>
+
+                <ui-select ng-model="ProfilePartners.newPartner"
+                           limit="40"
+                           ui-select-focus-input
+                           autofocus="true"
+                           class="no-select2">
+
+                    <ui-select-match placeholder="Select a Partner" allow-clear="true">
+                        {{ $select.selected.name }}
+                    </ui-select-match>
+
+                    <ui-select-choices
+                        refresh="ProfilePartners.searchPartners($select.search)"
+                        refresh-delay="200"
+                        repeat="partner in ProfilePartners.availablePartners | filter: $select.search | limitTo:$select.limit"
+                        ui-disable-choice="ProfilePartners.profileHasPartner(partner)">
+
+                        <div ng-bind-html="partner.name | highlight: $select.search"></div>
+                        <span ng-if="ProfilePartners.profileHasPartner(partner)">({{ ProfileDetail.profile.name }} already has this partner)</span>
+                    </ui-select-choices>
+
+                </ui-select>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!ProfilePartners.newPartner">
+                    Save
+                     <i class="fa fa-spinner fa-spin" ng-if="ProfilePartners.isSavingNewPartner"></i>
+                </button>
+                <a class="btn btn-link" ng-click="ProfilePartners.isAddingPartner = false">Cancel</a>
+            </div>
+        </section>
+    </form>
+
+</section>
+
+<div class="item-detail-overlay" ng-if="ProfilePartners.isAddingPartner" ng-click="ProfilePartners.isAddingPartner = false"></div>
+
+<div class="item-detail-content-header" ng-if="ProfilePartners.partners && ProfilePartners.partners.length">
+    <section>
+
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="ProfilePartners.partnerSearchText"
+                   tabindex="0"
+                   placeholder="Search Partners" />
+        </div>
+
+    </section>
+
+    <section class="item-detail-header-actions">
+        <button class="btn btn-primary btn-xs" ng-click="ProfilePartners.isAddingPartner = true" auto-focus="#resourceTypeTitle" ng-if="ProfileDetail._callerRights.write">
+            <i class="fa fa-plus"></i> Add Partner
+        </button>
+    </section>
+</div>
+
+<div class="primary-loader" ng-class="{active: ProfilePartners.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="cards allow-ng-animate default-animation" ng-if="ProfilePartners.partners && ProfilePartners.partners.length">
+
+    <partner-card partner="partner" ng-repeat="partner in ProfilePartners.partners | filter: ProfilePartners.partnerSearchText | orderBy: 'name' | limitTo: ProfilePartners.partnerLimit">
+
+        <div class="card-trash" ng-if="ProfileDetail._callerRights.write">
+            <i class="fa fa-trash"
+               ng-click="partner.isPromptingToDelete = true"
+               uib-tooltip="Remove Partner from Profile."
+               tooltip-popup-delay="500"
+               tooltip-append-to-body="true"></i>
+        </div>
+
+        <div class="card-danger-prompt allow-ng-animate default-animation" ng-if="partner.isPromptingToDelete">
+            <p class="text-center">Are you sure?</p>
+
+            <div class="form-actions">
+                <a class="wwt-mini-btn alpha-btn"
+                   ng-click="ProfilePartners.removePartnerFromProfile(partner)">
+                    Delete <i class="fa fa-spinner fa-spin" ng-if="user.isProcessing"></i>
+                </a>
+
+                <a class="wwt-mini-btn cancel" ng-click="partner.isPromptingToDelete = false">Cancel</a>
+            </div>
+        </div>
+
+    </partner-card>
+
+</div>
+
+<div class="text-center" ng-if="ProfilePartners.partners.length > ProfilePartners.partnerLimit">
+    <hr class="dashed">
+
+    <a class="btn btn-link"
+       ng-click="ProfilePartners.partnerLimit = ProfilePartners.partnerLimit + ProfilePartners.partnersLimitStart"> Show More
+    </a>
+</div>

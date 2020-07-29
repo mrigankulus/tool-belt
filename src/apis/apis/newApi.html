@@ -1,0 +1,131 @@
+<!-- Todo: having trouble starting this with the github repo
+<repo-connect on-repo-connected="NewApi.onRepoConnected"></repo-connect>
+-->
+
+<main class="container new-asset-form">
+
+    <ng-include src="'apis/noPermissions.tpl.html'" class="blank-slate-tab" ng-if="!NewApi.canEditApis && NewApi.permissionsHaveLoaded"></ng-include>
+
+    <form name="newApiForm" ng-if="NewApi.canEditApis" ng-submit="NewApi.create()" ng-class="{'is-showing-cf-routes' : NewApi.isCloudFoundryPlatformAPI() }">
+
+        <div class="fp-form-validation-msg warning allow-ng-animate" ng-if="NewApi.validVersion != 1">
+           <p> You are about to create a new version of an existing API Route. We recommend reading our <a href="https://github.wwt.com/cook-books/rest/blob/master/versioning-conventions.md" target="_blank" title="API Versioning Cook-Book">
+            Versioning Conventions</a> to determine whether this is the right thing for what you need.</p>
+        </div>
+
+        <div class="form-validation-msg info allow-ng-animate" ng-if="NewApi.isCloudFoundryPlatformAPI()">
+            <api-location-description api="NewApi.api"></api-location-description>
+        </div>
+
+        <div class="form-group required">
+            <label id="name">NAME</label>
+            <p>
+                <small>API names should be plural.</small>
+            </p>
+            <input ng-model="NewApi.api.apiName" required="true" id="inputName" placeholder="Ex: users or quotes" autocomplete="off"
+                ng-change="NewApi.calculateNextAPIVersion()" />
+        </div>
+
+        <div class="form-group" ng-if="featureFlagsSVC.flagIsActive('versioning')">
+            <label id="version">VERSION</label>
+            <input ng-model="NewApi.validVersion" required="false" id="version" placeholder="1" autocomplete="on" ng-disabled=true />
+        </div>
+
+        <div class="form-group required">
+            <label id="platform">PLATFORM</label>
+
+            <ui-select ng-model="NewApi.api.platform" ui-select-focus-input required="true" title="Add Platform">
+
+                <ui-select-match placeholder="Add Platform..." allow-clear="true">
+                    {{ $select.selected.platformName }}
+                </ui-select-match>
+
+                <ui-select-choices repeat="platform in NewApi.availablePlatforms | filter: $select.search | limitTo:$select.limit">
+                    <div>
+                        <span ng-bind-html="platform.platformName | highlight: $select.search"></span>
+                    </div>
+                </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group required" ng-if="NewApi.isCloudFoundryPlatformAPI()">
+            <label id="prefix">SUB-DOMAIN PREFIX</label>
+            <input ng-model="NewApi.api.routePrefix" required="true" placeholder="Ex: service-quoting-api" />
+        </div>
+
+        <div class="form-group required">
+            <label id="route">ROUTE</label>
+            <input ng-model="NewApi.api.route" required="true" placeholder="Ex: /quote-system/api/quotes" />
+        </div>
+
+        <div class="form-group required">
+            <label id="description">DESCRIPTION</label>
+            <textarea msd-elastic rows="3" ng-model="NewApi.api.description" required="true"></textarea>
+        </div>
+
+        <section class="advanced-settings" ng-show="NewApi.api.isViewingAdvancedSettings">
+            <hr>
+
+            <div class="form-group required">
+                <label id="routeType">ROUTE TYPE</label>
+
+                <ui-select ng-model="NewApi.api.routeType" ui-select-focus-input required="true" title="Add Route Type">
+
+                    <ui-select-match placeholder="Add Route Type..." allow-clear="true">
+                        {{ $select.selected }}
+                    </ui-select-match>
+
+                    <ui-select-choices repeat="routeType in NewApi.proxyOptions | filter: $select.search | limitTo:$select.limit">
+                        <div>
+                            <span ng-bind-html="routeType | highlight: $select.search"></span>
+                        </div>
+                    </ui-select-choices>
+
+                </ui-select>
+            </div>
+
+            <div class="form-group">
+                <label id="timeout">TIMEOUT</label>
+                <p>
+                    <small>In seconds, with a maximum of 900s.</small>
+                </p>
+                <input ng-model="NewApi.api.timeout" placeholder="Ex: 300" />
+            </div>
+
+            <div class="form-group">
+                <label id="documentationUrl">DOCUMENTATION URL</label>
+                <input ng-model="NewApi.api.documentationUrl" placeholder="Ex: https://service-quoting-api.apps-dev.wwt.com" />
+            </div>
+
+            <div class="form-group">
+                <label>LOG RESPONSES</label>
+                <br>
+                <div class="switch">
+                    <input type="checkbox" id="logResponseFlag" ng-model="NewApi.api.logResponseFlag">
+                    <label for="logResponseFlag">
+                        <span></span>
+                    </label>
+                    </input>
+                </div>
+            </div>
+        </section>
+
+        <a class="btn-link clickable" type="none" ng-click="NewApi.api.isViewingAdvancedSettings = !NewApi.api.isViewingAdvancedSettings">
+            {{ NewApi.api.isViewingAdvancedSettings ? 'Hide' : 'Show'; }} Advanced Settings
+        </a>
+
+        <div class="form-actions split fixed-footer" ng-if="NewApi.canEditApis">
+            <section>
+                <button class="btn btn-primary" type="submit" ng-disabled="!newApiForm.$valid"> Submit
+                    <span ng-if="NewApi.api.isWorking">
+                        <i class="fa fa-spinner fa-spin"></i>
+                    </span>
+                </button>
+                <a class="btn btn-link" ng-click="wwtFocusPanelSVC.closePanel('newApiForm')"> Cancel</a>
+            </section>
+        </div>
+
+    </form>
+
+</main>

@@ -1,0 +1,209 @@
+.btn {
+    font-family: 'Proxima Nova';
+}
+
+.btn-score-filter {
+    box-shadow: none;
+    border: none;
+}
+
+.btn,
+.btn-xs {
+    border-radius: 0;
+}
+
+.btn-my-overrides {
+    border-right: 1px solid #cccc;
+    padding-right: 20px;
+}
+
+.btn-retry {
+    position: static;
+    float: right;
+}
+
+.btn-exception {
+    position: static;
+    float: right;
+}
+
+.btn-delete-exception {
+    position: static;
+    float: right;
+}
+
+.btn-link {
+    color: #9D9E9F;
+}
+
+.btn-primary:active:hover,
+.btn-primary.active:hover,
+.open>.dropdown-toggle.btn-primary:hover,
+.btn-primary:active:focus,
+.btn-primary.active:focus,
+.open>.dropdown-toggle.btn-primary:focus,
+.btn-primary:active.focus, .btn-primary.active.focus,
+.open>.dropdown-toggle.btn-primary.focus {
+    background: darken(@soft-green, 20%);
+    border-color: darken(@soft-green, 20%);
+}
+
+.btn-primary {
+    background: @soft-green;
+    border-color: @soft-green;
+
+    &[disabled] {
+        background: lighten(@soft-green, 10%);
+        border-color: lighten(@soft-green, 10%);
+
+        &:hover {
+            background: lighten(@soft-green, 10%);
+            border-color: lighten(@soft-green, 10%);
+        }
+    }
+
+    &:hover {
+        background: darken(@soft-green, 10%);
+        border-color: darken(@soft-green, 10%);
+    }
+
+    &:active,
+    &:focus,
+    &:active:hover,
+    &:active:focus {
+        outline: none;
+        background: darken(@soft-green, 20%);
+        border-color: darken(@soft-green, 20%);
+    }
+}
+
+.btn-warning {
+    background: @warning-color;
+    border-color: @warning-color;
+    color: #fff;
+
+    &:hover {
+        background: darken(@warning-color, 10%);
+        border-color: darken(@warning-color, 10%);
+    }
+
+    &:active,
+    &:focus,
+    &:active:hover,
+    &:active:focus {
+        outline: none;
+        color: #fff;
+        background: darken(@warning-color, 20%);
+        border-color: darken(@warning-color, 20%);
+    }
+}
+
+.btn-danger {
+    background: @danger-color;
+    border-color: @danger-color;
+    color: #fff;
+
+    &:hover {
+        background: darken(@danger-color, 10%);
+        border-color: darken(@danger-color, 10%);
+    }
+
+    &:active,
+    &:focus,
+    &:active:hover,
+    &:active:focus {
+        outline: none;
+        color: #fff;
+        background: darken(@danger-color, 20%);
+        border-color: darken(@danger-color, 20%);
+    }
+}
+
+button {
+    outline: none !important;
+}
+
+.btn {
+    .count {
+        margin: 0 0 0 2px;
+        padding: 2px 8px 1px;
+        font-weight: normal;
+        color: #fff;
+        background: rgba(74, 79, 85, 0.39);
+        border-radius: 3px;
+        box-shadow: 0 1px 0 rgba(0,11,18,0.1);
+    }
+}
+
+.wwt-mini-btn {
+    .btn;
+    .btn-xs;
+    position: relative;
+    background: @primaryColor; // #576169;
+    color: #fff;
+    border: none;
+    box-shadow: none;
+    border-radius: 4px;
+    font-weight: 500;
+    margin-right: 4px;
+
+    &:hover,
+    &:focus {
+        background: #fff;
+        color: #31363b;
+    }
+
+    &:focus {
+        outline: none;
+    }
+
+    &.cancel {
+        background: none;
+
+        &:hover,
+        &:focus {
+            color: #fff;
+            text-decoration: underline;
+        }
+    }
+
+    &.alpha-btn {
+        background: rgba(0, 0, 0, 0.35);
+
+        &:hover,
+        &:focus {
+            background: #fff;
+        }
+    }
+
+    .btn-overlay {
+        position: absolute;
+        z-index: 2;
+        background: rgba(0, 0, 0, 0.46);
+        width: 100%;
+        left: 0;
+        opacity: 0.9;
+        color: #fff;
+    }
+
+    &.inverse {
+        &:hover,
+        &:focus {
+          background: #000;
+          color: #d5dbe0;
+        }
+    }
+}
+
+.btn-dashed {
+    border-style: dashed;
+}
+
+// For vue element-ui buttons. Add more as needed.
+.el-button {
+    .btn;
+}
+
+.el-button--primary {
+    .btn-primary
+}

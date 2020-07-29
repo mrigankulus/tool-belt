@@ -1,0 +1,149 @@
+<!-- Github repos -->
+<label><i class="fa fa-github"></i> GitHub Repos</label>
+
+<p class="hint" ng-if="assetState.currentAsset.connectedRepos && assetState.currentAsset.connectedRepos.length > 1">Drag a repo to the top to make it primary.</p>
+
+<ul class="repo-list" dragula='"repos-bag"' dragula-model="assetState.currentAsset.connectedRepos">
+    <li ng-repeat="repo in assetState.currentAsset.connectedRepos">
+
+        <i ng-if="!repo.isEditing" class="fa fa-times-circle" ng-click="ConnectedItems.removeRepo(repo)"></i>
+
+        <span ng-if="!repo.isEditing"
+              ng-click="repo.isEditing = true"
+              auto-focus="#org">{{ repo.org }} / <strong>{{ repo.repo }}</strong></span>
+
+        <repo-connect ng-if="repo.isEditing"
+                      inline="true"
+                      repo="repo"
+                      on-repo-connected="ConnectedItems.onRepoConnected"
+                      on-cancel="ConnectedItems.onCancel"></repo-connect>
+
+    </li>
+</ul>
+
+<!-- need a second list so this sucker isn't draggable -->
+<ul class="repo-list">
+    <li class="new-repo">
+        <span ng-if="!ConnectedItems.isAddingRepo"
+              ng-click="ConnectedItems.isAddingRepo = true"
+              auto-focus="#org">
+
+            <i class="fa fa-plus-circle"></i> Add a Repo
+        </span>
+
+        <repo-connect ng-if="ConnectedItems.isAddingRepo"
+                      inline="true"
+                      on-repo-connected="ConnectedItems.onRepoConnected"
+                      on-cancel="ConnectedItems.onCancel"></repo-connect>
+    </li>
+</ul>
+
+<br><br>
+
+<!-- Vision Boards -->
+<label><i class="fa fa-lightbulb-o"></i> Vision Boards</label>
+
+<p class="hint" ng-if="assetState.currentAsset.connectedVisionBoards && assetState.currentAsset.connectedVisionBoards.length">Updates to Vision board connections will show after page refresh.</p>
+
+<ul class="repo-list" dragula='"vision-boards-bag"' dragula-model="assetState.currentAsset.connectedVisionBoards">
+    <li ng-repeat="board in assetState.currentAsset.connectedVisionBoards">
+
+        <i ng-if="!board.isEditing" class="fa fa-times-circle" ng-click="ConnectedItems.removeVisionBoard(board)"></i>
+
+        <span ng-if="!board.isEditing"
+              ng-click="board.isEditing = true"
+              auto-focus="#board">{{ board.name }}</span>
+
+
+        <vision-connect ng-if="board.isEditing"
+                      inline="true"
+                      board="board"
+                      on-board-connected="ConnectedItems.onVisionBoardConnected"
+                      on-cancel-board="ConnectedItems.onCancelAddingVisionBoard"></vision-connect>
+    </li>
+</ul>
+
+<!-- need a second list so this sucker isn't draggable -->
+<ul class="repo-list">
+    <li class="new-repo">
+        <span ng-if="!ConnectedItems.isAddingVisionBoard"
+              ng-click="ConnectedItems.isAddingVisionBoard = true"
+              auto-focus="#board">
+
+            <i class="fa fa-plus-circle"></i> Add a Board
+        </span>
+
+        <vision-connect ng-if="ConnectedItems.isAddingVisionBoard"
+                      inline="true"
+                      on-board-connected="ConnectedItems.onVisionBoardConnected"
+                      on-cancel-board="ConnectedItems.onCancelAddingVisionBoard"></vision-connect>
+    </li>
+</ul>
+
+<br><br>
+
+<!-- Jenkins Jobs -->
+<label><img src="img/jenkins.png" style="max-width: 20px;"> Jenkins Jobs</label>
+
+<ul class="repo-list" dragula='"jenkins-jobs-bag"' dragula-model="assetState.currentAsset.connectedJenkinsJobs">
+    <li ng-repeat="job in assetState.currentAsset.connectedJenkinsJobs">
+
+        <i ng-if="!job.isEditing" class="fa fa-times-circle" ng-click="ConnectedItems.removeJenkinsJob(job)"></i>
+
+        <span ng-if="!job.isEditing"
+              ng-click="job.isEditing = true; ConnectedItems.newJob.name = job.name"
+              auto-focus="#jenkinsJob">{{ job.name }}</span>
+
+        <form ng-if="job.isEditing"
+              class="repo-connect-form inline"
+              ng-submit="ConnectedItems.onJenkinsJobConnected(ConnectedItems.newJob, job)">
+
+            <div class="form-group">
+                <label>Job Name</label>
+                <input type="text" id="jenkinsJob" placeholder="Ex: api-router-master" ng-model="ConnectedItems.newJob.name"></input>
+            </div>
+
+            <footer class="form-actions">
+                <section>
+                    <button class="btn btn-primary"
+                            type="submit"
+                            ng-disabled="!ConnectedItems.newJob.name">Connect</button>
+
+                    <button class="btn btn-link" type="button" ng-click="ConnectedItems.onCancelJenkinsJob()">Cancel</button>
+                </section>
+            </footer>
+        </form>
+    </li>
+</ul>
+
+<!-- need a second list so this sucker isn't draggable -->
+<ul class="repo-list">
+    <li class="new-repo">
+        <span ng-if="!ConnectedItems.isAddingJenkinsJob"
+              ng-click="ConnectedItems.isAddingJenkinsJob = true; ConnectedItems.newJob.name = ''"
+              auto-focus="#jenkinsJob">
+
+            <i class="fa fa-plus-circle"></i> Add a Job
+        </span>
+
+        <form ng-if="ConnectedItems.isAddingJenkinsJob"
+              class="repo-connect-form inline"
+              ng-submit="ConnectedItems.onJenkinsJobConnected(ConnectedItems.newJob)">
+
+            <div class="form-group">
+                <label>Job Name</label>
+                <input type="text" id="jenkinsJob" placeholder="Ex: api-router-master" ng-model="ConnectedItems.newJob.name"></input>
+            </div>
+
+            <footer class="form-actions">
+                <section>
+                    <button class="btn btn-primary"
+                            type="submit"
+                            ng-disabled="!ConnectedItems.newJob.name">Connect</button>
+
+                    <button class="btn btn-link" type="button" ng-click="ConnectedItems.onCancelJenkinsJob()">Cancel</button>
+                </section>
+            </footer>
+        </form>
+    </li>
+</ul>

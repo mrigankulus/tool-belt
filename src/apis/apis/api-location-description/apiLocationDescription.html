@@ -1,0 +1,11 @@
+<section class="api-route-info">
+    <section>
+        <p>AVAILABLE AT: </p>
+        <p><a ng-href="https://apirouter.apps{{ getEnvPrefix() }}.wwt.com/v{{ api.version}}/{{ api.apiName }}" target="_blank">{{ getAvailableUrlPrefix() }}<strong uib-tooltip="Your API name" tooltip-popup-delay="500" tooltip-append-to-body="true">{{ api.apiName || 'your-api-name' }}</strong></a></p>
+    </section>
+
+    <section>
+        <p>FORWARDS TO: </p>
+        <p><a ng-href="http://{{ api.routePrefix }}.apps{{ getEnvPrefix() }}.wwt.com{{api.route}}" target="_blank">https://<strong uib-tooltip="Your sub-domain prefix" tooltip-popup-delay="500" tooltip-append-to-body="true">{{ api.routePrefix || 'your-subdomain-prefix' }}</strong>.apps{{ getEnvPrefix() }}.wwt.com<strong uib-tooltip="Your API route" tooltip-popup-delay="500" tooltip-append-to-body="true">{{ api.route || '/your-api-route' }}</strong></p>
+    </section>
+</section>

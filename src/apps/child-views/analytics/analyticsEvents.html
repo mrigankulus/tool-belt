@@ -1,0 +1,93 @@
+<div class="blank-slate-tab allow-ng-animate default-animation" ng-if="ApplicationAnalytics.hasGAConnection() && !ApplicationAnalytics.isLoadingReports && !AnalyticsEvents.categories.length">
+    <i class="fa fa-bar-chart"></i>
+
+    <section>
+        <p>It looks like there are no events to show for this application.</p>
+    </section>
+</div>
+
+<div ng-if="AnalyticsEvents.categories.length" class="analytics-reports">
+
+    <div class="processing-overlay" ng-class="{active: ApplicationAnalytics.isLoadingReports}"><i class="fa fa-spinner fa-spin"></i></div>
+
+    <div class="columns with-padding">
+
+        <section>
+            <ui-select ng-model="AnalyticsEvents.activeCategory"
+                       ui-select-focus-input
+                       class="no-select2"
+                       ng-change="AnalyticsEvents.selectCategory(AnalyticsEvents.activeCategory)">
+
+                <ui-select-match allow-clear="true" placeholder="Cateogry">
+                     {{ $select.selected }}
+                </ui-select-match>
+
+                <ui-select-choices repeat="cat in AnalyticsEvents.categories | filter: $select.search">
+                    <span ng-bind-html="cat | highlight: $select.search"></span>
+                </ui-select-choices>
+
+            </ui-select>
+        </section>
+
+        <!-- todo: some data makes this select go crazy. cheap fix for now :) -->
+        <section style="max-width: 400px;">
+            <ui-select ng-model="AnalyticsEvents.activeAction"
+                       ui-select-focus-input
+                       class="no-select2"
+                       ng-change="AnalyticsEvents.selectAction(AnalyticsEvents.activeAction)">
+
+                <ui-select-match allow-clear="true" placeholder="Action">
+                     {{ $select.selected }}
+                </ui-select-match>
+
+                <ui-select-choices repeat="action in AnalyticsEvents.actions | filter: $select.search">
+                    <span ng-bind-html="action | highlight: $select.search"></span>
+                </ui-select-choices>
+
+            </ui-select>
+        </section>
+
+    </div>
+
+    <br><br>
+
+    <!-- Events Chart -->
+    <div class="chart-wrapper">
+        <a class="analytics-json-link" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/applications/{{ assetState.currentAsset.id }}/analytics/eventsByDate" target="_blank">JSON</a>
+
+        <div class="chart-inner">
+            <highchart id="chart1" ng-if="AnalyticsEvents.chartConfig" config="AnalyticsEvents.chartConfig"></highchart>
+        </div>
+    </div>
+
+    <hr class="dashed">
+
+    <!-- javascript errors -->
+    <h3 class="text-center">
+        Javascript Errors <a class="btn btn-link btn-sm" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/applications/{{ assetState.currentAsset.id }}/analytics/javascriptErrorsByDate" target="_blank">JSON</a>
+    </h3>
+
+    <div class="api-request-list">
+
+        <section>
+
+            <article class="api-request-card" ng-repeat="error in AnalyticsEvents.jsErrors | filter: AnalyticsEvents.errorSearch | limitTo: AnalyticsEvents.currentlyErrorDisplayedLimit">
+
+                <div class="api-request-status-badge serverError">ERROR</div>
+
+                <h4 class="break-all">{{ error['ga:eventAction'] }}</h4>
+
+                <p>{{ error['ga:date'] | friendlyDate }}</p>
+
+                <p>{{ error['ga:eventLabel'] }}</p>
+
+            </article>
+
+            <div class="text-center">
+                <button class="btn btn-link"
+                        ng-click="AnalyticsEvents.showMoreErrors()"
+                        ng-if="AnalyticsEvents.shouldShowMoreButtonForErrors()">Show More</button>
+            </div>
+        </section>
+    </div>
+</div>

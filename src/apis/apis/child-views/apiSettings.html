@@ -1,0 +1,156 @@
+<br>
+<br>
+
+<ng-include src="'apis/noPermissions.tpl.html'" class="blank-slate-tab" ng-if="!APIDetail.canEditApis && APIDetail.permissionsHaveLoaded"></ng-include>
+
+<div class="container columns with-borders" ng-if="APIDetail.canEditApis" style="max-width: 600px;">
+
+    <section>
+
+        <form name="apiSettingsForm" ng-submit="APISettings.update()">
+            <div class="form-group required">
+                <label id="name">NAME</label>
+                <input ng-model="APIDetail.api.apiName" required="true" placeholder="Ex: users or quotes" />
+            </div>
+
+            <div class="form-group required">
+                <label id="platform">PLATFORM</label>
+                <ui-select ng-model="APIDetail.api.platform" required="true" ui-select-focus-input title="Add Platform">
+
+                    <ui-select-match placeholder="Add Platform..." allow-clear="true">
+                        {{ $select.selected.platformName }}
+                    </ui-select-match>
+
+                    <ui-select-choices repeat="platform in APISettings.availablePlatforms | filter: $select.search | limitTo:$select.limit">
+                        <div>
+                            <span ng-bind-html="platform.platformName | highlight: $select.search"></span>
+                        </div>
+                    </ui-select-choices>
+
+                </ui-select>
+            </div>
+
+            <div class="form-group required" ng-if="APIDetail.isCloudFoundryPlatformAPI()">
+                <label id="prefix">SUB-DOMAIN PREFIX</label>
+                <input ng-model="APIDetail.api.routePrefix" placeholder="Ex: service-quoting-api" required="true" />
+            </div>
+
+            <div class="form-group required">
+                <label id="route">ROUTE</label>
+                <input ng-model="APIDetail.api.route" placeholder="Ex: quote-system/api/quotes" required="true" />
+            </div>
+
+            <div class="form-group required">
+                <label id="description">DESCRIPTION</label>
+                <br>
+                <textarea msd-elastic ng-model="APIDetail.api.description" required="true"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label id="documentationUrl">DOCUMENTATION URL</label>
+                <input id="documentationUrlInput" ng-model="APIDetail.api.documentationUrl" placeholder="Ex: https://www.wwt.com/yourAPI-api/"
+                />
+            </div>
+
+            <div class="form-group">
+                <label>KEYWORDS</label>
+                <i class="fa fa-question-circle" uib-popover="You can search and select a keyword for this API from a list of pre-existing keywords across other APIs.
+                 To create a new keyword, simply type in your desired string and press enter." popover-title="Override URL"
+                    popover-trigger="mouseenter" popover-popup-delay="300" popover-append-to-body="true"></i>
+
+                <ui-select multiple tagging tagging-label="false" ng-model="assetState.currentAsset.keywords" title="Keywords">
+
+                    <ui-select-match placeholder="Add Keywords">{{$item || '** Removed **'}}</ui-select-match>
+
+                    <ui-select-choices refresh="APISettings.filterKeywords($select.search)" refresh-delay="600" repeat="keyword in APISettings.availableKeywords | filter:$select.search | orderBy: 'toString()' track by $index">
+                        {{ keyword }}
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+
+            <section class="advanced-settings" ng-show="APIDetail.api.isViewingAdvancedSettings">
+
+                <section class="form-group required">
+                    <label id="routeType">ROUTE TYPE</label>
+                    <ui-select ng-model="APIDetail.api.routeType" required="true" ui-select-focus-input title="Add Route Type">
+                        <ui-select-match placeholder="Add Route Type..." allow-clear="true">
+                            {{ $select.selected }}
+                        </ui-select-match>
+
+                        <ui-select-choices repeat="routeType in APISettings.proxyOptions | filter: $select.search | limitTo:$select.limit">
+                            <div>
+                                <span ng-bind-html="routeType | highlight: $select.search"></span>
+                            </div>
+                        </ui-select-choices>
+
+                    </ui-select>
+                </section>
+
+                <div class="form-group">
+                    <label id="timeout">TIMEOUT</label>
+                    <p>
+                        <small>In seconds, with a maximum of 900s.</small>
+                    </p>
+                    <input ng-model="APIDetail.api.timeout" placeholder="Ex: 300"></input>
+                </div>
+
+                <section class="form-group" ng-if="featureFlagsSVC.flagIsActive('versioning')">
+                    <label> DEFAULT VERSION </label>
+                    <i class="fa fa-question-circle" uib-popover="This switch makes this version of the API the Default Version to use. Note that you cannot switch off an existing Default Version. Instead you must create and/or go to another version and make it the new Default Version."
+                        popover-trigger="mouseenter" popover-popup-delay="300" popover-append-to-body="true"></i>
+                    <p>
+                        <small>Sets this version of the API as the default version to use.</small>
+                    </p>
+
+                    <div class="switch">
+                        <input type="checkbox" id="versionDefault" ng-model="APIDetail.api.versionDefault" ng-disabled="APIDetail.api.versionDefault"
+                            ng-change="APISettings.changeDefaultVersion()">
+                        <label for="versionDefault">
+                            <span></span>
+                        </label>
+                        </input>
+                    </div>
+                </section>
+
+                <section class="form-group">
+                    <label>LOG RESPONSES</label>
+                    <br>
+                    <div class="switch">
+                        <input type="checkbox" id="logResponseFlag" ng-model="APIDetail.api.logResponseFlag">
+                        <label for="logResponseFlag">
+                            <span></span>
+                        </label>
+                        </input>
+                    </div>
+                </section>
+
+            </section>
+
+            <a class="btn-link clickable" ng-click="APIDetail.api.isViewingAdvancedSettings = !APIDetail.api.isViewingAdvancedSettings">
+                {{ APIDetail.api.isViewingAdvancedSettings ? 'Hide' : 'Show'; }} Advanced Settings
+            </a>
+
+            <hr class="dashed">
+
+            <div class="form-actions split">
+                <section>
+                    <button class="btn btn-primary" type="submit" ng-disabled="!apiSettingsForm.$valid">
+                        <span>Save</span>
+                        <span ng-if="APISettings.isWorking">
+                            <i class="fa fa-spinner fa-spin"></i>
+                        </span>
+                        <span ng-if="APISettings.isFinishedWorking">
+                            <i class="fa fa-thumbs-up"></i>
+                        </span>
+                    </button>
+                </section>
+
+                <section>
+                    <a href="" class="btn btn-link" type="delete" ng-click="APISettings.deleteApi()">Delete</a>
+                </section>
+            </div>
+
+        </form>
+
+    </section>
+</div>

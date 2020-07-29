@@ -1,0 +1,13 @@
+
+    <a class="card-inner clickable" tabindex="0" ui-sref="groups.groupDetail({id: $ctrl.group.id})">
+        <h3 class="card-header">
+            {{ ::$ctrl.group.title }}
+             <span ng-if="::$ctrl.group.memberCount">({{ ::$ctrl.group.memberCount | number }})</span>
+         </h3>
+
+        <span class="label label-default" ng-repeat="type in ::$ctrl.group.types" style="margin-right: 3px;">
+            {{ ::type.name }}
+        </span>
+    </a>
+
+

@@ -1,0 +1,85 @@
+<br>
+
+<div class="container technology">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>
+                        Technologies
+                         <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/technologies" target="_blank">JSON</a>
+                    </h1>
+
+                    <p>Find details about different areas of our stack and how to work with them.</p>
+
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95">
+                    <section class="search-section">
+
+                        <div class="resource-types-search">
+                            <i class="fa fa-search"></i>
+
+                            <input type="text"
+                                   class="no-input"
+                                   ng-model="Technologies.searchText"
+                                   tabindex="0"
+                                   id="secondarySearchInput"
+                                   placeholder="Search" />
+                        </div>
+
+                    </section>
+
+                    <section class="item-detail-header-actions">
+                        <a ng-if="Technologies.canViewTechnologies" class="btn btn-link btn-xs" ui-sref="importExport">Import/Export</a>
+
+                        <button ng-if="Technologies.canViewTechnologies" class="btn btn-primary btn-xs" ng-click="wwtFocusPanelSVC.togglePanel('newTechnologyPanel')" auto-focus="#technologyTitle">
+                            <i class="fa fa-plus"></i> Add New Technology
+                        </button>
+                    </section>
+                </div>
+
+                <div class="primary-loader" ng-class="{active: Technologies.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+                <section ng-if="Technologies.recent.length && !Technologies.searchText">
+                    <h3 class="divider-title"><span>Recently Viewed</span></h3>
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="Technologies.recent.length && !Technologies.searchText">
+
+                        <technology-card technology="technology" ng-repeat="technology in Technologies.recent"></technology-card>
+
+                    </div>
+                </section>
+
+                <section>
+                    <h3 class="divider-title" ng-if="Technologies.recent.length && !Technologies.searchText"><span>All</span></h3>
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="Technologies.technologies && Technologies.technologies.length">
+
+                        <technology-card technology="technology" ng-repeat="technology in Technologies.technologies | filter: Technologies.searchText | orderBy: 'name' | limitTo: Technologies.limit"></technology-card>
+                    </div>
+
+                    <hr ng-if="Technologies.shouldShowShowMore()">
+
+                    <p class="text-center" ng-if="Technologies.shouldShowShowMore()">
+                        <button class="btn btn-link" ng-click="Technologies.showMore()" ng-click="Technologies.showMore()">Show All</button>
+                    </p>
+                </section>
+
+            </section>
+        </main>
+
+    </article>
+
+    <wwt-focus-panel panel-name="'newTechnologyPanel'"
+                     position="'right'"
+                     header-text="'New Technology'"
+                     header-icon="'plus-circle'"
+                     backdrop="true">
+
+        <ng-include src="'technologies/newTechnology.html'" ng-controller="NewTechnologyCtrl as NewTechnology"></ng-include>
+    </wwt-focus-panel>
+</div>

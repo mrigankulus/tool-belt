@@ -1,0 +1,17 @@
+{
+    "remote": {
+        "target": "apps-local.wwt.com",
+        "isSubdomainBased": true
+    },
+    "applications": {
+        "ports": {
+            "dev-tool-belt": 8000
+        },
+        "routeToLocal": {
+            "dev-tool-belt": true
+        },
+        "modifyHostHeader": {
+            "cdn": true
+        }
+    }
+}

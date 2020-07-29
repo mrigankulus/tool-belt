@@ -1,0 +1,88 @@
+<form class="columns vertical-center with-padding"
+    ng-submit="NewUserForm.createUser()"
+    name="newUserForm">
+
+    <section>
+        <div class="form-group">
+            <label>Type</label>
+            <br>
+            <ui-select ng-model="NewUserForm.newUser.type"
+                       ui-select-focus-input
+                       ng-change="NewUserForm.onTypeChange()"
+                       append-to-body="true">
+
+                <ui-select-match placeholder="Select Type">
+                    {{ $select.selected }}
+                </ui-select-match>
+
+                <ui-select-choices repeat="type in ['svc', 'proxy'] | filter: $select.search | limitTo:$select.limit">
+                    <div>
+                        <span ng-bind-html="type | highlight: $select.search"></span>
+                    </div>
+                </ui-select-choices>
+
+            </ui-select>
+        </div>
+    </section>
+
+    <section class="flex-2">
+        <div class="form-group">
+            <label>First Name</label>
+            <input ng-model="NewUserForm.newUser.firstName"
+            placeholder="Ex. My Awesome API"
+            id="newFirstName"
+            required="true" />
+        </div>
+    </section>
+
+    <section class="flex-2" ng-if="NewUserForm.newUser.type === 'svc'">
+        <div class="form-group">
+            <label>Last Name</label>
+            <input ng-model="NewUserForm.newUser.lastName"
+                placeholder="Ex. Service Account"
+                id="newLastName"
+                required="true" />
+        </div>
+    </section>
+
+
+    <section class="flex-2" ng-if="NewUserForm.newUser.type === 'proxy'">
+        <div class="form-group">
+            <span class="flex-1">Email</span>
+            <span class="flex-none" uib-tooltip="The email will also be used as the userName and lastName." tooltip-append-to-body="true">
+                <i class="fa fa-question-circle muted"></i>
+            </span>
+
+            <input ng-model="NewUserForm.newUser.email"
+                   placeholder="Ex. me@me.com"
+                   id="email"
+                   required="true" />
+        </div>
+    </section>
+
+    <section class="flex-2" ng-if="NewUserForm.newUser.type === 'svc'">
+        <div class="form-group with-input-msg" ng-class="{'has-error': NewUserForm.newUser.invalidUserName === true}">
+            <label class="columns">
+                <span class="flex-1">User Name</span>
+                <span class="flex-none" uib-tooltip="Service account userName must start with svc_" tooltip-append-to-body="true">
+                    <i class="fa fa-question-circle muted"></i>
+                </span>
+            </label>
+            <input ng-model="NewUserForm.newUser.userName"
+                placeholder="Ex. svc_my-awesome-api"
+                id="newUserName"
+                required="true" />
+            <span class="form-input-msg error" ng-if="NewUserForm.newUser.invalidUserName === true">User name must begin with svc_</span>
+        </div>
+    </section>
+
+    <section>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit" ng-disabled="!newUserForm.$valid">
+                Save
+                <i class="fa fa-spinner fa-spin" ng-if="NewUserForm.isSavingNewUser"></i>
+            </button>
+            <a class="btn btn-link" ng-click="NewUserForm.cancelNewUser()">Cancel</a>
+        </div>
+    </section>
+</form>

@@ -1,0 +1,110 @@
+<br><br>
+
+<div class="blank-slate-tab" ng-if="UserDetail.dataLoaded && !UserDetail.partners.length">
+    <i>P</i>
+
+    <section>
+        <h2>No Partners Yet</h2>
+
+        <p ng-if="UserPartners.canApplyPartners"><a class="clickable" ng-click="UserDetail.isAddingPartner = true"><strong>Add a partner</strong></a> for @{{ UserDetail.user.userName }}.</p>
+    </section>
+</div>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="UserDetail.isAddingPartner">
+
+    <form class="columns vertical-center with-padding" ng-submit="UserDetail.addPartnerToUser()">
+
+        <section></section>
+
+        <section class="flex-2">
+            <br>
+            <div class="form-group relative-position">
+                <span ng-if="UserPartners.showMinCharLimitMsg" class="min-character-required allow-ng-animate">3 character min.</span>
+
+                <ui-select ng-model="UserDetail.newPartner"
+                           limit="20"
+                           ui-select-focus-input
+                           autofocus="true"
+                           class="no-select2">
+
+                    <ui-select-match placeholder="Select a Partner" allow-clear="true">
+                        {{ $select.selected.name }}
+                    </ui-select-match>
+
+                    <ui-select-choices
+                            refresh="UserPartners.searchPartners($select.search)"
+                            refresh-delay="200"
+                            repeat="partner in UserPartners.availablePartners | filter: $select.search | limitTo:$select.limit"
+                            ui-disable-choice="UserDetail.userHasPartner(partner)">
+
+                        <strong>{{ partner.name }}</strong>
+                        <span ng-if="UserDetail.userHasPartner(partner)">(@{{ UserDetail.user.userName }} already has this partner)</span>
+                        <br>
+                        <small>{{ partner.id }}</small>
+
+                    </ui-select-choices>
+
+                </ui-select>
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!UserDetail.newPartner">
+                    Save
+                    <i class="fa fa-spinner fa-spin" ng-if="UserDetail.isSavingPartner"></i>
+                </button>
+                <a class="btn btn-link" ng-click="UserDetail.isAddingPartner = false;">Cancel</a>
+            </div>
+        </section>
+    </form>
+
+</section>
+
+<div class="item-detail-overlay" ng-if="UserDetail.isAddingPartner" ng-click="UserDetail.isAddingPartner = false"></div>
+
+<div class="item-detail-content-header" ng-if="UserDetail.dataLoaded && UserDetail.partners.length">
+
+    <section class="search-section">
+
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input type="text"
+                   class="no-input"
+                   ng-model="UserDetail.partnerSearchText"
+                   tabindex="0"
+                   id="secondarySearchInput"
+                   placeholder="Search Partners">
+        </div>
+
+    </section>
+
+    <section class="item-detail-header-actions">
+        <button class="btn btn-primary btn-xs"
+                ng-if="UserPartners.canApplyPartners"
+                ng-click="UserDetail.isAddingPartner = true">
+
+            <i class="fa fa-plus"></i> Add Partner
+        </button>
+
+        <p class="muted" ng-if="!UserPartners.canApplyPartners">@{{ UserDetail.user.userName }} has been assigned these partners.</p>
+    </section>
+
+</div>
+
+<div class="primary-loader" ng-class="{active: UserProfiles.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="cards allow-ng-animate default-animation" ng-if="UserDetail.partners && UserDetail.partners.length">
+
+    <partner-card ng-if="partner" partner="partner" ng-repeat="partner in UserDetail.partners | filter: UserDetail.partnerSearchText | orderBy: 'name' | limitTo: UserPartners.partnersLimit"></partner-card>
+
+    <hr ng-if="UserPartners.shouldShowShowMore()">
+
+    <p class="text-center" ng-if="UserPartners.shouldShowShowMore()">
+        <button class="btn btn-link" ng-click="UserPartners.showMore()">Show All</button>
+    </p>
+
+</div>

@@ -1,0 +1,167 @@
+<br>
+
+<div class="container profile allow-ng-animate default-animation" ng-if="Profiles.canViewProfiles">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>
+                        Profiles
+                         <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/profiles" target="_blank">JSON</a>
+                    </h1>
+
+                    <p>Profiles allow you to assign permissions to users. A Profile should represent a group of users - something like "Internal Sales Rep" or "Buyer".</p>
+
+                </section>
+            </header>
+
+            <div class="alert alert-warning" style="margin-top: 20px;">
+                <div class="pull-right" style="margin-top: -5px;">
+                    <a ng-href="{{ aboutProfileGroupConversionUrl }}" class="btn btn-link pull-right">More Info</a>
+                </div>
+                Heads up! Profiles have been converted to groups. <br>Please manage this profile in the <a ui-sref="groups">groups section</a> instead as the profile section will be removed in an upcoming release.
+            </div>
+
+            <section class="item-detail-content">
+                <section class="item-detail-content-header-form large allow-ng-animate" ng-if="Profiles.isAddingProfile">
+
+
+                    <div class="bulk-upload-msg error allow-ng-animate" ng-if="Profiles.doesProfileExist == true">
+                            <p ng-if="Profiles.doesProfileExist == true">
+                                <span>This profile already exists. </span>
+                                <i class="fa fa-exclamation-triangle"></i>
+                            </p>
+                    </div>
+
+                    <form class="columns vertical-center with-padding"
+                          ng-submit="Profiles.createProfile()"
+                          name="newProfileForm"
+                          ng-if="Profiles.isAddingProfile">
+
+                        <section class="flex-2">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input ng-model="Profiles.newProfile.name"
+                                       ng-model-options="{ debounce: 300 }"
+                                       placeholder="Ex. Internal Sales Rep"
+                                       id="newProfileName"
+                                       required="true"
+                                       ng-change="Profiles.checkIfProfileExists()"></input>
+                            </div>
+                        </section>
+
+                        <section class="flex-2">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea msd-elastic ng-model="Profiles.newProfile.description" placeholder="What does this profile mean?" rows="1" required="true"></textarea>
+                            </div>
+                        </section>
+
+                        <section>
+                            <div class="form-actions">
+                                <button class="btn btn-primary"
+                                        type="submit"
+                                        ng-disabled="!newProfileForm.$valid || Profiles.doesProfileExist">
+
+                                    Save
+                                     <i class="fa fa-spinner fa-spin" ng-if="Profiles.isSavingNewProfile"></i>
+                                </button>
+
+                                <a class="btn btn-link" ng-click="Profiles.isAddingProfile = false">Cancel</a>
+                            </div>
+                        </section>
+                    </form>
+
+
+                </section>
+
+                <div class="item-detail-overlay" ng-if="Profiles.isAddingProfile" ng-click="Profiles.isAddingProfile = false"></div>
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95">
+                    <section class="search-section">
+
+                        <div class="resource-types-search">
+                            <i class="fa fa-search"></i>
+
+                            <input type="text"
+                                   class="no-input"
+                                   ng-model="Profiles.profilesSearchText"
+                                   tabindex="0"
+                                   id="secondarySearchInput"
+                                   placeholder="Search Profiles">
+                        </div>
+
+                    </section>
+
+                    <section>
+                        <button ng-if="Profiles.canApplyProfiles && Profiles.isDeveloper" class="btn btn-primary btn-xs" ng-click="Profiles.isAddingProfile = true" auto-focus="#newProfileName">
+                            <i class="fa fa-plus"></i> Add New Profile
+                        </button>
+                    </section>
+
+                </div>
+
+                <div class="primary-loader" ng-class="{active: Profiles.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+                <section>
+                    <h3 class="divider-title" ng-if="Profiles.recentProfiles.length && !Profiles.profilesSearchText"><span>Recently Viewed</span></h3>
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="Profiles.recentProfiles.length && !Profiles.profilesSearchText">
+
+                        <section class="card-outer asset-card" ng-repeat="profile in Profiles.recentProfiles">
+
+                            <a class="card-inner clickable" ui-sref="profileDetail({profileId: profile.id})" tabindex="0">
+
+                                <div class="columns">
+
+                                    <section class="flex-3">
+                                        <h3 class="card-header">{{ profile.name }}</h3>
+
+                                        <p class="card-content">{{ profile.description }}</p>
+
+                                    </section>
+
+                                </div><!-- /.columns -->
+                            </a>
+
+                        </section>
+
+                    </div>
+                </section>
+
+                <section>
+                    <h3 class="divider-title" ng-if="Profiles.recentProfiles.length && !Profiles.profilesSearchText"><span>All</span></h3>
+                    <div class="cards allow-ng-animate default-animation" ng-if="Profiles.profiles && Profiles.profiles.length">
+
+                        <section class="card-outer asset-card" ng-repeat="profile in Profiles.profiles | filter: Profiles.profilesSearchText | orderBy: 'name' | limitTo: Profiles.profilesLimit">
+
+                            <a class="card-inner clickable" ui-sref="profileDetail({profileId: profile.id})" tabindex="0">
+
+                                <div class="columns">
+
+                                    <section class="flex-3">
+                                        <h3 class="card-header">{{ profile.name }}</h3>
+
+                                        <p class="card-content">{{ profile.description }}</p>
+
+                                    </section>
+
+                                </div><!-- /.columns -->
+                            </a>
+
+                        </section>
+
+                    </div>
+                </section>
+
+                <hr ng-if="Profiles.shouldShowShowMore()">
+
+                <p class="text-center" ng-if="Profiles.shouldShowShowMore()">
+                    <button class="btn btn-link" ng-click="Profiles.showMore()" ng-click="Profiles.showMore()">Show All</button>
+                </p>
+            </section>
+        </main>
+
+    </article>
+
+</div>

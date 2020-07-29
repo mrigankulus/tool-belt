@@ -1,0 +1,92 @@
+<div class="columns vertical-center">
+    <h3>
+      {{ $ctrl.eventType.title }}
+       <span ng-if="$ctrl.taskType.eventIsDisabled($ctrl.eventType.id)">(Disabled)</span>
+     </h3>
+</div>
+
+<hr>
+
+<div ng-if="$ctrl.template" class="allow-ng-animate default-animation">
+    <label class="secondary-label">Subject</label>
+
+    <div class="token-supported-input-wrapper">
+        <token-supported-message ng-if="!$ctrl.isDefault()"></token-supported-message>
+
+        <textarea msd-elastic
+                  mentio
+                  mentio-typed-text="typedTerm"
+                  id="emailTextSubjectInput"
+                  ng-model="$ctrl.template.subject"
+                  rows="1"
+                  placeholder="Subject"
+                  class="no-textarea"
+                  ng-readonly="$ctrl.isDefault()"></textarea>
+    </div>
+
+    <token-typeahead-menu input-id="'emailTextSubjectInput'"
+                          starter-token-list="$ctrl.allTokens"></token-typeahead-menu>
+
+    <br>
+
+    <label class="secondary-label">Message</label>
+
+    <div class="token-supported-input-wrapper">
+        <token-supported-message ng-if="!$ctrl.isDefault()"></token-supported-message>
+
+        <textarea msd-elastic
+                  mentio
+                  mentio-typed-text="typedTerm"
+                  ng-model="$ctrl.template.content"
+                  id="emailTextInput"
+                  rows="4"
+                  placeholder="Add tokens by typing curly braces"
+                  class="no-textarea"
+                  ng-readonly="$ctrl.isDefault()"></textarea>
+    </div>
+
+    <token-typeahead-menu input-id="'emailTextInput'"
+                          starter-token-list="$ctrl.allTokens"></token-typeahead-menu>
+
+    <br><br>
+
+    <div class="form-actions split sticky-bottom">
+        <section ng-if="$ctrl.taskType.eventIsDisabled($ctrl.eventType.id)">
+            <a class="btn btn-default btn-sm"
+               ng-click="$ctrl.taskType.enableNotificationsForEventType($ctrl.eventType.id)">
+                Enable <i class="fa fa-spinner fa-spin" ng-if="$ctrl.isWorking"></i>
+            </a>
+        </section>
+
+        <section ng-if="!$ctrl.taskType.eventIsDisabled($ctrl.eventType.id)">
+            <a class="btn btn-default btn-sm"
+               ng-if="$ctrl.isDefault()"
+               ng-click="$ctrl.stubCustom()">
+                Customize <i class="fa fa-spinner fa-spin" ng-if="$ctrl.isWorking"></i>
+            </a>
+
+            <a class="btn btn-link btn-sm"
+               ng-if="$ctrl.isDefault()"
+               uib-tooltip="Stop notifications for this event."
+               tooltip-popup-delay="300"
+               ng-click="$ctrl.taskType.disableNotificationsForEventType($ctrl.eventType.id)">
+                Disable
+            </a>
+
+            <a class="btn btn-primary btn-sm"
+               ng-if="!$ctrl.isDefault()"
+               ng-click="$ctrl.update()">
+                Submit <i class="fa fa-spinner fa-spin" ng-if="$ctrl.isWorking"></i>
+            </a>
+
+
+            <a class="btn btn-link btn-sm"
+               uib-tooltip="Delete custom template and use the default."
+               tooltip-popup-delay="300"
+               ng-click="$ctrl.deleteTemplate()"
+               ng-if="!$ctrl.isDefault()">
+                <i class="fa fa-trash"></i> Delete Template
+            </a>
+        </section>
+    </div>
+</div>

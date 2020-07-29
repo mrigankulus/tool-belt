@@ -1,0 +1,18 @@
+<br>
+
+<div class="dashboard">
+
+    <div class="dashboard-loader" ng-class="{active: Dashboard.isLongLoad}">
+        <i class="fa fa-circle-o-notch fa-spin"></i>
+        <p>Loading...</p>
+    </div>
+
+    <div class="allow-ng-animate default-animation" ng-if="!Dashboard.isLoading">
+
+        <ng-include src="'dashboard/dashboard-views/wwtDeveloperDashboard.html'" ng-if="!Dashboard.isLoading && Dashboard.isDeveloper"></ng-include>
+
+        <ng-include src="'dashboard/dashboard-views/userAdminDashboard.html'" ng-if="!Dashboard.isLoading && !Dashboard.isDeveloper"></ng-include>
+
+    </div>
+
+</div>

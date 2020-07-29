@@ -1,0 +1,80 @@
+<div class="new-user-setup">
+
+    <div class="new-user-defaults" ng-if="PartnerProfilesUsers.isSettingUserDefaults">
+
+        <form name="newUserSetupForm">
+
+            <h3>New User Setup</h3>
+            <p class="muted">Apply profiles and a default application to each new user account</p>
+
+            <div class="form-group">
+                <label>AVAILABLE PROFILES</label>
+
+                <ui-select ng-model="PartnerProfilesUsers.selectedProfiles"
+                           ui-select-focus-input
+                           title="Profiles"
+                           multiple
+                           autofocus="true">
+
+                    <ui-select-match placeholder="Add Profiles">{{$item.name || '** Removed **'}}</ui-select-match>
+
+                    <ui-select-choices refresh-delay="200"
+                                       refresh="PartnerProfilesUsers.searchProfiles($select.search)"
+                                       repeat="profile in PartnerProfilesUsers.profiles | filter: $select.search | limitTo:$select.limit">
+                        {{ profile.name }}
+                    </ui-select-choices>
+
+                </ui-select>
+            </div>
+
+            <div class="form-group required">
+                <label>DEFAULT APPLICATION</label>
+
+                <ui-select required
+                           ng-model="PartnerProfilesUsers.selectedApp"
+                           ui-select-focus-input
+                           title="Add Default Application">
+
+                    <ui-select-match placeholder="Select Default Application...">
+                        <i class="wwt-icon-{{ $select.selected.iconName}}"></i> {{ $select.selected.appName }}
+                    </ui-select-match>
+
+                    <ui-select-choices repeat="app in PartnerProfilesUsers.apps | filter:$select.search | orderBy: 'appName'">
+                        <i class="wwt-icon-{{ app.iconName }}"></i> {{ app.displayName || app.appName }}
+                    </ui-select-choices>
+
+                </ui-select>
+
+            </div>
+
+            <div class="form-actions">
+                <button class="btn btn-primary" type="button"
+                        ng-click="PartnerProfilesUsers.isSettingUserDefaults = false"> Next
+                </button>
+                <a class="btn btn-link" ng-click="wwtFocusPanelSVC.closePanel('newUserSetupForm')">Cancel</a>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="new-user-invitation" ng-if="!PartnerProfilesUsers.isSettingUserDefaults">
+
+        <h3>Send New Users an Invitation Now?</h3>
+        <p class="muted">We can automatically send an email to the user with account setup instructions now. Or, this
+            can be done manually at a later time.</p>
+
+        <div class="form-actions split">
+            <section>
+                <button class="btn btn-primary" type="submit" ng-click="PartnerProfilesUsers.onConfirmSaveAndInvite()">Yes, Send Now</button>
+                <button class="btn btn-default" type="button" ng-click="PartnerProfilesUsers.onConfirmSave()">No, Don't Send</button>
+            </section>
+
+            <section>
+                <a class="btn btn-link" ng-click="PartnerProfilesUsers.isSettingUserDefaults = true"><i class="fa fa-chevron-left"></i>Go Back</a>
+            </section>
+        </div>
+
+    </div>
+
+</div>

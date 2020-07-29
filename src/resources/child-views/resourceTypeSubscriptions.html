@@ -1,0 +1,113 @@
+<br><br>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="ResourceTypeSubscriptions.isAddingSubscriber">
+
+    <form class="columns vertical-center with-padding" ng-submit="ResourceTypeSubscriptions.subscribeUser()">
+
+        <section></section>
+
+        <section class="flex-2">
+            <br>
+            <div class="form-group">
+                <user-typeahead target-model-parent="ResourceTypeSubscriptions.newUser"
+                                on-select-user="ResourceTypeSubscriptions.onSelectUserFromTypeAhead"
+                                placeholder="'Add User'"></user-typeahead>
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!ResourceTypeSubscriptions.newUser">
+
+                    Save
+                     <i class="fa fa-spinner fa-spin" ng-if="ResourceTypeSubscriptions.isSavingSubscriber"></i>
+                </button>
+                <a class="btn btn-link" ng-click="ResourceTypeSubscriptions.isAddingSubscriber = false;">Cancel</a>
+            </div>
+        </section>
+    </form>
+
+</section>
+
+<div class="item-detail-content-header" ng-if="ResourceTypeSubscriptions.subscribersHaveLoaded">
+    <section>
+
+        <div class="resource-types-search">
+            <i class="fa fa-search" ng-if="!ResourceTypeSubscriptions.isSearching"></i>
+            <i class="fa fa-spin fa-spinner" ng-if="ResourceTypeSubscriptions.isSearching"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="ResourceTypeSubscriptions.userSearchText"
+                   ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }"
+                   ng-change="ResourceTypeSubscriptions.onSearch(ResourceTypeSubscriptions.userSearchText)"
+                   tabindex="0"
+                   placeholder="Search Users" />
+        </div>
+    </section>
+
+    <section class="item-detail-header-actions">
+        <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/subscribable-resource-types/{{ ResourceTypeDetail.resourceType.id }}/subscribers?pageSize=100" target="_blank">JSON</a>
+
+        <button class="btn btn-primary btn-xs" ng-click="ResourceTypeSubscriptions.isAddingSubscriber = true">
+            <i class="fa fa-plus"></i> Subscribe User
+        </button>
+    </section>
+</div>
+
+<div ng-if="ResourceTypeSubscriptions.subscribersHaveLoaded && !ResourceTypeSubscriptions.subscribers.length">
+    <br><br>
+    <div class="blank-slate-tab">
+        <i class="fa fa-users"></i>
+
+        <section>
+            <h2 ng-if="!ResourceTypeSubscriptions.userSearchText">No Subscribers Yet</h2>
+            <h2 ng-if="ResourceTypeSubscriptions.userSearchText">No Subscribers Matching "{{ ResourceTypeSubscriptions.userSearchText }}"</h2>
+
+            <p><a class="clickable" ng-click="ResourceTypeSubscriptions.isAddingSubscriber = true"><strong>Add a subscriber</strong></a> to get started.</p>
+        </section>
+    </div>
+</div>
+
+<div class="cards"
+     ng-if="ResourceTypeSubscriptions.subscribersHaveLoaded && ResourceTypeSubscriptions.subscribers.length">
+
+    <section class="card-outer allow-ng-animate default-animation" ng-repeat="user in ResourceTypeSubscriptions.subscribers | orderBy: 'userName'">
+
+        <a class="card-inner clickable" ng-click="ResourceTypeSubscriptions.currentSubscriber = user" tabindex="0">
+            <div class="columns with-borders small-borders">
+                <section>
+                    <wwt-user-image user-name="user.userName"></wwt-user-image>
+                </section>
+
+                <section class="flex-5">
+                    <h3 class="card-header">{{ '@' + user.userName }}</h3>
+                    <p class="card-content">
+                        Scope: <strong>{{ user.scope }}</strong>
+                        <br>
+                        {{ user.reason }}
+                    </p>
+                </section>
+            </div>
+        </a>
+    </section>
+
+</div>
+
+<div class="text-center" ng-if="ResourceTypeSubscriptions.subscribersHaveLoaded && ResourceTypeSubscriptions.subscribers.length === ResourceTypeSubscriptions.query.pageSize">
+    <br>
+    <a class="btn btn-link" ng-click="ResourceTypeSubscriptions.nextPage()">Show More</a>
+</div>
+
+<div class="slide-in-panel sip-right allow-ng-animate"
+     ng-if="ResourceTypeSubscriptions.currentSubscriber">
+
+     <subscription-panel subscriber="ResourceTypeSubscriptions.currentSubscriber"
+                         resource-type="ResourceTypeDetail.resourceType"
+                         subscribers="ResourceTypeSubscriptions.subscribers"></subscription-panel>
+</div>
+
+<div class="page-overlay allow-ng-animate" ng-if="ResourceTypeSubscriptions.currentSubscriber" ng-click="ResourceTypeSubscriptions.currentSubscriber = false"></div>

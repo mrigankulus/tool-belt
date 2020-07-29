@@ -1,0 +1,117 @@
+<ol class="breadcrumb">
+    <li><a ui-sref="^">Import/Export</a></li>
+    <li class="active">Import</li>
+</ol>
+
+<div class="columns with-borders" style="margin-bottom: 100px;">
+    <section>
+            <h4>Import</h4>
+            <p>After copying the JSON from an <a ui-sref="importExport.export">export</a>, paste it here to review and import.</p>
+
+        <textarea class="json-textarea"
+                  placeholder="Paste Import here"
+                  ng-change="Import.processPastedContent()"
+                  ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }"
+                  ng-model="Import.pasteArea"></textarea>
+    </section>
+
+    <!-- todo: can we safely add position relative to all .column > section -->
+    <section style="position: relative">
+        <h4 ng-if="Import.pasteArea">We'll import these.</h4>
+
+        <hr>
+
+        <div class="alert alert-danger" ng-if="importer.state.badJson">
+            Sorry, can't process that JSON.
+        </div>
+
+        <div class="import-list">
+
+            <code-progress class="allow-ng-animate default-animation"
+                           ng-if="importer.state.isProcessingJson"
+                           font-size="'100px'"></code-progress>
+
+            <ul class="formatted-list">
+                <li ng-repeat="item in importer.exportListProcessed" class="allow-ng-animate default-animation"
+                    ng-class="[{'resource': item.importType === 'resourceType'}, item.importType]">
+                    <div class="columns">
+                        <section class="flex-none">
+                            <div class="asset-icon">
+                                <div class="asset-icon-progress allow-ng-animate" ng-if="item.isImporting || item.importWasSuccessful">
+                                    <i class="fa fa-spin fa-spinner" ng-if="item.isImporting"></i>
+                                    <i class="fa fa-thumbs-up" ng-if="item.importWasSuccessful"></i>
+                                </div>
+
+                                <i class="wwt-icon-{{ item.icon }}" ng-if="item.importType != 'resourceType'"></i>
+                                <i ng-if="item.importType === 'resourceType'">R</i>
+                            </div>
+                        </section>
+
+                        <section>
+                            <div class="columns vertical-center">
+                                <section>
+                                    <h4>&nbsp;{{ item.title }}</h4>
+                                </section>
+
+                                <section>
+                                    <span ng-if="item.importActionText" class="label label-default">{{ item.importActionText }}</span>
+                                </section>
+                            </div>
+
+                            <p>&nbsp;{{ item.description }}</p>
+
+                            <div ng-if="item.eventTypes && item.eventTypes.length">
+                                <hr class="dashed">
+
+                                <h5>Event Types</h5>
+                                <ul class="formatted-list">
+                                    <li ng-repeat="eventType in item.eventTypes">
+                                        <div class="columns vertical-center">
+                                            <section>
+                                                {{ eventType.title }}
+                                            </section>
+
+                                            <section>
+                                                <span ng-if="eventType.importActionText"
+                                                      class="label label-default">
+                                                      {{ eventType.importActionText }}
+                                                </span>
+                                            </section>
+                                        </div>
+
+                                        <section ng-if="eventType.importErrors && eventType.importErrors.length">
+                                            <br>
+                                            <div class="alert alert-danger">
+                                                <p ng-repeat="error in eventType.importErrors">{{ error }}</p>
+                                            </div>
+                                        </section>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                    </div>
+
+                    <!-- <json-formatter json="item" open="1"></json-formatter> -->
+                </li>
+            </ul>
+        </div>
+    </section>
+</div>
+
+<section class="status-bar-bottom allow-ng-animate" ng-if="importer.exportListProcessed && importer.exportListProcessed.length">
+    <div class="container columns with-padding vertical-center">
+        <section class="flex-2 allow-ng-animate default-animation" ng-if="importer.state.isImporting">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="{{ importer.state.itemCount }}" ng-style="{'width': importer.getImportProgress() + '%' }">
+
+                </div>
+            </div>
+        </section>
+
+        <section class="actions">
+            <button class="btn btn-primary btn-lg"
+                    ng-click="importer.import()"
+                    ng-disabled="importer.state.isImporting">Import</button>
+        </section>
+    </div>
+</section>

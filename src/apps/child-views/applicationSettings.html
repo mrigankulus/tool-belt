@@ -1,0 +1,167 @@
+<br><br>
+
+<div class="blank-slate-tab" ng-if="!Application.canEditApps && Application.permissionsHaveLoaded">
+    <i class="fa fa-lock"></i>
+
+    <section>
+        <p>It looks like you don't have <strong>permission</strong> to edit this application. Please <a ng-if="Application.getRepoURL()" ng-href="{{ Application.getRepoURL() }}" target="_blank">open an issue</a> <span ng-if="Application.getRepoURL()">or</span> contact the service desk to request permission.</p>
+    </section>
+</div>
+
+<div class="columns with-borders" ng-if="Application.canEditApps">
+    <section>
+
+        <form name="applicationSettingsForm" ng-submit="ApplicationSettings.update()">
+            <div class="form-group required">
+                <label id="name">NAME</label>
+                <input ng-model="assetState.currentAsset.appName" required="true" />
+            </div>
+
+            <div class="form-group required">
+                <label id="displayName">DISPLAY NAME</label>
+                <input ng-model="assetState.currentAsset.displayName" required="true" />
+            </div>
+
+            <div class="form-group required">
+                <label id="icon">ICON NAME</label>
+
+                <wwt-icon-type-ahead target-model="assetState.currentAsset.iconName" placeholder="'Ex: thumbs-up'"></wwt-icon-type-ahead>
+            </div>
+
+            <div class="form-group">
+                <label>KEYWORDS</label>
+
+                <keywords-typeahead keyword-parent-object="assetState.currentAsset"></keywords-typeahead>
+            </div>
+
+            <div class="form-group required">
+                <label>URL</label>
+
+                <div class="form-group">
+                    <div class="input-group url-input-group">
+                        <span class="no-select">
+
+                            <select ng-model="assetState.currentAsset.fixedUrlFlag" class="no-select">
+                                <option value="N">wwt.com/app-name</option>
+                                <option value="Y">your-custom.url.com/sweetness</option>
+                            </select>
+
+
+                            https://{{ assetState.currentAsset.fixedUrlFlag === 'N' ? 'www.wwt.com/' : '' }}
+                             <i class="fa fa-caret-down"></i>
+                        </span>
+
+                        <input id="url" ng-model="assetState.currentAsset.appLocation" placeholder="app-name" required="true" />
+
+                        <!-- something like this would be cool for CloudFoundry urls
+                        <span ng-if="ApplicationSettings.selectedOption.value === 'cloudFoundryURL'"
+                              auto-focus="#url">.apps.wwt.com</span>
+                        -->
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-group required">
+                <label id="description">DESCRIPTION</label>
+                <br>
+                <textarea msd-elastic ng-model="assetState.currentAsset.appDescription" required="true"></textarea>
+            </div>
+
+            <section class="advanced-settings" ng-if="ApplicationSettings.isViewingAdvancedSettings">
+                <hr>
+
+                <div class="form-group">
+                    <label>MOBILE OPTIMIZED</label>
+                    <select ng-model="assetState.currentAsset.mobileEnabledFlag">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>SHOW IN APP SWITCHER</label>
+                    <select ng-model="assetState.currentAsset.showInNav">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>ALL INTERNAL USERS</label>
+                    <select ng-model="assetState.currentAsset.allInternalFlag">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>ALL EXTERNAL USERS</label>
+                    <select ng-model="assetState.currentAsset.allExternalFlag">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <label>DEFAULT EXTERNAL FLAG</label>
+
+                    <p><small>Let's leave this disabled until we do some more testing as this will impact other things.</small></p>
+
+                    <select disabled="disabled" ng-model="assetState.currentAsset.defaultExternalApp">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+
+                <hr>
+
+                <div class="form-group">
+                    <label>DEFAULT INTERNAL FLAG</label>
+
+                    <p><small>Let's leave this disabled until we do some more testing as this will impact other things.</small></p>
+
+                    <select disabled="disabled" ng-model="assetState.currentAsset.defaultInternalApp">
+                        <option value="Y">Yes</option>
+                        <option value="N">No</option>
+                    </select>
+                </div>
+
+            </section><!-- /.advanced-settings -->
+
+            <a class="btn-link clickable"
+                ng-click="ApplicationSettings.isViewingAdvancedSettings = !ApplicationSettings.isViewingAdvancedSettings">
+
+                {{ ApplicationSettings.isViewingAdvancedSettings ? 'Hide' : 'Show'; }} Advanced Settings
+            </a>
+
+            <hr class="dashed">
+
+            <div class="form-actions split">
+                <section>
+                    <button class="btn btn-primary" type="submit" ng-disabled="!applicationSettingsForm.$valid">
+                        <span>Save</span>
+                        <span ng-if="ApplicationSettings.isWorking"><i class="fa fa-spinner fa-spin"></i></span>
+                        <span ng-if="ApplicationSettings.isFinishedWorking"><i class="fa fa-thumbs-up"></i></span>
+                    </button>
+                </section>
+
+                <section>
+                    <a href="" class="btn btn-link" type="delete" ng-click="ApplicationSettings.deleteApplication()">Delete</a>
+                </section>
+            </div>
+        </form>
+
+    </section>
+
+    <section>
+
+        <connected-items-list></connected-items-list>
+        <br><br>
+        <connected-service-users></connected-service-users>
+
+    </section>
+
+</div>

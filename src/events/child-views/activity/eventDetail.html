@@ -1,0 +1,89 @@
+<br>
+
+<ol class="breadcrumb">
+    <li><a ui-sref="^">Events for {{ EventTypeDetail.eventType.title }}</a></li>
+    <li class="active">Event Details</li>
+</ol>
+
+<div class="primary-loader" ng-class="{active: EventDetail.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="alert alert-danger" ng-if="EventDetail.event && (!EventDetail.event.notificationRequests || !EventDetail.event.notificationRequests.length)">
+    No notificationRequest has been created for this event. This means that it hasn't been created yet, or something went wrong. :/
+
+    <br><br>
+
+    This is what your event looks like...
+    <json-formatter json="EventDetail.event" open="1"></json-formatter>
+</div>
+
+<div ng-if="EventDetail.event.notificationRequests && EventDetail.event.notificationRequests.length" class="allow-ng-animate default-animation">
+
+    <h3>Resource: {{ EventDetail.getResourceId(EventDetail.event) }}</h3>
+    <p>{{ EventDetail.event.notificationRequests[0].who.creationDate | date:'medium' }}</p>
+
+    <p ng-if="EventDetail.receipt">Receipt sent to @{{ EventDetail.receipt.recipient.userName }}.</p>
+
+    <hr>
+
+    <div class="columns with-borders" style="max-width: 1100px; margin: 0 auto;">
+
+        <section>
+            <h4 class="text-center">Notifications</h4>
+            <hr class="dashed">
+
+            <div class="alert alert-danger" ng-repeat="error in EventDetail.event.errors">
+                <p>{{ error.cause }}</p>
+            </div>
+
+            <ul class="formatted-list">
+
+                <li ng-repeat="notification in EventDetail.event.notifications"
+                    class="columns with-padding vertical-center"
+                    ng-class="{'error': notification.status === 'failed'}">
+
+                    <section class="flex-none">
+                        <wwt-user-image user-name="notification.user.userName" ng-if="notification.user.userName"></wwt-user-image>
+
+                        <span ng-if="!notification.user.userName">Non-user</span>
+                    </section>
+
+                    <section class="flex-2" ng-if="notification.user.userName">
+                        {{ notification.user.fullName }}<br>
+                        @{{ notification.user.userName }}
+                    </section>
+
+                    <section class="flex-2" ng-if="!notification.user.userName">
+                        {{ notification.user.email }}
+                    </section>
+
+                    <section style="max-width: 80px;">
+                        {{ notification.method | startCase }}
+                    </section>
+
+                    <section>
+                        <div style="min-width: 125px;">
+                            <span ng-if="!notification.readAt && notification.method === 'inApp'">Unread</span>
+                            <span ng-if="notification.readAt">Read: {{ notification.readAt | friendlyDate }}</span>
+                            <span ng-if="notification.method === 'email' && !notification.readAt">{{ notification.successful ? 'Delivered' : 'Failed' }}</span>
+                        </div>
+                    </section>
+
+                    <!-- this doesn't do anything yet
+                    <section class="flex-none formatted-list-highlight-on-hover" ng-if="notification.status === 'failed'">
+                        <a class="btn btn-link btn-xs"><i class="fa fa-refresh"></i> Retry</a>
+                    </section>
+                    -->
+                </li>
+            </ul>
+        </section>
+
+        <section style="max-width: 50%; overflow: auto">
+            <h4 class="text-center">Event Details</h4>
+            <hr class="dashed">
+
+            <json-formatter json="EventDetail.event" open="1"></json-formatter>
+        </section>
+
+    </div>
+
+</div>

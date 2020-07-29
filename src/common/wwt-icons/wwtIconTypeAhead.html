@@ -1,0 +1,20 @@
+<ui-select class="hidden-select"
+           ng-model="targetModel"
+           theme="select2"
+           limit="20"
+           ui-select-focus-input
+           required="true"
+           ng-change="onChange($select.selected)">
+
+    <ui-select-match placeholder="{{placeholder}}" allow-clear="true">
+        <i class="wwt-icon-{{$select.selected}}"></i> {{ $select.selected }}
+    </ui-select-match>
+
+    <ui-select-choices repeat="icon in icons | filter: $select.search | limitTo:$select.limit">
+        <div>
+            <i class="wwt-icon-{{icon}}"></i>
+             <span ng-bind-html="icon | highlight: $select.search"></span>
+        </div>
+    </ui-select-choices>
+
+</ui-select>

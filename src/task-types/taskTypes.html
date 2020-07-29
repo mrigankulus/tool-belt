@@ -1,0 +1,58 @@
+<br>
+
+<div class="container allow-ng-animate default-animation" ng-if="TaskTypes.canManageTaskTypes">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>Task Types</h1>
+
+                    <p>Manage task types for the <a href="https://github.wwt.com/custom-apps/tasks-api" target="_blank">Tasks API</a>.</p>
+
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95">
+                    <section>
+
+                        <div class="resource-types-search">
+                            <i class="fa fa-search" ng-if="!TaskTypes.isSearching"></i>
+                            <i class="fa fa-spin fa-spinner" ng-if="TaskTypes.isSearching"></i>
+
+                            <input id="secondarySearchInput"
+                                   type="text"
+                                   class="no-input"
+                                   ng-model="TaskTypes.searchText"
+                                   tabindex="0"
+                                   placeholder="Search">
+
+                        </div>
+
+                    </section>
+                    <section class="item-detail-header-actions">
+                        <button class="btn btn-primary btn-xs" ng-click="TaskTypes.openNewTaskForm()"><i class="fa fa-plus"></i> Add Type</button>
+                    </section>
+                </div>
+
+                <div class="cards allow-ng-animate default-animation" ng-if="TaskTypes.taskTypes.length">
+                    <task-type-card task-type="taskType" class="card-outer asset-card" ng-repeat="taskType in TaskTypes.taskTypes | filter:TaskTypes.searchText | orderBy: 'id'"></task-type-card>
+                </div>
+
+            </section>
+        </main>
+
+    </article>
+</div>
+
+<wwt-focus-panel panel-name="'newTaskTypeForm'"
+                 position="'right'"
+                 header-text="'New Task Type'"
+                 header-icon="'plus-circle'"
+                 backdrop="true">
+
+    <section class="fp-container">
+        <edit-task-type></edit-task-type>
+    </section>
+</wwt-focus-panel>

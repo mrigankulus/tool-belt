@@ -1,0 +1,7 @@
+<div>
+    <p>Be careful with this. This is a great way to maintain consistency between event types, but if you're not actually passing data for this token to all your events, those events will fail. These event types will get this token...</p>
+
+    <ul>
+        <li ng-repeat="type in EventTypeDetail.eventType.resourceType.eventTypes" ng-if="type">{{ type.title }}</li>
+    </ul>
+</div>

@@ -1,0 +1,56 @@
+<section class="container new-asset-form" ng-if="!NewComponent.canEditComponents && NewComponent.permissionsHaveLoaded">
+    <div class="blank-slate-tab">
+        <i class="fa fa-lock"></i>
+
+        <section>
+            <p>It looks like you don't have <strong>permission</strong> to create components. Please contact the service desk to request permission.</p>
+        </section>
+    </div>
+</section>
+
+<div class="alert alert-danger" ng-if="NewComponent.error">
+    <p>{{ NewComponent.error }}</p>
+</div>
+
+<repo-connect ng-if="NewComponent.canEditComponents" on-repo-connected="NewComponent.onRepoConnected" on-cancel="Components.closeAddComponentForm" class="new-component-form"></repo-connect>
+
+<main class="container new-asset-form" ng-if="NewComponent.new.name && NewComponent.canEditComponents">
+
+    <form name="newComponentForm" ng-submit="NewComponent.create()" ng-if="NewComponent.new.name" class="allow-ng-animate">
+        <h4>Don't over-think it. You can change all this later if you'd like.</h4>
+
+        <div class="form-group required">
+            <label id="name">NAME</label>
+            <input ng-model="NewComponent.new.name" required="true" />
+        </div>
+
+        <div class="form-group required">
+            <label id="icon">ICON NAME</label>
+
+            <wwt-icon-type-ahead target-model="NewComponent.new.iconName" placeholder="'Ex: thumbs-up'"></wwt-icon-type-ahead>
+        </div>
+
+        <div class="form-group">
+            <label>KEYWORDS</label>
+
+            <keywords-typeahead keyword-parent-object="NewComponent.new"></keywords-typeahead>
+        </div>
+
+        <div class="form-group required">
+            <label id="description">DESCRIPTION</label>
+            <br>
+            <textarea msd-elastic rows="3" ng-model="NewComponent.new.shortDescription" required="true"></textarea>
+        </div>
+
+        <div class="form-actions split fixed-footer">
+            <section>
+                <button type="submit" class="btn btn-primary" ng-disabled="!newComponentForm.$valid"> Submit
+                    <span ng-if="NewComponent.isWorking"><i class="fa fa-spinner fa-spin"></i></span>
+                </button>
+                <a class="btn btn-link" ng-click="Components.closeAddComponentForm()"> Cancel</a>
+            </section>
+        </div>
+
+    </form>
+
+</main>

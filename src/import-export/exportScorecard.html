@@ -1,0 +1,76 @@
+<ol class="breadcrumb">
+    <li><a ui-sref="^">Import/Export</a></li>
+    <li class="active">Export</li>
+</ol>
+<!-- search bar -->
+<div class="blank-slate-tab">
+    <i class="fa fa-plus"></i>
+
+    <section>
+        <h2>Add Items to your Export</h2>
+
+        <p><small>Currently supporting API Routes with API Scorecard Exceptions.</small></p>
+
+        <br>
+
+        <ui-select class="no-select2" ng-model="ExportScorecard.searchTerm" limit="50" ui-select-focus-input
+            append-to-body="true" ng-change="ExportScorecard.onSearchResultSelected($select.selected)">
+
+            <ui-select-match placeholder="Search API Routes" allow-clear="true">
+                <div>
+                    <i class="wwt-icon-{{$select.selected.formatted.icon}}" ng-if="$select.selected.formatted.icon"></i>
+                    <span ng-bind-html="$select.selected.formatted.title"></span>
+                </div>
+            </ui-select-match>
+
+            <ui-select-choices
+                repeat="result in ExportScorecard.searchResults | filter: $select.search | limitTo:$select.limit"
+                group-by="ExportScorecard.mapToGroup" refresh="ExportScorecard.searchExportables($select.search)"
+                refresh-delay="200">
+
+                <div>
+                    <i class="wwt-icon-{{result.formatted.icon}}" ng-if="result.formatted.icon"></i>
+                    <span ng-bind-html="result.formatted.title | highlight: $select.search"></span>
+                </div>
+            </ui-select-choices>
+
+        </ui-select>
+    </section>
+</div>
+
+<hr class="dashed">
+<!-- left column -->
+<div class="columns with-borders" ng-if="ExportScorecard.termSelected">
+    <section>
+        <header class="item-header">
+            <section>
+                <div class="asset-icon">
+                    <i>API</i>
+                </div>
+            </section>
+
+            <section>
+                <h1 class="ng-binding">{{ ExportScorecard.selectedItem.formatted.title }}</h1>
+                <p>{{ ExportScorecard.selectedItem.raw.description }}</p>
+            </section>
+        </header>
+    </section>
+
+    <!-- right column -->
+    <section>
+        <div class="allow-ng-animate default-animation">
+            <h4>Export</h4>
+            <p>When you're ready to export, copy this JSON, head over to your target environment, and paste import it
+                there.</p>
+
+            <pre style="max-width: 500px;max-height: 300px; overflow: auto;"
+                id="exportScorecardContent">{{ ExportScorecard.allUrlExceptions | json }}</pre>
+
+            <button class="btn btn-primary" ngclipboard data-clipboard-target="#exportScorecardContent"
+                ngclipboard-success="ExportScorecard.onCopy(e)">Copy</button>
+
+            <span class="lead muted" ng-if="ExportScorecard.shouldShowCopiedMessage">&nbsp;Copied to Clipboard <i
+                    class="fa fa-thumbs-up"></i></span>
+        </div>
+    </section>
+</div>

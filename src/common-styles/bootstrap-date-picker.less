@@ -1,0 +1,166 @@
+// Mostly copied from  Qsys because those datepickers looked great!
+@tlDatePickerBlue: #32699b;
+
+[uib-datepicker-popup-wrap] {
+
+  > li {
+
+    // get rid of our Proxima Nova (it's too small)
+    // font-family: @font-family-sans-serif;
+    // cursor was set to pointer, even on default buttons
+    cursor: default;
+
+    // remove blue background on hover
+    &:hover {
+      color: initial;
+      background: initial;
+    }
+
+  }
+
+  button {
+    border: none;
+  }
+
+  // removes box shadow from button's 'active' state
+  .btn:active {
+    box-shadow: none;
+  }
+
+  // selected date on calendar
+  .btn-default.btn-sm.btn-info, .btn-default.btn-sm.btn-info.active {
+    padding: 4px;
+    height: 25px;
+    min-width: 25px !important; // overrides their inline style
+    border-radius: 50%;
+    background-color: @tlDatePickerBlue;
+    font-weight: 600;
+
+    .text-info {
+      color: #fff;
+    }
+  }
+
+  .btn-default.btn-sm.btn-info.active:hover {
+    color: #fff;
+    background-color: darken(@tlDatePickerBlue, 5%);
+  }
+
+  .btn-default:hover {
+    color: @tlDatePickerBlue;
+  }
+
+  .btn-default:focus {
+    background: transparent;
+  }
+
+  // first day of month
+  .btn-default.active {
+    border: none;
+    background-color: #fff;
+    box-shadow: none;
+
+    &:hover {
+      color: #333;
+    }
+  }
+
+  // current month and current year
+  .btn-info, .btn-info:active {
+    background-color: #fff;
+  }
+
+  // today's date
+  .text-info {
+    color: @tlDatePickerBlue;
+    font-weight: 600;
+  }
+
+  .text-muted {
+    color: lightgrey;
+  }
+
+  // remove blue fuzzy outline
+  [datepicker] > table:focus {
+    outline: none;
+  }
+
+  // replaces glyphicons with font-awesome icons (hijacking bs class names)
+  .glyphicon {
+      font-family: FontAwesome;
+      font-style: normal;
+      font-weight: normal;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+        // color: @iconText;
+  }
+
+  .glyphicon-chevron-left {
+    &:before {
+      content: "\f053"; // fa-chevron-left
+    }
+  }
+
+  .glyphicon-chevron-right {
+    position: relative;
+    right: -1px;
+
+    &:before {
+      content: "\f054"; // fa-chevron-right
+    }
+  }
+
+  + .close-datepicker {
+    width: 30px;
+    font-size: 18px;
+    cursor: pointer;
+
+    &:before {
+      position: relative;
+      top: -1px;
+      content: '\00d7';
+    }
+  }
+
+}
+
+.uib-datepicker {
+    border-radius: 0;
+    background: #fff;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    // Hide the outline on active and focus states
+    &:active,
+    &:focus {
+        outline: none !important;
+    }
+
+    div:active,
+    div:focus {
+      outline: none !important;
+    }
+}
+
+.uib-datepicker-popup {
+  background: #f5f5f5;
+}
+
+.uib-datepicker-current {
+  display: none;
+}
+
+.uib-clear {
+  font-size: 14px;
+  background-color: #f5f5f5;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+}
+
+.uib-close {
+  .btn;
+  .btn-link;
+  font-size: 14px;
+}

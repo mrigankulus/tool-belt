@@ -1,0 +1,35 @@
+<div ng-if="featureFlagsSVC.flagIsActive('versioning')">
+    <br>
+
+    <div class="item-detail-content-header">
+        <section></section>
+        <section class="item-detail-header-actions">
+            <button ng-if="APIVersions.canEditApis" class="btn btn-primary btn-sm" ng-click="wwtFocusPanelSVC.togglePanel('newApiForm')"
+                auto-focus="#inputName">
+                <i class="fa fa-plus"></i> Add New Version
+            </button>
+        </section>
+    </div>
+
+    <div class="primary-loader" ng-class="{active: APIVersions.isLongLoad}">
+        <i class="fa fa-spinner fa-spin"></i>
+    </div>
+
+    <div class="blank-slate-tab" ng-if="APIVersions.shouldShowBlankSlate()">
+        <i class="fa fa-info-circle"></i>
+
+        <section>
+            <p>No Other Versions Exist. Add a New Version to Get Started.</p>
+        </section>
+    </div>
+
+    <div class="cards allow-ng-animate default-animation" ng-if="APIVersions.apis && APIVersions.apis.length">
+        <api-card class="card-default-version" api="api" ng-repeat="api in APIVersions.defaultApis" uib-tooltip="Default Version"
+            tooltip-popup-delay="500" tooltip-placement="top-left"></api-card>
+        <api-card api="api" ng-repeat="api in APIVersions.apis"></api-card>
+    </div>
+
+    <wwt-focus-panel panel-name="'newApiForm'" position="'right'" header-text="'New API Version'" header-icon="'plus-circle'" backdrop="true">
+        <ng-include src="'apis/apis/newApi.html'" ng-controller="NewApiCtrl as NewApi"></ng-include>
+    </wwt-focus-panel>
+</div>

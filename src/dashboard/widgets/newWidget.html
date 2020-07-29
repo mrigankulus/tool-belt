@@ -1,0 +1,31 @@
+<i class="fa fa-thumb-tack"></i>
+
+<br>
+
+<p>Pin things that are important to you!</p>
+
+<ui-select class="no-select2"
+           ng-model="NewWidget.searchTerm"
+           limit="50"
+           ui-select-focus-input
+           append-to-body="true"
+           ng-change="NewWidget.onSearchResultSelected($select.selected)">
+
+    <ui-select-match placeholder="{{placeholder}}" allow-clear="true">
+        <div>
+            <i class="wwt-icon-{{$select.selected.formatted.icon}}" ng-if="$select.selected.formatted.icon"></i>
+             <span ng-bind-html="$select.selected.formatted.title"></span>
+        </div>
+    </ui-select-match>
+
+    <ui-select-choices repeat="result in NewWidget.searchResults | filter: $select.search | limitTo:$select.limit" group-by="NewWidget.mapToGroup"
+                       refresh="NewWidget.searchPinables($select.search)"
+                       refresh-delay="200">
+
+        <div>
+            <i class="wwt-icon-{{result.formatted.icon}}" ng-if="result.formatted.icon"></i>
+             <span ng-bind-html="result.formatted.title | highlight: $select.search"></span>
+        </div>
+    </ui-select-choices>
+
+</ui-select>

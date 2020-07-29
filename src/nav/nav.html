@@ -1,0 +1,143 @@
+<nav class="navigation" ng-controller="NavCtrl as Nav">
+    <div class="container allow-ng-animate default-animation" ng-if="Nav.permissionsHaveLoaded">
+
+        <ul class="nav-group" ng-if="Nav.isDeveloper">
+
+            <li>
+                <a ui-sref="applications"
+                   ng-class="{'active': Nav.isTabActive('application')}"
+                   auto-focus="#secondarySearchInput"
+                   class="nav-group-type-applications">Applications</a>
+            </li>
+
+            <li ng-if="Nav.canEditApis">
+                <a ui-sref="apis"
+                   ng-class="{'active': Nav.isTabActive('api')}"
+                   auto-focus="#secondarySearchInput"
+                   class="nav-group-type-apis">API Routes</a>
+            </li>
+
+            <li ng-if="Nav.canEditComponents">
+                <a ui-sref="components"
+                   ng-class="{'active': Nav.isTabActive('component')}"
+                   auto-focus="#secondarySearchInput"
+                   class="nav-group-type-components">Components</a>
+            </li>
+
+            <li ng-if="Nav.canViewResources">
+                <a ui-sref="resourceTypes"
+                   ng-class="{'active': Nav.isTabActive('resourceType')}"
+                   auto-focus="#secondarySearchInput"
+                   class="nav-group-type-resource">Resources</a>
+            </li>
+
+            <li ng-if="Nav.canViewEvents">
+                <a ui-sref="eventTypes"
+                   ng-class="{'active': Nav.isTabActive('eventType')}"
+                   auto-focus="#secondarySearchInput"
+                   class="nav-group-type-event">Events</a>
+            </li>
+
+            <li class="nav-dot-dot-dot" ng-if="Nav.shouldShowDotDotDotMenu()">
+                <span class="navigation-item"
+                      ng-class="{'active': Nav.isDotDotDotActive()}"
+                      uib-dropdown on-toggle="toggled(open)">
+
+                    <a href uib-dropdown-toggle>...</a>
+
+                    <ul class="dropdown-menu" uib-dropdown-menu>
+                        <li ng-if="Nav.canViewCronJobs">
+                            <a ui-sref="cronJobs" auto-focus="#secondarySearchInput">Cron Jobs</a>
+                        </li>
+
+                        <li ng-if="Nav.canViewAllGroups">
+                            <a ui-sref="groups" auto-focus="#secondarySearchInput">Groups</a>
+                        </li>
+
+                        <li ng-if="Nav.canViewPartners">
+                            <a ui-sref="partners" auto-focus="#secondarySearchInput">Partners</a>
+                        </li>
+
+                        <li ng-if="Nav.canViewProfiles">
+                            <a ui-sref="profiles" auto-focus="#secondarySearchInput">Profiles</a>
+                        </li>
+
+                        <li ng-if="featureFlagsSVC.flagIsActive('websockets') && Nav.canViewSockets">
+                            <a ui-sref="sharedSockets" auto-focus="#secondarySearchInput">Shared Sockets</a>
+                        </li>
+
+                        <li ng-if="Nav.canManageTaskTypes">
+                            <a ui-sref="taskTypes" auto-focus="#secondarySearchInput">Task Types</a>
+                        </li>
+
+                        <li ng-if="Nav.canViewTechnologies">
+                            <a ui-sref="technologies" auto-focus="#secondarySearchInput">Technologies</a>
+                        </li>
+
+                        <li ng-if="Nav.canViewUsers">
+                            <a ui-sref="users" auto-focus="#secondarySearchInput">Users</a>
+                        </li>
+                    </ul>
+                </span>
+            </li>
+        </ul>
+
+        <ul class="nav-group" ng-if="!Nav.isDeveloper">
+            <li>
+                <a ui-sref="applications"
+                   ng-class="{'active': Nav.isTabActive('application')}"
+                   auto-focus="#secondarySearchInput"
+                   class="nav-group-type-applications">Applications</a>
+            </li>
+
+            <li ng-if="Nav.canViewPartners">
+                <a ui-sref="partners"
+                   ng-class="{'active': Nav.isTabActive('partner')}"
+                   auto-focus="#secondarySearchInput"
+                   class="nav-group-type-partner">Partners</a>
+            </li>
+
+            <li ng-if="Nav.canViewProfiles">
+                <a ui-sref="profiles"
+                   ng-class="{'active': Nav.isTabActive('profile')}"
+                   auto-focus="#secondarySearchInput"
+                   class="nav-group-type-profile">Profiles</a>
+            </li>
+
+            <li ng-if="Nav.canViewUsers">
+                <a ui-sref="users"
+                   ng-class="{'active': Nav.isTabActive('user')}"
+                   auto-focus="#secondarySearchInput"
+                   class="nav-group-type-user">Users</a>
+            </li>
+        </ul>
+
+        <ul class="nav-group group-right">
+
+            <div class="nav-search" ng-class="{'is-searching' : Nav.isSearching}">
+                <button ng-if="!Nav.isSearching" ng-click="Nav.toggleNavSearch()" auto-focus="#navSearch" class="allow-ng-animate">
+                    <i class="fa fa-search"></i>
+                </button>
+
+                <form ng-if="Nav.isSearching" class="search-form allow-ng-animate">
+                    <i class="fa fa-search"></i>
+                    <input id="navSearch" ng-model="Nav.searchTerm" ng-change="Nav.search(Nav.searchTerm)"
+                           ng-model-options="{ debounce: 200 }" placeholder="Search Everywhere" autocomplete="off">
+                </form>
+            </div>
+
+        </ul>
+
+        <ng-include src="'nav/navSearchResults.html'" class="search-results-container allow-ng-animate" ng-if="Nav.searchTerm"></ng-include>
+
+    </div>
+
+    <div class="page-overlay allow-ng-animate" ng-if="Nav.isSearching" ng-click="Nav.closeNavSearch()"></div>
+
+    <div class="minimum-browser-support-msg">
+        <i class="fa fa-warning"></i>
+        <p><strong>Heads Up!</strong> The Dev Tool Belt is not yet fully supported in {{ Nav.getActiveBrowserName() }}. Please
+            <strong><a href="https://github.wwt.com/custom-apps/dev-tool-belt/issues/new" target="_blank">create an issue</a></strong>
+            if you see anything that looks off. We'll get on it as quickly as possible!</p>
+    </div>
+</nav>

@@ -1,0 +1,108 @@
+<br>
+
+<div class="container">
+    <article class="item-detail application">
+        <main>
+            <header class="item-header">
+                <section>
+                    <div class="asset-icon"><i class="wwt-icon-{{assetState.currentAsset.iconName}}"></i></div>
+                </section>
+
+                <section>
+                    <h1>{{ assetState.currentAsset.displayName || assetState.currentAsset.appName }} <small>{{ assetState.currentAsset.packageJson.version }}</small></h1>
+
+                    <p>{{ assetState.currentAsset.appDescription }}</p>
+
+                    <p ng-if="!assetState.currentAsset.isLoading">
+                        <span ng-if="Application.permissionsHaveLoaded && Application.isDeveloper">
+                            <pinner ng-if="assetState.currentAsset.appName" asset-type="application"></pinner>
+
+                            &nbsp;
+                            |
+                            &nbsp;
+                        </span>
+
+                        <a ng-href="{{ Application.getAppLink() }}" target="_blank">View App</a>
+
+                        &nbsp;
+                        |
+                        &nbsp;
+
+                        <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/applications/{{ assetState.currentAsset.id }}" target="_blank">JSON</a>
+                    </p>
+                </section>
+
+                <section class="item-header-watch-button">
+                    <dtb-resource-watcher dtb-resource-watcher-settings="Application.watcherSettings"></dtb-resource-watcher>
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+                <div class="item-detail-content-header short" hl-sticky offset-top="95">
+                    <ul class="nav nav-tabs" ng-if="Application.permissionsHaveLoaded && Application.isDeveloper">
+                        <li ng-repeat="tab in Application.tabs | filter:{inTabsDotDotDot: false}"
+                            ui-sref-active="active"
+                            ng-class="{'pull-right': tab.slug === 'settings'}">
+
+                            <a ui-sref="applicationDetail.{{ tab.slug }}">
+                                <i class="fa fa-cog" ng-if="tab.slug === 'settings'"></i>
+                                 {{ tab.displayName }}
+                            </a>
+                        </li>
+                        <li class="tab-dot-dot-dot"
+                            ng-if="Application.shouldShowTabsDotDotDot()"
+                            uib-dropdown
+                            ng-class="{'active': Application.isDotDotDotActive()}"
+                            on-toggle="toggled(open)">
+                          <a href uib-dropdown-toggle>...</a>
+                          <ul class="dropdown-menu" uib-dropdown-menu>
+                              <li ng-repeat="tab in Application.tabs | filter:{inTabsDotDotDot: true}"
+                                  ui-sref-active="active">
+                                  <a ui-sref="applicationDetail.{{ tab.slug }}">
+                                    {{ tab.displayName }}
+                                  </a>
+                              </li>
+                          </ul>
+                        </li>
+                    </ul>
+
+                    <ul class="nav nav-tabs" ng-if="Application.permissionsHaveLoaded && !Application.isDeveloper">
+                        <li ng-repeat="tab in Application.tabs | filter:{inTabsDotDotDot: false} | filter:{isDeveloperOnlyView: false}"
+                            ui-sref-active="active"
+                            ng-class="{'pull-right': tab.slug === 'settings'}">
+
+                            <a ui-sref="applicationDetail.{{ tab.slug }}">
+                                <i class="fa fa-cog" ng-if="tab.slug === 'settings'"></i>
+                                {{ tab.displayName }}
+                            </a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <ui-view></ui-view>
+            </section>
+        </main>
+
+        <aside ng-if="Application.permissionsHaveLoaded && Application.isDeveloper">
+
+            <section hl-sticky offset-top="116">
+
+                <div ng-repeat="repo in assetState.currentAsset.connectedRepos">
+                    <github-widget readonly="!Application.canEditApps" org="repo.org" repo="repo.repo"></github-widget>
+                    <br>
+                </div>
+
+                <div ng-repeat="board in assetState.currentAsset.connectedVisionBoards">
+                    <vision-widget group-id="board.id" group-name="board.name"></vision-widget>
+                    <br>
+                </div>
+
+                <jenkins-widget></jenkins-widget>
+
+                <ng-include ng-if="assetState.currentAsset.id" src="'common/relate-things-ad.html'"></ng-include>
+
+            </section>
+        </aside>
+    </article>
+</div>

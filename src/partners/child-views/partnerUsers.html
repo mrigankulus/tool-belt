@@ -1,0 +1,402 @@
+<div class="primary-loader" ng-class="{active: PartnerProfilesUsers.isLongUserDataLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="blank-slate-tab" ng-if="PartnerProfilesUsers.userDataLoaded && !PartnerProfilesUsers.users.length">
+    <i>U</i>
+
+    <section>
+        <h2>No Users Yet</h2>
+        <p ng-if="PartnerProfilesUsers.canApplyUsers">
+            <a class="clickable" ng-click="PartnerProfilesUsers.toggleNewUserForm()">
+                <strong auto-focus="#newUserFirstName">Create New</strong></a> <strong>|</strong>
+
+            <a class="clickable" ng-click="PartnerProfilesUsers.isAddingUser = true">
+                <strong auto-focus="#newUserFirstName">Add Existing</strong></a>
+
+            <strong>External Users</strong> <br> to {{ PartnerDetail.partner.name }}
+        </p>
+    </section>
+</div>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="PartnerProfilesUsers.isAddingUser">
+
+    <form name="addUserForm" class="columns vertical-center with-padding" ng-submit="PartnerProfilesUsers.addExistingUserToPartner()">
+
+        <section></section>
+
+        <section class="flex-2">
+            <br>
+            <div class="form-group">
+                <user-typeahead target-model-parent="PartnerProfilesUsers.newUser"
+                                on-select-user="PartnerProfilesUsers.onSelectUserFromTypeAhead"
+                                get-should-disable-user-selection-reason="PartnerProfilesUsers.getShouldDisableUserSelectionReason"
+                                placeholder="'Select an External User'"></user-typeahead>
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!PartnerProfilesUsers.newUser">
+                    Save
+                    <i class="fa fa-spinner fa-spin" ng-if="PartnerProfilesUsers.isSavingUser"></i>
+                </button>
+                <a class="btn btn-link" ng-click="PartnerProfilesUsers.isAddingUser = false;">Cancel</a>
+            </div>
+        </section>
+
+    </form>
+
+</section>
+
+<section class="item-detail-content-header-form large add-external-user allow-ng-animate" ng-if="PartnerProfilesUsers.isCreatingNewUsers">
+
+    <section class="external-user">
+
+        <p class="columns muted">Create New External Users for {{ PartnerDetail.partner.name }}</p>
+
+        <div class="new-user-list" wwt-scroll-trap>
+
+            <form name="newUserListForm" class="columns"
+                  ng-class="{'has-error' : PartnerProfilesUsers.userHasError(newUser)}"
+                  ng-repeat="newUser in PartnerProfilesUsers.newUsers">
+
+                <section class="inline-form flex">
+                    <i class="fa fa-user-circle-o"></i>
+
+                    <i class="fa fa-exclamation-triangle"
+                       ng-if="PartnerProfilesUsers.userHasError(newUser)"
+                       uib-popover-template="'common/userCreationErrors.html'"
+                       popover-trigger="mouseenter" popover-popup-delay="200" popover-append-to-body="true">
+                    </i>
+
+                    <input type="text" required="true" autocomplete="off"
+                           id="userFirstName" class="no-input"
+                           ng-class="{'has-error' : !newUser.firstName}"
+                           ng-change="PartnerProfilesUsers.updateNewUserFullName(newUser)"
+                           ng-model="newUser.firstName"
+                           placeholder="First Name">
+
+                    <input type="text" required="true" autocomplete="off"
+                           id="userLastName" class="no-input"
+                           ng-class="{'has-error' : !newUser.lastName}"
+                           ng-change="PartnerProfilesUsers.updateNewUserFullName(newUser)"
+                           ng-model="newUser.lastName"
+                           placeholder="Last Name">
+
+                    <input type="email" required="true" autocomplete="off"
+                           id="userEmail" class="flex-2 no-input"
+                           ng-class="{ 'has-error' : !newUser.email ||
+                                        (PartnerProfilesUsers.userHasError(newUser) && PartnerProfilesUsers.containsDuplicateEmail) ||
+                                        newUser.isExistingUser }"
+                           ng-change="PartnerProfilesUsers.updateNewUserUserName(newUser)"
+                           ng-model="newUser.email"
+                           placeholder="Email Address">
+
+                    <i class="fa fa-close remove-user" title="Remove {{ newUser.fullName }}"
+                       ng-click="PartnerProfilesUsers.removeNewUser(newUser)"></i>
+                </section>
+
+            </form>
+
+        </div>
+
+        <div class="clear-new-user-list" ng-if="PartnerProfilesUsers.newUsers.length > 1">
+            <div class="remove-all-user-btn" ng-click="PartnerProfilesUsers.isPromptingToDeleteAllUsers = true">
+                <i class="fa fa-times-circle"></i>
+                <p>Remove All Users</p>
+            </div>
+
+            <div class="remove-all-users-prompt allow-ng-animate"
+                 ng-if="PartnerProfilesUsers.isPromptingToDeleteAllUsers">
+                <p>Remove all <b>UNSAVED</b> users?</p>
+
+                <a class="wwt-mini-btn cancel" ng-click="PartnerProfilesUsers.isPromptingToDeleteAllUsers = false"> Cancel</a>
+                <button class="wwt-mini-btn alpha-btn" ng-click="PartnerProfilesUsers.removeAllUsers()"> Remove All</button>
+            </div>
+        </div>
+
+        <form name="createNewUserForm" class="columns new-user-form" ng-class="{ 'is-adding-users' : PartnerProfilesUsers.newUsers.length }"
+              ng-submit="PartnerProfilesUsers.addAnotherUserToPartner()">
+
+            <section class="inline-form flex">
+
+                <i class="fa fa-user-circle-o"></i>
+
+                <input type="text" required="true" autocomplete="off"
+                       id="newUserFirstName"
+                       ng-model="PartnerProfilesUsers.userFirstName"
+                       placeholder="First Name">
+
+                <input type="text" required="true" autocomplete="off"
+                       ng-model="PartnerProfilesUsers.userLastName"
+                       placeholder="Last Name">
+
+                <input type="email" required="true" class="flex-2" autocomplete="off"
+                       ng-model="PartnerProfilesUsers.userEmail"
+                       placeholder="Email">
+
+            </section>
+
+            <section>
+                <div class="form-actions">
+
+                    <button type="button" class="btn btn-primary"
+                            ng-disabled="!createNewUserForm.$valid && !PartnerProfilesUsers.newUsers.length || PartnerProfilesUsers.hasUserErrors().length"
+                            ng-click="PartnerProfilesUsers.validateAndSave()">
+
+                        <span>{{ PartnerProfilesUsers.getCreateUserBtnText(createNewUserForm) }}</span>
+                        <i class="fa fa-spinner fa-spin" ng-if="PartnerProfilesUsers.isSavingUser"></i>
+                    </button>
+
+                    <button type="submit" class="btn btn-default" auto-focus="#newUserFirstName"
+                            ng-disabled="!createNewUserForm.$valid"> Add Another
+                    </button>
+
+                    <a class="btn btn-link" ng-click="PartnerProfilesUsers.cancelNewUserForm()">Cancel</a>
+                </div>
+            </section>
+
+        </form>
+    </section>
+
+    <section class="bulk-add">
+        <div class="bulk-upload-container">
+            <wwt-att-drop-zone wwt-attachments-settings="PartnerProfilesUsers.attachmentsSettings">
+                <p class="muted">Have a lot of users? Use the template.
+                    <i class="fa fa-question-circle" popover-popup-delay="300" popover-append-to-body="true" popover-trigger="mouseenter" popover-placement="left"
+                       uib-popover="To upload a list of users, simply download the template and add the users info. Once all users have been added, save the template and drag the file back here to upload."></i>
+                </p>
+                <section class="bulk-add-btn-group">
+                    <a href="img/external-user-template.xlsx" target="_self" class="bulk-user-btn download">DOWNLOAD TEMPLATE</a>
+
+                    <wwt-att-file-select wwt-attachments-settings="PartnerProfilesUsers.attachmentsSettings"
+                                         class="bulk-user-btn upload">UPLOAD TEMPLATE</wwt-att-file-select>
+                </section>
+            </wwt-att-drop-zone>
+        </div>
+    </section>
+
+    <div class="bulk-upload-msg success allow-ng-animate" ng-if="PartnerProfilesUsers.processImportComplete">
+        <p>Upload Completed Successfully!<i class="fa fa-check-circle"></i></p>
+    </div>
+
+    <div class="bulk-upload-msg error allow-ng-animate" ng-if="PartnerProfilesUsers.hasUserErrors().length">
+        <p ng-if="PartnerProfilesUsers.hasUserErrors().length">
+            <span class="error-count">{{ PartnerProfilesUsers.hasUserErrors().length }}</span>
+            user<span ng-if="PartnerProfilesUsers.hasUserErrors().length > 1">s</span>&nbsp;to fix before proceeding...
+            <i class="fa fa-exclamation-triangle"></i>
+        </p>
+    </div>
+
+</section>
+
+<div class="item-detail-overlay"
+     ng-if="PartnerProfilesUsers.isCreatingNewUsers || PartnerProfilesUsers.isAddingUser"
+     ng-click="PartnerProfilesUsers.cancelNewUserForm()">
+</div>
+
+<div class="item-detail-content-header" ng-if="PartnerProfilesUsers.userDataLoaded && PartnerProfilesUsers.users.length">
+
+    <section class="search-section">
+
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input type="text"
+                   class="no-input"
+                   ng-model="PartnerProfilesUsers.usersSearchText"
+                   tabindex="0"
+                   id="secondarySearchInput"
+                   placeholder="Search Users">
+        </div>
+
+    </section>
+
+    <section class="item-detail-header-actions" ng-if="PartnerProfilesUsers.profiles.length">
+
+        <button class="btn btn-primary btn-xs"
+                ng-if="PartnerProfilesUsers.canApplyUsers"
+                ng-click="PartnerProfilesUsers.isAddingUser = true"
+                auto-focus="#newUserFirstName">
+            <i class="fa fa-plus"></i> Add User
+        </button>
+
+        <button class="btn btn-primary btn-xs"
+                ng-if="PartnerProfilesUsers.canApplyUsers"
+                ng-click="PartnerProfilesUsers.toggleNewUserForm()"
+                auto-focus="#newUserFirstName">
+            <i class="fa fa-plus"></i> Create Users
+        </button>
+
+    </section>
+
+</div>
+
+<section class="partner-sub-header" ng-if="PartnerProfilesUsers.users.length">
+    <h3>Users for {{ PartnerDetail.partner.name }}</h3>
+    <p class="muted" ng-if="PartnerProfilesUsers.profiles.length">Drag and drop Profiles to assign to Users</p>
+</section>
+
+<div class="cards partner-users allow-ng-animate default-animation"
+     ng-if="PartnerProfilesUsers.users && PartnerProfilesUsers.users.length">
+
+    <div class="bulk-profile-drop-zone muted" ng-if="PartnerProfilesUsers.profiles.length"
+         drop="PartnerProfilesUsers.onBulkDropProfile($data, $event)"
+         drop-effect="copy"
+         drop-accept="true"
+         drag-over-class="drag-over-accept">Drop profile here to apply to ALL users</div>
+
+    <section class="card-outer asset-card"
+             ng-repeat="user in PartnerProfilesUsers.users | filter: { enabled: true } | filter: PartnerProfilesUsers.userMatchesSearch | orderBy: 'fullName' | limitTo: PartnerProfilesUsers.usersLimit">
+
+        <div class="card-actions" ng-if="PartnerProfilesUsers.canApplyProfiles">
+            <i class="fa fa-paper-plane-o"
+               ng-click="user.isPromptingToSendInvite = true"
+               uib-tooltip="Send user an email invitation"
+               tooltip-popup-delay="500"
+               tooltip-append-to-body="true"></i>
+
+            <i class="fa fa-ban"
+               ng-click="PartnerProfilesUsers.disableUser(user)"
+               uib-tooltip="Disable user"
+               tooltip-popup-delay="500"
+               tooltip-append-to-body="true"></i>
+
+           <i class="fa fa-trash"
+              ng-if="user.associationId"
+              ng-click="PartnerProfilesUsers.removeUserFromPartner(user)"
+              uib-tooltip="Remove user from partner"
+              tooltip-popup-delay="500"
+              tooltip-append-to-body="true"></i>
+        </div>
+
+        <div class="card-warning-prompt allow-ng-animate default-animation" ng-if="user.isPromptingToSendInvite">
+            <p class="text-center">Send invitation to <strong>{{ user.fullName }}</strong>?</p>
+
+            <div class="form-actions">
+                <a class="wwt-mini-btn alpha-btn" ng-click="PartnerProfilesUsers.sendManualUserInvite(user)">
+                    <span ng-if="!user.isProcessing && !user.isDoneProcessing">Send Invite</span>
+                    <span ng-if="user.isProcessing">Sending <i class="fa fa-spinner fa-spin"></i></span>
+                    <span ng-if="user.isDoneProcessing">Sent <i class="fa fa-check"></i></span>
+                </a>
+
+                <a class="wwt-mini-btn cancel" ng-click="user.isPromptingToSendInvite = false">Cancel</a>
+            </div>
+        </div>
+
+        <a class="card-inner clickable" ui-sref="userDetail({userName: user.userName})" tabindex="0"
+           drop="PartnerProfilesUsers.onDropProfile($data, $event, user)"
+           drop-effect="copy"
+           drop-accept="true"
+           draggable="false"
+           drag-over-class="drag-over-accept">
+
+            <div class="drag-over-message">Drop to add profile to {{ user.fullName }}</div>
+
+            <div class="columns with-borders small-borders">
+
+                <div class="external-user-banner">
+                    <p>EXTERNAL</p>
+                </div>
+
+                <section>
+                    <wwt-user-image user-name="user.userName"></wwt-user-image>
+                </section>
+
+                <section class="flex-5">
+                    <h3 class="card-header">{{ user.fullName }}</h3>
+
+                    <p class="card-content">{{ user.userName }}
+                        <span ng-if="user._profiles" uib-popover-template="'common/partnerUserProfiles.html'"
+                              popover-trigger="mouseenter" popover-popup-delay="200" popover-append-to-body="true">
+                            | {{ user._profiles.length || 'No' }} Profile<span ng-if="!user._profiles.length || user._profiles.length > 1">s</span>
+                        </span>
+                    </p>
+                </section>
+            </div>
+
+            <div class="profile-add-success" ng-if="user.isAddingProfileToUser">
+                <span>ADDING PROFILE</span>
+                <i class="fa fa-gear fa-spin"></i>
+            </div>
+
+            <div class="profile-add-success" ng-if="user.isProfileAddedToUser">
+                <span>PROFILE ADDED</span>
+                <i class="fa fa-check"></i>
+            </div>
+        </a>
+
+    </section>
+
+</div>
+
+<hr ng-if="PartnerProfilesUsers.shouldShowShowMoreUsers()">
+
+<p class="text-center" ng-if="PartnerProfilesUsers.shouldShowShowMoreUsers()">
+    <button class="btn btn-link" ng-click="PartnerProfilesUsers.showMoreUsers()">Show All</button>
+</p>
+
+
+<section class="partner-sub-header disabled-users" ng-if="PartnerProfilesUsers.hasDisabledUser">
+    <h3>Disabled Users for {{ PartnerDetail.partner.name }}</h3>
+    <p class="muted">Users can be re-enabled from this list</p>
+</section>
+
+<div class="cards partner-users allow-ng-animate default-animation"
+     ng-if="PartnerProfilesUsers.users && PartnerProfilesUsers.users.length">
+
+    <section class="card-outer asset-card"
+             ng-repeat="user in PartnerProfilesUsers.users | filter: { enabled: false } | filter: PartnerProfilesUsers.userMatchesSearch | orderBy: 'fullName' | limitTo: PartnerProfilesUsers.usersLimit">
+
+        <div class="card-ribbon-wrapper">
+            <div class="card-ribbon">DISABLED</div>
+        </div>
+
+        <div class="card-actions" ng-if="PartnerProfilesUsers.canApplyProfiles">
+            <i class="fa fa-refresh"
+               ng-click="PartnerProfilesUsers.reEnableUser(user)"
+               uib-tooltip="Re-enable user"
+               tooltip-popup-delay="500"
+               tooltip-append-to-body="true"></i>
+        </div>
+
+        <a class="card-inner clickable" ui-sref="userDetail({userName: user.userName})" tabindex="0">
+
+            <div class="columns with-borders small-borders">
+
+                <div class="external-user-banner">
+                    <p>EXTERNAL</p>
+                </div>
+                <div class="is-disabled-card"></div>
+
+                <section>
+                    <wwt-user-image user-name="user.userName"></wwt-user-image>
+                </section>
+
+                <section class="flex-5">
+                    <h3 class="card-header">{{ user.fullName }}</h3>
+
+                    <p class="card-content">{{ user.userName }}
+                        <span ng-if="user._profiles" uib-popover-template="'common/partnerUserProfiles.html'"
+                              popover-trigger="mouseenter" popover-popup-delay="200" popover-append-to-body="true">
+                            | {{ user._profiles.length || 'No' }} Profile<span ng-if="!user._profiles.length || user._profiles.length > 1">s</span>
+                        </span>
+                    </p>
+                </section>
+            </div>
+        </a>
+
+    </section>
+
+</div>
+
+<wwt-focus-panel panel-name="'newUserSetupForm'"
+                 position="'center'"
+                 header-text="'New User Setup'"
+                 header-icon="'user-plus'"
+                 backdrop="true"
+                 backdrop-dark-theme="true">
+
+    <ng-include src="'partners/child-views/newUserSetup.html'"></ng-include>
+</wwt-focus-panel>

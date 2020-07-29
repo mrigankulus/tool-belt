@@ -1,0 +1,9 @@
+<a ng-href="{{ GithubActivity.getLinkToUser(item.actor) }}" target="_blank">{{ item.actor.login }}</a> pushed code to <a ng-href="{{ GithubActivity.getRepoLink(item.repo.name) }}" target="_blank">{{ item.repo.name }}</a>
+
+<!-- todo: need to limit and truncate these
+<ul>
+    <li ng-repeat="commit in item.payload.commits">
+        <a href="{{ GithubActivity.getCommitLink(item, commit) }}">{{ commit.message }}</a>
+    </li>
+</ul>
+-->

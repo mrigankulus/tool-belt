@@ -1,0 +1,38 @@
+<a class="btn btn-link"
+   ng-if="!EventTypePlayground.isUpdatingGeneralSettings"
+   ng-click="EventTypePlayground.isUpdatingGeneralSettings = true">
+
+    <i class="fa fa-plus"></i> General Settings
+</a>
+
+<section class="panel panel-default" ng-if="EventTypePlayground.isUpdatingGeneralSettings">
+    <div class="panel-heading">General Settings</div>
+    <div class="panel-body">
+        <div class="form-group">
+            <label>No Notifications</label>
+            <br>
+            <small>This allows you to fire an event that will show in the activity feed without sending notifications to users.</small>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="noNotifications" ng-model="EventTypePlayground.requiredTokenData.noNotifications">
+                    <label for="noNotifications">
+                        <span></span>
+                    </label>
+                </input>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Back Date Resource Event</label>
+            <br>
+            <small>Note that this will disable notifications.</small>
+            <input uib-datepicker-popup="MM/dd/yyyy"
+                 ng-model="EventTypePlayground.requiredTokenData.backDate"
+                 is-open="EventTypePlayground.datePickers['backDate'].opened"
+                 datepicker-options="EventTypePlayground.dateOptions"
+                 close-text="Close"
+                 show-button-bar="true"
+                 ng-click="EventTypePlayground.openDatePicker('backDate')">
+        </div>
+    </div>
+</section>

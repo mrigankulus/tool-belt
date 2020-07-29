@@ -1,0 +1,75 @@
+<a class="btn btn-link"
+   ng-if="!EventTypePlayground.requiredTokenData.approvalRequest"
+   ng-click="EventTypePlayground.requiredTokenData.approvalRequest = {}">
+
+    <i class="fa fa-plus"></i> Approval Request (beta! coming soon)
+</a>
+
+<section class="panel panel-default" ng-if="EventTypePlayground.requiredTokenData.approvalRequest">
+    <div class="panel-heading">Approval Request</div>
+
+    <div class="panel-body">
+        <div class="form-group">
+            <label>requestText <small>(The text that represents the open approval.)</small></label>
+            <input ng-model="EventTypePlayground.requiredTokenData.approvalRequest.requestText" placeholder="Quote 1234 requires buyer approval.">
+        </div>
+
+        <div class="form-group">
+            <label>approvedText <small>(Text to send user when their request is approved.)</small></label>
+            <input ng-model="EventTypePlayground.requiredTokenData.approvalRequest.approvedText" placeholder="Your quote was approved by buyer.">
+        </div>
+
+        <div class="form-group">
+            <label>onAllApprovedExchange <small>(We'll post a message to this exchange when the request is approved.)</small></label>
+            <input ng-model="EventTypePlayground.requiredTokenData.approvalRequest.onAllApprovedExchange" placeholder="wwt.quote.buyerApproved">
+        </div>
+
+        <div class="form-group">
+            <label>Requested By</label>
+
+            <ui-select ui-select-focus-input
+                ng-model="EventTypePlayground.requiredTokenData.approvalRequest.requestedBy">
+
+              <ui-select-match placeholder="Find User">{{$item.userName}}</ui-select-match>
+
+              <ui-select-choices refresh-delay="200"
+                                 refresh="EventTypePlayground.searchUsersForApprovalRequestedBy($select.search)"
+                                 repeat="user in EventTypePlayground.availableUsers | filter:$select.search">
+                    {{ user.userName }}
+              </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group">
+            <label>Users <small>(approvers)</small></label>
+
+            <ui-select multiple
+                     ng-model="EventTypePlayground.requiredTokenData.approvalRequest.users"
+                     title="UserNames">
+
+              <ui-select-match placeholder="Add Users">{{$item.userName}}</ui-select-match>
+
+              <ui-select-choices refresh-delay="200"
+                                 refresh="EventTypePlayground.searchUsersForApprovalRequest($select.search)"
+                                 repeat="user in EventTypePlayground.availableUsers | filter:$select.search">
+                    {{ user.userName }}
+              </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group">
+            <label>Require All</label>
+            <small>Require all users to approve before this is considered approved.</small>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="raCheckboxSwitch" ng-model="EventTypePlayground.requiredTokenData.approvalRequest.requireAll">
+                    <label for="raCheckboxSwitch">
+                        <span></span>
+                    </label>
+                </input>
+            </div>
+        </div>
+    </div>
+</section>

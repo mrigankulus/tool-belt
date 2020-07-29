@@ -1,0 +1,142 @@
+<br>
+
+<div class="container">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>
+                        Post Refresh Functions
+                    </h1>
+
+                    <p>Restore some data after an environment refresh.</p>
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+                <br>
+                <div class="blank-slate-tab">
+                    <i class="fa fa-arrows-v"></i>
+
+                    <section>
+                        <h2>
+                            <a class="clickable" ng-click="PostRefresh.getData()">Get Data</a> to save before refresh.
+                            <br>
+                            <a class="clickable" ng-click="PostRefresh.upload()">Upload</a> data to review and restore.</h2>
+                    </section>
+                </div>
+
+                <hr class="dashed" />
+
+                <div class="columns with-padding" ng-if="!PostRefresh.isUploading">
+                    <section>
+                        <ul class="formatted-list">
+                            <li ng-repeat="app in PostRefresh.data.applications"><b>{{ app.appName }}</b> &middot; {{ app.appLocation }}</li>
+                        </ul>
+                    </section>
+
+                    <section>
+                        <div class="allow-ng-animate default-animation" ng-if="PostRefresh.data.applications.length">
+                            <h4>Save Data</h4>
+                            <p>Save this data before the refresh. After the refresh, head back here and paste it in.</p>
+
+                            <pre style="max-width: 500px;max-height: 300px; overflow: auto;" id="exportContent">{{ PostRefresh.data | json }}</pre>
+
+                            <button class="btn btn-primary"
+                                    ngclipboard
+                                    data-clipboard-target="#exportContent"
+                                    ngclipboard-success="PostRefresh.onCopy(e)">Copy</button>
+
+                            <span class="lead muted" ng-if="PostRefresh.shouldShowCopiedMessage">&nbsp;Copied to Clipboard <i class="fa fa-thumbs-up"></i></span>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="columns with-borders" style="margin-bottom: 100px;" ng-if="PostRefresh.isUploading">
+                    <section>
+                            <h4>Upload</h4>
+                            <p>Paste in your JSON here to review and restore</p>
+
+                        <textarea class="json-textarea"
+                                  placeholder="Paste Import here"
+                                  ng-change="PostRefresh.processPastedContent()"
+                                  ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }"
+                                  ng-model="PostRefresh.pasteArea"></textarea>
+                    </section>
+
+                    <section style="position: relative">
+                        <h4 ng-if="PostRefresh.pasteArea">We'll update these.</h4>
+
+                        <hr>
+
+                        <div class="alert alert-danger" ng-if="PostRefresh.state.badJson">
+                            Sorry, can't process that JSON.
+                        </div>
+
+                        <div class="import-list">
+
+                            <code-progress class="allow-ng-animate default-animation"
+                                           ng-if="PostRefresh.state.isProcessingJson"
+                                           font-size="'100px'"></code-progress>
+
+                            <ul class="formatted-list">
+                                <li ng-repeat="item in PostRefresh.willUpdateList" class="allow-ng-animate default-animation"
+                                    ng-class="[{'resource': item.importType === 'resourceType'}, item.importType]">
+                                    <div class="columns application">
+                                        <section class="flex-none">
+                                            <div class="asset-icon">
+                                                <div class="asset-icon-progress allow-ng-animate" ng-if="item.isImporting || item.importWasSuccessful" style="border-color: #f8c46f;">
+                                                    <i class="fa fa-spin fa-spinner" ng-if="item.isImporting"></i>
+                                                    <i class="fa fa-thumbs-up" ng-if="item.importWasSuccessful"></i>
+                                                </div>
+
+                                                <i class="wwt-icon-{{ item.iconName }}"></i>
+                                            </div>
+                                        </section>
+
+                                        <section>
+                                            <div class="columns vertical-center">
+                                                <section>
+                                                    <h4>&nbsp;{{ item.appName }}</h4>
+                                                </section>
+
+                                                <section>
+                                                    <span ng-if="item.importActionText" class="label label-default">{{ item.importActionText }}</span>
+                                                </section>
+                                            </div>
+
+                                            <p>from: {{ item.currentUrl }}</p>
+                                            <p>to: &nbsp;&nbsp;&nbsp;&nbsp;{{ item.newUrl }}</p>
+                                        </section>
+                                    </div>
+
+                                    <!-- <json-formatter json="item" open="1"></json-formatter> -->
+                                </li>
+                            </ul>
+                        </div>
+                    </section>
+                </div>
+
+                <section class="status-bar-bottom allow-ng-animate" ng-if="PostRefresh.willUpdateList.length">
+                    <div class="container columns with-padding vertical-center">
+                        <section class="flex-2 allow-ng-animate default-animation" ng-if="PostRefresh.state.isImporting">
+                            <div class="progress">
+                                <div class="progress-bar" role="progressbar" aria-valuemin="0" aria-valuemax="{{ PostRefresh.state.itemCount }}" ng-style="{'width': PostRefresh.getImportProgress() + '%' }">
+
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="actions">
+                            <button class="btn btn-primary btn-lg"
+                                    ng-click="PostRefresh.runUpdate()"
+                                    ng-disabled="PostRefresh.state.isImporting">Update</button>
+                        </section>
+                    </div>
+                </section>
+
+            </section>
+        </main>
+
+    </article>
+</div>

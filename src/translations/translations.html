@@ -1,0 +1,171 @@
+<br>
+
+<div class="container" ng-if="Translations.shouldShowComingSoon">
+    <div class="text-center">
+        <h3 class="muted">Translations are coming soon!</h3>
+    </div>
+</div>
+
+<div class="container" ng-if="!Translations.shouldShowComingSoon">
+    <div ng-if="Translations.showCreateForm !== true">
+        <div class="text-center" ng-if="Translations.translation.id === undefined">
+            <h3 class="muted">No translations configured for this resource.</h3>
+            <button class="btn btn-primary" ng-click="Translations.toggleCreateForm()">Add New Translation</button>
+        </div>
+
+        <div ng-if="Translations.translation.id !== undefined">
+            <header class="item-detail-content-header">
+                <section class="resource-types-search">
+                    <i class="fa fa-search"></i>
+                    <input type="text" placeholder="Search" ng-model="Translations.mappingFilterTerm" class="no-input" />
+                </section>
+                <section class="item-detail-header-actions">
+                    <div ng-if="Translations.showDeletePrompt === true">
+                        <span>Are you sure?</span>
+                        <button class="btn btn-link" ng-click="Translations.showDeletePrompt = false">No, cancel</button>
+                        <button class="btn btn-danger" ng-click="Translations.deleteTranslation()">Yes, delete</button>
+                    </div>
+
+                    <a class="btn btn-link btn-xs" ng-if="Translations.showDeletePrompt !== true" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/translations/{{ Translations.translation.id }}" target="_blank">JSON</a>
+                    <button class="btn btn-danger btn-xs"  ng-if="Translations.showDeletePrompt !== true" ng-click="Translations.showDeletePrompt = true">Delete</button>
+                </section>
+            </header>
+
+            <hr>
+
+            <ul class="formatted-list">
+                <li ng-repeat="entry in Translations.translation.mappings | filterObjectArray:Translations.mappingFilterTerm">
+                    <div class="columns with-padding clickable"
+                        ng-if="!entry.isEditing"
+                        ng-click="Translations.openEditEntry(entry)">
+                        <section class="flex-1">Locale: {{ entry.locale }}</section>
+                        <section class="flex-3">Key: {{ entry.key }}</section>
+                        <section class="flex-3">Value: {{ entry.value }}</section>
+                    </div>
+
+                    <div class="formatted-list-prompt allow-ng-animate" ng-if="entry.isPromptingToDelete === true">
+                        Are you sure?
+                        &nbsp;&nbsp;
+                        <a class="wwt-mini-btn cancel" ng-click="entry.isPromptingToDelete = false">Cancel</a>
+                        <a class="wwt-mini-btn alpha-btn" ng-click="Translations.removeMapping(entry)">Delete</a>
+                    </div>
+
+                    <form class="columns with-padding vertical-center"
+                        name="editTranslationForm"
+                        ng-if="entry.isEditing"
+                        ng-submit="Translations.updateMapping(entry)">
+
+                        <section class="flex-1">Locale: {{ entry.locale }}</section>
+
+                        <section class="flex-3">
+                            <input class="no-input"
+                                uib-tooltip="Key"
+                                tooltip-popup-delay="500"
+                                placeholder="Key"
+                                required="true"
+                                ng-model="entry.tempKey">
+                        </section>
+
+                        <section class="flex-3">
+                            <input class="no-input"
+                                uib-tooltip="Value"
+                                tooltip-popup-delay="500"
+                                placeholder="Value"
+                                required="true"
+                                ng-model="entry.tempValue">
+                        </section>
+
+                        <section>
+                            <div class="form-actions">
+                                <button class="btn btn-primary btn-xs" ng-disabled="!editTranslationForm.$valid">Save</button>
+                                &nbsp;
+                                <a class="btn btn-link btn-xs" ng-click="entry.isPromptingToDelete = true"><i class="fa fa-trash"></i> Delete</a>
+                                <a class="btn btn-link btn-xs" ng-click="entry.isEditing = false">Cancel</a>
+                            </div>
+                        </section>
+
+                    </form>
+                </li>
+
+                <li class="columns with-padding" ng-if="!Translations.isAddingTranslation">
+                    <section>
+                        <span class="clickable formatted-list-highlight-on-hover" ng-click="Translations.isAddingTranslation = true"><i class="fa fa-plus-circle"></i> Add Translation</span>
+                    </section>
+                </li>
+
+                <li ng-if="Translations.isAddingTranslation">
+                    <form class="columns with-padding vertical-center"
+                        name="newTranslationForm"
+                        ng-submit="Translations.addNewMapping()">
+
+                        <section>
+                            <ui-select class="no-select2"
+                                ng-model="Translations.newMapping.locale"
+                                uib-tooltip="Locale Code"
+                                tooltip-popup-delay="500"
+                                required="true"
+                                limit="10"
+                                ui-select-focus-input>
+
+                                <ui-select-match placeholder="Locale Code" allow-clear="true">
+                                    {{ $select.selected }}
+                                </ui-select-match>
+
+                                <ui-select-choices repeat="locale in Translations.localeCodes | filter: $select.search | limitTo:$select.limit">
+                                    <span ng-bind-html="locale | highlight: $select.search"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </section>
+
+                        <section>
+                            <input class="no-input"
+                                uib-tooltip="Key"
+                                tooltip-popup-delay="500"
+                                placeholder="Key"
+                                required="true"
+                                ng-model="Translations.newMapping.key">
+                        </section>
+
+                        <section>
+                            <input class="no-input"
+                                uib-tooltip="Value"
+                                tooltip-popup-delay="500"
+                                placeholder="Value"
+                                required="true"
+                                ng-model="Translations.newMapping.value">
+                        </section>
+
+                        <section>
+                            <div class="form-actions">
+                                <button class="btn btn-default btn-xs" ng-disabled="!newTranslationForm.$valid">Save</button>
+                                <a class="btn btn-link btn-xs" ng-click="Translations.newMapping = {}; Translations.isAddingTranslation = false">Cancel</a>
+                            </div>
+                        </section>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <form name="newTranslationForm" ng-submit="Translations.addNew()" ng-if="Translations.showCreateForm === true">
+        <p class="muted">
+            Create a new translation. Upon saving, you will be able to add language mappings.
+            Pick a meaningful ID - this is what you will use to initialize the component in your UI.
+            The "name" field of your UI's <code>package.json</code> is probably going to be a good choice here.
+            Optionally, if you are migrating entries from another environment,
+            you can paste the <code>entries</code> object in the textarea and we will set it up for you.
+        </p>
+        <div class="form-group required">
+            <label>ID</label>
+            <input type="text" required ng-model="Translations.newTranslation.id" placeholder="ex. {{ Translations.getIdSuggestion() }}">
+        </div>
+        <div class="form-group">
+            <label>Entries</label>
+            <textarea ng-model="Translations.newTranslation.entries" rows="8"></textarea>
+        </div>
+        <div class="text-right">
+            <button class="btn btn-link" ng-click="Translations.toggleCreateForm()">Cancel</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
+        </div>
+    </form>
+</div>

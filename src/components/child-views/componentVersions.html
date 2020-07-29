@@ -1,0 +1,65 @@
+<br><br>
+
+<div class="blank-slate-tab" ng-if="ComponentVersions.shouldShowBlankSlate()">
+    <i class="fa fa-info-circle"></i>
+
+    <section>
+        <p>Version history is not available for <b>{{ assetState.currentAsset.name }}</b>.</p>
+    </section>
+</div>
+
+<div class="primary-loader" ng-class="{active: ComponentVersions.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="alert alert-danger" ng-if="ComponentVersions.error">
+    <p>{{ ComponentVersions.error }}</p>
+</div>
+
+<div class="columns with-borders versions"
+     ng-if="!ComponentVersions.error && !ComponentVersions.isLoadingVersions && !ComponentVersions.shouldShowBlankSlate()">
+
+    <section class="relative-position">
+        <h3>Available Versions</h3>
+
+        <ul class="version-list">
+            <li ng-repeat="version in ComponentVersions.componentVersions.versions | limitTo: ComponentVersions.versionsLimit">
+                <a ng-href="{{ ComponentVersions.getTagReleaseVersionUrl(version) }}" target="_blank">v{{ version }}
+                   <span ng-if="version === ComponentVersions.componentVersions.latest"> (latest)</span></a>
+                <p ng-if="ComponentVersions.getPublishedVersionMatches(version)" class="is-published">
+                    <i class="fa fa-check"></i> Published to CDN</p>
+            </li>
+        </ul>
+
+        <div class="text-center" ng-if="ComponentVersions.componentVersions.versions.length > ComponentVersions.versionsLimit">
+            <a class="btn btn-link"
+               ng-click="ComponentVersions.versionsLimit = ComponentVersions.versionsLimit + ComponentVersions.componentVersions.versions.length"> Show All
+            </a>
+        </div>
+
+    </section>
+
+    <section>
+        <h3 ng-if="ComponentVersions.componentVersions.publishedVersions.length">Versions Published to CDN
+            <a class="package-versions-link" href="https://github.wwt.com/custom-apps/cdn/blob/master/packageVersions.json" target="_blank">
+                <i class="fa fa-external-link"></i>
+            </a>
+        </h3>
+
+        <ul class="version-list">
+            <li ng-repeat="publishedVersion in ComponentVersions.componentVersions.publishedVersions | orderBy: publishedVersions">
+                <p>v{{ publishedVersion }}</p>
+            </li>
+        </ul>
+
+        <br><br>
+
+        <div class="blank-slate-tab" ng-if="!ComponentVersions.componentVersions.publishedVersions.length">
+            <i class="fa fa-info-circle"></i>
+
+            <section>
+                <p>The <b>{{ assetState.currentAsset.name }}</b> component has not been deployed to the CDN.
+                    Click <a href="https://github.wwt.com/custom-apps/cdn/blob/master/README.md" target="_blank">here</a> to
+                    learn more about publishing to the CDN.</p>
+            </section>
+        </div>
+    </section>
+</div>

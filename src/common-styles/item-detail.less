@@ -1,0 +1,683 @@
+.item-detail {
+    display: flex;
+
+    > main {
+        flex: 4;
+    }
+
+    > aside {
+        flex: 1;
+        margin-left: 40px;
+
+        a {
+            color: #9d9e9f;
+        }
+
+        .is-sticky {
+            // fixes glitch with sticky element
+            top: 116px !important;
+            z-index: 999 !important;
+            height: 100%;
+            overflow: auto;
+        }
+    }
+}
+
+.item-header {
+    display: flex;
+    position: relative;
+    z-index: 10;
+
+    > section {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        &:nth-child(1) {
+            justify-content: flex-start;
+        }
+    }
+
+    h1 {
+        margin: 5px 0;
+        font-size: 23px;
+        text-transform: uppercase;
+        font-weight: 400;
+    }
+
+    p {
+        color: #6D6D6D;
+        margin-bottom: 5px;
+
+        a {
+            color: #767676;
+            transition: all 0.3s;
+
+            &:hover {
+                color: #000;
+            }
+        }
+    }
+}
+
+.documentation-disabled, .documentation-disabled:hover {
+    cursor: not-allowed;
+    color: @disabled-color;
+}
+
+.item-header-watch-button {
+    flex: 1;
+    align-items: flex-end;
+
+    &.top {
+        align-self: flex-start;
+    }
+
+    .resource-watcher-button {
+        font-weight: 600;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        color: #73736E;
+    }
+
+    .watcher-envrionment-warning {
+        font-weight: bold;
+        color: #73736e;
+        font-size: 12px;
+        text-align: right;
+        transition: all 0.3s;
+
+        i {
+            font-size: 11px;
+        }
+    }
+
+}
+
+dtb-resource-watcher:hover {
+    .watcher-envrionment-warning {
+        color: #aa191a;
+    }
+}
+
+.application .left-border {
+    border-left: 4px solid @application-color;
+    padding-left: 20px;
+}
+
+.api .left-border {
+    border-left: 4px solid @api-color;
+    padding-left: 20px;
+}
+
+.component .left-border {
+    border-left: 4px solid @component-color;
+    padding-left: 20px;
+}
+
+.technology .left-border {
+    border-left: 4px solid @technology-color;
+    padding-left: 20px;
+}
+
+.event .left-border {
+    border-left: 4px solid @event-color;
+    padding-left: 20px;
+}
+
+.resource .left-border {
+    border-left: 4px solid @resource-color;
+    padding-left: 20px;
+}
+
+.cron-job .left-border {
+    border-left: 4px solid @cron-job-color;
+    padding-left: 20px;
+}
+
+.partner .left-border {
+    border-left: 4px solid @partner-color;
+    padding-left: 20px;
+}
+
+.profile .left-border {
+    border-left: 4px solid @profile-color;
+    padding-left: 20px;
+}
+
+.user .left-border {
+    border-left: 4px solid @user-color;
+    padding-left: 20px;
+}
+
+.item-detail-content {
+    background: #fff;
+    margin: 20px 0;
+    padding: 20px;
+    padding-top: 0;
+    min-height: 350px;
+    position: relative;
+
+    &.error {
+        border: 2px solid @danger-color;
+    }
+
+    .primary-loader {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        left: 0;
+        height: 150px;
+        z-index: 2;
+        width: 100%;
+        font-size: 25px;
+        color: #858585;
+        transition: all 0.3s;
+        opacity: 0;
+        visibility: hidden;
+
+        &.active {
+            opacity: 1;
+            visibility: visible;
+        }
+    }
+
+    .is-sticky {
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: 0 3px 3px -2px rgba(0, 0, 0, 0.2);
+        transition: all .2s;
+        z-index: 999 !important;
+    }
+
+    .nav-tabs {
+        width: 100%;
+    }
+
+    h5.is-sticky {
+        padding: 10px 0;
+        height: 35px !important;
+    }
+
+    // fixing up chart so it's width is dynamic.
+    .chart-wrapper {
+        width: 100%;
+        // todo: it would be cool if this height could be dynamic.
+        min-height: 400px;
+        position: relative;
+
+        .chart-inner {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    // yeah, these class names are getting a little wacky.
+    .analytics-reports {
+        .chart-wrapper {
+            // todo: it would be cool if this height could be dynamic.
+            min-height: 300px;
+        }
+    }
+
+    > .item-detail-content-header {
+        // not all headers should get this top padding
+        padding-top: 20px;
+    }
+}
+
+.item-detail-content-header {
+    display: flex;
+    padding-left: 10px;
+    padding-right: 18px;
+    padding-bottom: 15px;
+    background: rgba(255, 255, 255, 0.94);
+
+    &.short {
+        padding-bottom: 0;
+    }
+
+    > section {
+        flex: 1;
+        display: flex;
+
+        &:nth-child(2) {
+            justify-content: flex-end;
+        }
+    }
+
+    .search-section {
+        input {
+            margin-right: 40px;
+        }
+
+        button {
+            margin-right: 20px;
+        }
+
+        .btn {
+            color: #bdc3c7;
+            transition: all .15s;
+        }
+
+        .btn-link:focus, .btn-link:hover {
+            text-decoration: none;
+        }
+
+        .btn.btn-active {
+            opacity: 1;
+            color: #23527c;
+
+            .count {
+                background: rgb(50, 105, 155);
+                transition: all .15s;
+            }
+        }
+
+        .filter-toggle {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .filter-toggle.btn-active:before {
+            content: '\f046';
+            color: #23527c;
+        }
+
+        .filter-toggle:before {
+            position: absolute;
+            content: '\f096';
+            left: 1px;
+            bottom: 1px;
+            font-size: 15px;
+            color: #ccc;
+            transition: all .15s;
+            .font-awesome-font();
+        }
+
+        .filter-toggle:after {
+            position: absolute;
+            content: '';
+            right: 7px;
+            bottom: 5px;
+            left: 20px;
+            height: 2px;
+            background: #ddd;
+        }
+
+        .filter-toggle-scorecard {
+            position: relative;
+            padding-left: 20px;
+        }
+        .filter-toggle-scorecard.btn-active:before {
+            content: '\f046';
+            color: #23527c;
+        }
+
+        .filter-toggle-scorecard:before {
+            position: absolute;
+            content: '\f096';
+            left: 1px;
+            font-size: 15px;
+            color: #ccc;
+            transition: all .15s;
+            .font-awesome-font();
+        }
+
+        .filter-toggle-scorecard:after {
+            position: absolute;
+            content: '';
+            left: 20px;
+            height: 2px;
+            background: #ddd;
+        }
+
+        .filter-toggle.partner-customer {
+            &:after {
+                background: @partner-customer-color;
+            }
+        }
+
+        .filter-toggle.partner-vendor {
+            &:after {
+                background: @partner-vendor-color;
+            }
+        }
+
+        .filter-toggle.partner-manufacturer {
+            &:after {
+                background: @partner-manufacturer-color;
+            }
+        }
+
+    }
+
+    .btn-xs {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+}
+
+.item-detail-content-list {
+    margin: 0 0 5px;
+    color: #777;
+    display: flex;
+
+    dt {
+        padding-right: 20px;
+        flex: 0 0 290px;
+    }
+
+    dd {
+        padding-right: 20px;
+        flex: 0 0 295px;
+    }
+}
+
+.item-detail-content-header-form {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(243, 243, 243, 0.95);
+    border: 1px solid rgb(228, 228, 228);
+    z-index: 6;
+    min-height: 100px;
+    transition: all 0.2s;
+
+    > .columns {
+        max-width: 525px;
+        margin: 0 auto;
+        padding: 20px 0;
+        position: relative;
+
+        .form-group {
+            margin-bottom: 24px;
+
+            input {
+                height: 34px;
+            }
+        }
+
+        &.no-padding {
+            padding: 0;
+        }
+    }
+
+    &.large > .columns {
+        max-width: 80%;
+    }
+
+    .close-panel {
+        padding: 5px 12px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: #ccc;
+        font-size: 24px;
+        font-style: normal;
+        transition: all .2s;
+
+        &:hover {
+            color: #888;
+            cursor: pointer;
+        }
+    }
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+
+}
+
+.item-detail-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(255, 255, 255, 0.4);
+    z-index: 5;
+    transition: all 0.2s;
+}
+
+.item-detail-header-actions {
+    > .btn-link {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.repo-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+    > li {
+        border-bottom: 1px solid #f5f5f5;
+        padding: 7px;
+        font-size: 13px;
+        padding-left: 3px;
+        color: #7C848C;
+        transition: all .3s;
+        cursor: pointer;
+        position: relative;
+
+        &:hover {
+            color: #676767;
+
+            .fa-times-circle {
+                opacity: 1;
+            }
+        }
+
+        .fa-times-circle {
+            position: absolute;
+            right: 10px;
+            color: rgba(124, 132, 140, 0.43);
+            transition: all 0.3s;
+            opacity: 0;
+            cursor: pointer;
+
+            &:hover {
+                color: #676767;
+            }
+        }
+
+    }
+}
+
+.dependencies {
+    h3 {
+        font-size: 18px;
+    }
+}
+
+.dependency-list {
+    .repo-list;
+
+    > li {
+        cursor: default;
+    }
+}
+
+.npm-logo {
+    width: 40px;
+    position: absolute;
+    right: 0;
+    top: 5px;
+    opacity: 0;
+    transition: all 0.3s;
+    transition-delay: 0s;
+}
+
+.dependency-list li:hover .npm-logo {
+    opacity: 1;
+    transition-delay: 0.3s;
+}
+
+.versions {
+    h3 {
+        font-size: 18px;
+    }
+
+    .version-list {
+        .repo-list;
+
+        p {
+            margin: 0;
+
+            &.is-published {
+                color: @soft-green;
+                cursor: default;
+            }
+        }
+
+        li {
+            cursor: default;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+
+    .package-versions-link {
+        font-size: 15px;
+        margin-left: 5px;
+    }
+}
+
+// --- Resource Types
+// ---------------------------
+.resource-types-search {
+    position: relative;
+
+    input {
+        padding-left: 23px;
+        width: 250px;
+
+        &.small-input {
+            width: 195px;
+            margin-right: 20px;
+        }
+    }
+
+    i {
+        position: absolute;
+        top: 8px;
+        left: 3px;
+        color: #D0D4D6;
+    }
+
+    .clear-input {
+        position: absolute;
+        right: 44px;
+        left: initial;
+
+        &:hover {
+            cursor: pointer;
+            color: #777;
+            transition: all .2s;
+        }
+    }
+
+}
+
+// ----- Users
+// --------------------------
+.user-meta {
+    margin-top: 5px;
+    opacity: 0;
+    transition: all 0.3s;
+
+    &.ready {
+        opacity: 1;
+    }
+
+    p {
+        margin-bottom: 3px;
+    }
+
+    .fa {
+        color: #B0B0B0;
+        margin-right: 3px;
+    }
+
+    a {
+        color: #9d9e9f;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .external-user {
+        padding: 3px 5px;
+        color: rgba(110, 119, 128, 0.8);
+        background-color: #dbdee0;
+        text-shadow: -1px 0 0 rgba(255, 255, 255, 0.8);
+        font-size: 12px;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+    }
+}
+
+.item-detail-content.unplugged-image {
+    background-image: url('img/unplugged.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: bottom;
+    min-height: 435px;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.item-detail-sub-section-title {
+    font-size: 18px;
+    text-transform: uppercase;
+    border-bottom: 1px dotted #ccc;
+    padding-bottom: 6px;
+}
+
+.item-detail-content-warning {
+    .minimum-browser-support-msg;
+    min-height: 34px;
+    height: auto;
+    padding: 5px 50px;
+    margin-top: 10px;
+    border-bottom: none;
+
+    + .item-detail-content {
+        margin-top: 0;
+    }
+
+    &.error {
+        background: @danger-color;
+
+        .fa-warning {
+            color: rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            color: #f5f5f5;
+        }
+
+        p strong,
+        a {
+            color: #fff;
+        }
+
+        a {
+            font-weight: bold;
+            cursor: pointer;
+        }
+    }
+}

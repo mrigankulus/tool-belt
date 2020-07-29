@@ -1,0 +1,71 @@
+<br><br>
+
+<div class="blank-slate-tab" ng-if="!ApplicationPermissions.canEditPermissions && ApplicationPermissions.permissionsHaveLoaded">
+    <i class="fa fa-lock"></i>
+
+    <section>
+        <p>It looks like you don't have <strong>permission</strong> to edit these permissions. How meta. Please contact the service desk to request permission.</p>
+    </section>
+</div>
+
+<section ng-if="ApplicationPermissions.canEditPermissions && ApplicationPermissions.permissionsHaveLoaded">
+    <a class="btn btn-primary btn-xs pull-right"
+       auto-focus="#newPermissionName"
+       ng-click="ApplicationPermissions.openNewRoleForm()"
+       ng-if="ApplicationPermissions.appId && ApplicationPermissions.isDeveloper">
+
+        <i class="fa fa-plus"></i> Add New Role
+    </a>
+
+    <ul class="nav nav-pills" ng-if="ApplicationPermissions.appId">
+        <li ui-sref=".manage" ui-sref-active="active"><a class="clickable">Manage</a></li>
+
+        <li ui-sref=".maskedApplication" ui-sref-active="active" ng-if="assetState.currentAsset.apiName">
+            <a class="clickable">Masked Application</a>
+        </li>
+
+        <li ng-if="ApplicationPermissions.isDeveloper"
+            uib-dropdown is-open="status.isopen"
+            ng-class="{active: ApplicationPermissions.isViewingHowTo()}">
+
+            <a uib-dropdown-toggle ng-disabled="disabled" class="clickable">
+                Implement <span class="caret"></span>
+            </a>
+
+            <ul class="dropdown-menu" uib-dropdown-menu>
+                <li><a ui-sref=".ui"><i class="wwt-icon-code"></i> UI</a></li>
+                <li><a ui-sref=".grails"><i class="wwt-icon-grails"></i> Grails</a></li>
+                <li><a ui-sref=".node"><i class="wwt-icon-node-js"></i> Node.js</i></a></li>
+            </ul>
+
+        </li>
+
+        <li ui-sref=".users"
+            ui-sref-active="active"
+            ng-if="ApplicationPermissions.users">
+            <a class="clickable">Users ({{ ApplicationPermissions.users.length }})</a>
+        </li>
+
+        <li ui-sref=".customers"
+            ui-sref-active="active"
+            ng-if="ApplicationPermissions.customers">
+
+            <a class="clickable">Customers ({{ ApplicationPermissions.customers.length }})</a>
+        </li>
+    </ul>
+
+    <div ng-if="ApplicationPermissions.appId">
+        <br style="clear: both;"><br>
+    </div>
+
+    <div class="primary-loader" ng-class="{active: !ApplicationPermissions.pageIsReady}"><i class="fa fa-spinner fa-spin"></i></div>
+
+    <ui-view ng-if="ApplicationPermissions.pageIsReady"></ui-view>
+
+    <ng-include class="slide-in-panel sip-right allow-ng-animate"
+                ng-if="ApplicationPermissions.activeProfile"
+                src="'common-tabs/applicationPermissions/permissions/profiles/usersForProfileSidePanel.html'"
+                ng-controller="UsersForProfileCtrl as UsersForProfile"></ng-include>
+
+    <div class="page-overlay allow-ng-animate" ng-if="ApplicationPermissions.activeProfile" ng-click="ApplicationPermissions.activeProfile = '' "></div>
+</section>

@@ -1,0 +1,109 @@
+<br><br>
+
+<div class="blank-slate-tab">
+    <i class="fa fa-list"></i>
+
+    <section>
+        <h2>Find Resources</h2>
+
+        <p>Search for resources on the <small><code>{{ ResourceTypeDetail.resourceType.id }}</code></small> resource type using a <small><code>resourceId</code></small>.</p>
+    </section>
+</div>
+
+<br><hr class="dashed"><br>
+
+<!--
+<div class="columns with-borders">
+    <section class="flex-1">
+
+        <div class="resource-types-search">
+
+            <i class="fa fa-search"></i>
+
+            <input class="no-input"
+                   ng-model="ResourceTypeAssociations.searchText"
+                   placeholder="ReosourceId Ex: 1234"
+                   ng-change="ResourceTypeAssociations.searchForAssociations(ResourceTypeAssociations.searchText)"
+                   ng-model-options="{ debounce: { 'default': 500, 'blur': 0 } }"></input>
+
+        </div>
+
+        <br><br>
+
+        <ui-select multiple
+                   class="no-select2"
+                   ng-model="ResourceTypeAssociations.advancedResourceTypes"
+                   ng-change="ResourceTypeAssociations.searchForAssociations(ResourceTypeAssociations.searchText)"
+                   title="Types">
+
+           <ui-select-match placeholder="Filter by resource type">{{$item}}</ui-select-match>
+
+           <ui-select-choices repeat="advancedType in ResourceTypeAssociations.advancedTypeOptions | filter:$select.search">
+                {{advancedType}}
+            </ui-select-choices>
+        </ui-select>
+
+    </section>
+
+    <section class="flex-3">
+        <div class="blank-slate">
+            <section ng-if="!ResourceTypeAssociations.searchText">
+                <h2>Give it a try!</h2>
+
+                <p>Try searching for a <small><code>resourceId</code></small> that you would expect to find for <small><code>{{ ResourceTypeDetail.resourceType.id }}</code></small>.</p>
+
+                <p><i class="fa fa-lightbulb-o"></i> Filtering by another resource type that knows how to retrieve it's own data (ex: attachment) will get you enhanced results.</p>
+            </section>
+
+            <section ng-if="ResourceTypeAssociations.shouldShowNoResults()">
+                <h2>No Results Found</h2>
+
+                <p>Your search for <small><code>{{ ResourceTypeDetail.resourceType.id }}</code></small> <span ng-if="ResourceTypeAssociations.advancedResourceTypes && ResourceTypeAssociations.advancedResourceTypes.length">(with filters)</span> came up empty.</p>
+            </section>
+        </div>
+
+        <div class="text-center muted" ng-if="ResourceTypeAssociations.searchText">
+          <i class="fa fa-spinner fa-spin" ng-if="ResourceTypeAssociations.isSearching"></i>
+
+          <div ng-if="ResourceTypeAssociations.currentRequest && !ResourceTypeAssociations.isSearching">
+              <p>{{ ResourceTypeAssociations.currentRequest }}</p>
+
+              <hr>
+          </div>
+        </div>
+
+        <section ng-if="!ResourceTypeAssociations.searchText">
+            <hr>
+
+            <ul class="formatted-list two-column">
+                <li ng-repeat="association in ResourceTypeAssociations.exampleAssociations | limitTo:20">
+                    <div ng-repeat="resource in association.resources">
+                        {{ resource.id }} &nbsp; <a ui-sref="resourceTypeDetail({ id: resource.type })">{{ resource.type }}</a>
+                    </div>
+                </li>
+            </ul>
+        </section>
+
+        <ul class="formatted-list two-column">
+            <li ng-repeat="resource in ResourceTypeAssociations.foundResources">
+                {{ resource.id }} &nbsp; <a ui-sref="resourceTypeDetail({ id: resource.type })">{{ resource.type }}</a>
+            </li>
+        </ul>
+
+        <section ng-repeat="resourceTypeResults in ResourceTypeAssociations.advancedResults">
+
+            <h4 style="text-transform: capitalize;">{{ resourceTypeResults.key }}s</h4>
+
+            <hr>
+
+            <ul class="formatted-list">
+                <li ng-repeat="resource in resourceTypeResults.data">
+                    {{ resource.id }}
+                    <json-formatter json="resource" open="0"></json-formatter>
+                </li>
+            </ul>
+        </section>
+
+    </section>
+</div>
+-->

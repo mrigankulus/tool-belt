@@ -1,0 +1,32 @@
+<section class="card-outer">
+
+    <ng-transclude></ng-transclude>
+
+    <div class="card-ribbon-wrapper" ng-if="user.enabled == false || user.enabled === 'N'">
+        <div class="card-ribbon">DISABLED</div>
+    </div>
+
+    <a class="card-inner clickable" tabindex="0" ui-sref="userDetail({userName: user.ldapUserId || user.userName})">
+
+        <div class="columns with-borders small-borders">
+
+            <div class="external-user-banner">
+                <p ng-if="!user.internal || user.internal === 'N' || user.type === 'proxy'">{{ usersAPI.getExternalUserType(user) }}</p>
+            </div>
+
+            <div class="is-disabled-card" ng-if="user.enabled == false || user.enabled === 'N'"></div>
+
+            <section>
+                <wwt-user-image placeholder-as-default="true" user-name="user.ldapUserId || user.userName"></wwt-user-image>
+            </section>
+
+            <section class="flex-5">
+
+                <h3 class="card-header">{{ user.fullName || user.userName }}</h3>
+                <p class="card-content">{{ user.ldapUserId || user.userName }}</p>
+
+            </section>
+        </div>
+    </a>
+
+</section>

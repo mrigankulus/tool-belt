@@ -1,0 +1,92 @@
+<br><br>
+
+<div class="primary-loader" ng-class="{active: EventTypePlayground.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<form name="testNotificationForm"
+      ng-if="EventTypePlayground.eventType"
+      class="allow-ng-animate default-animation"
+      ng-submit="EventTypePlayground.sendTest()">
+
+    <section>
+
+        <div class="columns with-borders">
+            <section>
+                <h4>How about a test?</h4>
+
+                <p><small>Fill in the data below to populate your token data. If you're feeling lazy, <a class="clickable" ng-click="EventTypePlayground.prefillTokens()">pre-fill</a> your tokens with "test".</small></p>
+
+                <div class="form-group"
+                     ng-repeat="token in EventTypePlayground.eventType.tokens"
+                     ng-class="{required: token.tokenName === 'resourceId'}">
+
+                    <label>{{ token.tokenName }} <small class="muted">(at path: {{ token.propertyPath }})</small></label>
+                    <input ng-model="token.value"
+                           ng-change="EventTypePlayground.onUpdateToken(token)"
+                           ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }"
+                           ng-required="token.tokenName === 'resourceId'">
+                </div>
+
+                <br>
+
+                <h4>Magic Properties</h4>
+
+                <ng-include src="'events/child-views/playground/_generalEventSettings.html'"></ng-include>
+                <br>
+                <ng-include src="'events/child-views/playground/_emailSettings.html'"></ng-include>
+                <br>
+                <ng-include src="'events/child-views/playground/_targetUsers.html'"></ng-include>
+                <!-- <br> -->
+                <!-- <ng-include src="'events/child-views/playground/_approvalRequest.html'"></ng-include> -->
+                <br>
+                <ng-include src="'events/child-views/playground/_embeds.html'"></ng-include>
+
+            </section>
+
+            <section>
+                <p>We'll <small><code>POST</code></small> to - <small><code>{{ EventTypePlayground.getTestUrl() }}</code></small> with the following as the payload.</p>
+
+                <pre style="max-height: 300px; overflow: auto;" pretty-json="EventTypePlayground.requiredTokenData | json"></pre>
+
+                <div ng-if="EventTypePlayground.requiredTokenData.embeds && EventTypePlayground.embeds">
+                    <hr class="dashed">
+                    <p>We'll add this to your event in activity feeds.</p>
+                    <p>Sorry the preview is a little janky. One way bindings downstream require the data to be cleared, then refreshed.</p>
+
+                    <af-embeds embeds="EventTypePlayground.embeds"></af-embeds>
+                </div>
+            </section>
+        </div>
+
+    </section>
+
+    <hr>
+
+    <section>
+        <div class="form-actions split">
+            <section>
+                <button class="btn btn-primary" ng-disabled="!testNotificationForm.$valid || EventTypeDetail.eventType.pauseNotifications"
+                        analytics=" 'Event Type Actions', 'Notification test sent from playground' ">Send</button>
+
+                <span class="lead muted">
+                    <i ng-if="EventTypePlayground.shouldShowUserSettingsWarning"
+                       class="fa fa-warning"
+                       popover-trigger="mouseenter"
+                       popover-popup-delay="600"
+                       popover-popup-close-delay="600"
+                       uib-popover-template="'events/child-views/tips/notificationSettingsTip.html'"></i>
+
+                    <span ng-bind-html="EventTypePlayground.notifiedUsersText"></span>
+                    &nbsp;&nbsp;&nbsp;
+                </span>
+            </section>
+
+            <section ng-if="EventTypePlayground.messageSent">
+                <span class="lead muted">
+                    Your event has been sent! Check the&nbsp;<a ui-sref="eventTypeDetail.activity.activityList">activity</a>.
+                    &nbsp;<i class="fa fa-thumbs-up"></i>
+                </span>
+            </section>
+        </div>
+    </section>
+
+</form>

@@ -1,0 +1,38 @@
+<div class="blank-slate blank-slate-widget" ng-if="Dashboard.shouldShowItemBlankSlate(item)">
+
+    <i class="fa fa-warning"></i>
+
+    <section>
+        <p>No <strong>related</strong> content to show. Try <a ui-sref="{{Dashboard.getSettingsLink(item)}}">adding</a> a github repo, or jenkins job.</p>
+    </section>
+</div>
+
+<ul class="dasbhoard-widget-related-list">
+    <li ng-repeat="repo in item.data.connectedRepos">
+        <a ng-href="https://github.wwt.com/{{ repo.org }}/{{ repo.repo }}" target="_blank">
+            <i class="fa fa-github"></i> {{ repo.repo }}
+        </a>
+    </li>
+
+    <li ng-repeat="board in item.data.connectedVisionBoards">
+        <a ng-href="https://www-dev.wwt.com/vision/#/group/{{ board.id }}/ideas" target="_blank">
+            <i class="fa fa-lightbulb-o"></i> {{ board.name }}
+        </a>
+    </li>
+
+    <hr class="dashed" ng-if="item.data.connectedJenkinsJobs && item.data.connectedJenkinsJobs.length">
+
+    <li ng-repeat="job in item.data.connectedJenkinsJobs" ng-if="job.lastJobData">
+        <div class="jenkins-build-status"
+             ng-class="{
+                'success': job.lastJobData.result === 'SUCCESS',
+                'error': job.lastJobData.result === 'FAILURE',
+                'warning': job.lastJobData.result === 'UNSTABLE',
+                'no-status': !job.lastJobData.result
+             }"></div>
+
+        <a ng-href="{{ job.lastJobData.url }}" target="_blank">
+            {{ job.lastJobData.fullDisplayName }}
+        </a>
+    </li>
+</ul>

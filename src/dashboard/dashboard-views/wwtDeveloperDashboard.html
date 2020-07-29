@@ -1,0 +1,104 @@
+<div class="wwt-developer-dashboard container">
+
+    <ng-include src="'dashboard/widgets/welcomeBlock.html'" ng-controller="WelcomeBlockCtrl as WelcomeBlock"></ng-include>
+
+    <br>
+
+    <ng-include src="'dashboard/widgets/apiMetrics.html'" ng-controller="ApiMetricsCtrl as ApiMetrics"></ng-include>
+
+    <br>
+
+
+    <div class="columns">
+        <section class="dashboard-widgets dashboard-widgets-side">
+            <article class="dashboard-widget-outer github-activity">
+
+                <div class="dashboard-widget-inner">
+                    <header>
+                        <i class="fa fa-github"></i> GitHub Activity
+                    </header>
+
+                    <main>
+                        <github-activity org="'custom-apps'"></github-activity>
+                    </main>
+                </div>
+
+                <br><br>
+
+            </article>
+
+        </section>
+
+        <section class="flex-2">
+            <!-- must be outside the dragula='"dashboard-bag"' -->
+            <article class="dashboard-widget-outer new-widget"`>
+                <div class="dashboard-widget-inner">
+
+                    <i class="fa"
+                       ng-class="{
+                                'fa-chevron-down': !NewWidgetCtrl.isOpen,
+                                'fa-chevron-up': NewWidgetCtrl.isOpen
+                            }"
+                       ng-click="NewWidgetCtrl.isOpen = !NewWidgetCtrl.isOpen"></i>
+
+                    <header ng-show="!NewWidgetCtrl.isOpen">
+                        <span ng-click="NewWidgetCtrl.isOpen = !NewWidgetCtrl.isOpen"><i class="wwt-icon-thumb-tack"></i> Pin Something</span>
+                    </header>
+
+                    <main ng-if="NewWidgetCtrl.isOpen">
+                        <ng-include src="'dashboard/widgets/newWidget.html'" ng-controller="NewWidgetCtrl as NewWidget"></ng-include>
+                    </main>
+                </div>
+            </article>
+
+            <div class="dashboard-widgets allow-ng-animate default-animation" dragula='"dashboard-bag"' dragula-model="dashboardSVC.dashboard.items" ng-if="dashboardSVC.dashboard.items && dashboardSVC.dashboard.items.length">
+
+                <article class="dashboard-widget-outer"
+                         ng-class="[item.type, {'large': item.type === 'myApiRouteOverrides'}]"
+                         ng-repeat="item in dashboardSVC.dashboard.items"
+                         ng-show="item.type !== 'githubActivity'">
+
+                    <div class="dashboard-widget-inner">
+                        <header>
+
+                            <span ng-if="item.type === 'myApiRouteOverrides'">API Route Overrides</span>
+
+                            <div uib-dropdown dropdown-append-to-body ng-if="item.type !== 'myApiRouteOverrides'">
+                                    <span id="btn-append-to-body" class="clickable" uib-dropdown-toggle>
+                                        <i ng-if="item.data.iconName" class="wwt-icon-{{ item.data.iconName }}"></i>
+                                        {{ item.data.title || item.data.name || item.data.appName || item.data.apiName || item.type }}
+                                         <span class="caret"></span>
+                                    </span>
+
+                                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="btn-append-to-body">
+                                    <li ng-repeat="link in Dashboard.getWidgetJumpToLinks(item) | orderBy: 'data.browserTitle'">
+                                        <a ui-sref="{{ link.sref }}">{{ link.data.browserTitle }}</a>
+                                    </li>
+
+                                    <li class="divider"></li>
+
+                                    <li>
+                                        <a href="#" ng-click="dashboardSVC.toggleItemIsPinned(item)"><i class="fa fa-thumb-tack"> </i> Unpin from Dashboard</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <i class="fa fa-th-large drag-icon"></i>
+                        </header>
+
+                        <main>
+                            <ng-include ng-if="item.type === 'myApiRouteOverrides'" src="'dashboard/widgets/apiOverridesWidget.html'" ng-controller="ApiOverridesWidgetCtrl as ApiOverridesWidget"></ng-include>
+
+
+                            <ng-include src="'dashboard/widgets/relatedItems.html'"></ng-include>
+                        </main>
+                    </div>
+
+
+                </article>
+            </div>
+
+        </section>
+    </div>
+
+</div>

@@ -1,0 +1,180 @@
+<br>
+
+<div class="container user allow-ng-animate default-animation" ng-if="UserDetail.canViewUsers">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section>
+                    <div class="asset-icon">
+                        <div class="att-upload-trigger">
+                            <label for="imageUpload" class="clickable">
+                                <i class="fa fa-pencil-square-o asset-edit-icon"></i>
+
+                                <div ngf-drop="UserDetail.onDropImage($files)"
+                                     ngf-drag-over-class="'dragover'"
+                                     ngf-multiple="false"
+                                     ngf-accept="'image/*'"
+                                     ngf-resize="{width: 600}">
+
+                                    <div class="drop-zone-overlay">
+                                        <div class="drop-zone-msg">
+                                            <span>DROP HERE TO UPLOAD</span>
+                                            <i class="fa fa-cloud-upload"></i>
+                                        </div>
+                                    </div>
+
+                                    <div class="asset-icon-ribbon-wrapper" ng-if="UserDetail.user.enabled == false">
+                                        <div class="asset-icon-ribbon">DISABLED</div>
+                                    </div>
+                                    <i><wwt-user-image ng-if="!UserDetail.hidUserImage" user-name="UserDetail.user.userName" image-size="extra-large"></wwt-user-image></i>
+                                </div>
+                            </label>
+
+                            <div class="att-upload" style="display: none;">
+                                <i class="fa fa-plus"></i>
+
+                                <input ngf-select="UserDetail.onDropImage($files)"
+                                       multiple="false"
+                                       ngf-resize="{width: 600}"
+                                       ngf-accept="'image/*'"
+                                       id="imageUpload"
+                                       class="upload-mask" />
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h1>{{ UserDetail.user.firstName }} {{ UserDetail.user.lastName }} </h1>
+
+                    <div class="user-meta" ng-class="{ready: UserDetail.user}" ng-if="UserDetail.user.internal && UserDetail.user.type === 'internal'">
+                        <p><strong>{{ UserDetail.user.department}}</strong> - {{ UserDetail.user.profile.hrTitle }}</p>
+
+                        <p>
+                            <a ng-href="tel:{{ UserDetail.phoneNumber }}"
+                               ng-if="UserDetail.phoneNumber">
+                                <i class="fa fa-phone"></i>
+                                {{ UserDetail.phoneNumber }}
+                            </a>
+                            {{ UserDetail.phoneNumber ? '&nbsp; | &nbsp' : '' }}
+
+                            <a ng-href="mailto:{{ UserDetail.user.email }}"
+                                ng-if="UserDetail.user.email">
+                                <i class="fa fa-envelope"></i> {{ UserDetail.user.email }}
+                            </a>
+
+                            <span>
+                                &nbsp; | &nbsp;
+
+                                <a class="clickable" ng-click="UserDetail.historyPanelIsOpen = true">
+                                    <i class="fa fa-history"></i> History</a>
+                            </span>
+
+                            &nbsp; | &nbsp;
+                            <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/users/?userName={{ UserDetail.user.userName }}" target="_blank">JSON</a>
+                        </p>
+                    </div>
+
+                    <div class="user-meta" ng-class="{ready: UserDetail.user}" ng-if="!UserDetail.user.internal && (UserDetail.user.type == 'external' || UserDetail.user.type == 'old')">
+
+                        <p ng-repeat="partner in UserDetail.partners" ng-if="UserDetail.partners.length == 1">
+                            <a ui-sref="partnerDetail({partnerId: partner.partnerGroupId})">
+                                <strong>{{ partner.name }}</strong>
+                            </a>
+                        </p>
+
+                        <p ng-if="UserDetail.partners.length > 1">
+                            <a ui-sref="userDetail.partners">
+                                <strong>Assigned to {{ UserDetail.partners.length }} Partners</strong>
+                            </a>
+                        </p>
+
+                        <p ng-if="!UserDetail.partners.length"><strong>No Partners Assigned</strong></p>
+
+                        <p>
+                            <span class="external-user">External User</span>
+
+                            &nbsp; | &nbsp;
+                            <a ng-href="mailto:{{ UserDetail.user.email }}">
+                                <i class="fa fa-envelope"></i> {{ UserDetail.user.email }}
+                            </a>
+
+                            <span>
+                                &nbsp; | &nbsp;
+
+                                <a class="clickable" ng-click="UserDetail.historyPanelIsOpen = true">
+                                    <i class="fa fa-history"></i> History</a>
+                            </span>
+
+                            &nbsp; | &nbsp;
+                            <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/users/?userName={{ UserDetail.user.userName }}" target="_blank">JSON</a>
+                        </p>
+
+                    </div>
+
+                    <div class="user-meta" ng-class="{ready: UserDetail.user}"
+                         ng-if="!UserDetail.user.internal && UserDetail.user.type == 'svc' || UserDetail.user.type == 'proxy'">
+
+                        <p><strong>{{ UserDetail.user.userName }}</strong></p>
+
+                        <p>
+                            <span class="external-user" ng-if="UserDetail.user.type == 'proxy'">PROXY User</span>
+                            <span class="external-user" ng-if="UserDetail.user.type == 'svc'">SVC User</span>
+
+                            <span>
+                                &nbsp; | &nbsp;
+
+                                <a class="clickable" ng-click="UserDetail.historyPanelIsOpen = true">
+                                    <i class="fa fa-history"></i> History</a>
+                            </span>
+
+                            &nbsp; | &nbsp;
+                            <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/users/?userName={{ UserDetail.user.userName }}" target="_blank">JSON</a>
+                        </p>
+
+                    </div>
+
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+                <div class="item-detail-content-header short" hl-sticky offset-top="95">
+                    <ul class="nav nav-tabs">
+                        <li ng-repeat="tab in UserDetail.tabs"
+                            ng-if="UserDetail.shouldShowTab(tab)"
+                            ui-sref-active="active"
+                            ng-class="{'pull-right': tab.slug === 'settings'}">
+
+                            <a ui-sref="userDetail.{{ tab.slug }}">
+                                <i class="fa fa-cog" ng-if="tab.slug === 'settings'"></i>
+                                {{ tab.displayName }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <ui-view ng-if="UserDetail.user"></ui-view>
+
+            </section>
+        </main>
+
+    </article>
+</div>
+
+<div>
+    <div class="slide-in-panel sip-right allow-ng-animate" ng-if="UserDetail.historyPanelIsOpen">
+
+        <header class="sip-header">
+            <h3>History</h3>
+            <i class="fa fa-history"></i>
+        </header>
+
+        <section class="sip-body history-panel" wwt-scroll-trap="historyPanelScrollTrap">
+            <wwt-activity-feed type="resourceHistory"
+                       resource="{typeId: 'user', id: UserDetail.user.id, tokenData: {id: UserDetail.user.id}}"></wwt-activity-feed>
+
+        </section>
+    </div>
+
+    <div class="page-overlay allow-ng-animate" ng-if="UserDetail.historyPanelIsOpen" ng-click="UserDetail.historyPanelIsOpen = false"></div>
+</div>

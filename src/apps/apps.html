@@ -1,0 +1,86 @@
+<br>
+
+<div class="container application">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>
+                        Applications
+                         <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/applications" target="_blank">JSON</a>
+                    </h1>
+
+                    <p>Explore our applications! Get inspiration, manage permissions, and review analytics.</p>
+
+                </section>
+
+                <section class="item-header-watch-button top">
+                    <dtb-resource-watcher dtb-resource-watcher-settings="Apps.watcherSettings"></dtb-resource-watcher>
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95">
+                    <section class="search-section">
+
+                        <div class="resource-types-search">
+                            <i class="fa fa-search"></i>
+
+                            <input type="text"
+                                   class="no-input"
+                                   ng-model="Apps.appSearchText"
+                                   tabindex="0"
+                                   id="secondarySearchInput"
+                                   placeholder="Search Applications">
+                        </div>
+                    </section>
+
+                    <section>
+                        <button ng-if="Apps.canEditApps" class="btn btn-primary btn-xs" ng-click="wwtFocusPanelSVC.togglePanel('newApplicationForm')" auto-focus="#inputName">
+                            <i class="fa fa-plus"></i> Add New App
+                        </button>
+                    </section>
+                </div>
+
+                <div class="primary-loader" ng-class="{active: Apps.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+                <section>
+                    <h3 class="divider-title" ng-if="Apps.recentApps.length && !Apps.appSearchText"><span>Recently Viewed</span></h3>
+
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="!Apps.appSearchText && Apps.recentApps && Apps.recentApps.length">
+                        <app-card app="app" ng-repeat="app in Apps.recentApps"></app-card>
+                    </div>
+                </section>
+
+                <section>
+                    <h3 class="divider-title" ng-if="Apps.recentApps.length && !Apps.appSearchText"><span>All</span></h3>
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="Apps.apps && Apps.apps.length">
+
+                        <app-card app="app" ng-repeat="app in Apps.apps | filter: Apps.appSearchText | orderBy: 'appName' | limitTo: Apps.appsLimit"></app-card>
+
+                    </div>
+
+                    <hr ng-if="Apps.shouldShowShowMore()">
+
+                    <p class="text-center" ng-if="Apps.shouldShowShowMore()">
+                        <button class="btn btn-link" ng-click="Apps.showMore()" ng-click="Apps.showMore()">Show All</button>
+                    </p>
+                </section>
+            </section>
+        </main>
+
+    </article>
+
+    <wwt-focus-panel panel-name="'newApplicationForm'"
+                     position="'right'"
+                     header-text="'New Application'"
+                     header-icon="'plus-circle'"
+                     backdrop="true">
+
+            <ng-include src="'apps/newApplication.html'" ng-controller="NewApplicationCtrl as NewApplication"></ng-include>
+    </wwt-focus-panel>
+
+</div>

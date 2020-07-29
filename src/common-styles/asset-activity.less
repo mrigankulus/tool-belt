@@ -1,0 +1,95 @@
+.asset-activity {
+    border-left: 2px solid #ccc;
+    margin-left: 20px;
+    margin-top: 10px;
+
+    > ul {
+        list-style: none;
+        padding: 0;
+
+        > li {
+            position: relative;
+        }
+    }
+
+    .icon-identifier {
+        font-size: 25px;
+        width: 32px;
+        margin-right: 12px;
+        padding: 0 3px;
+        color: #fff;
+        text-align: center;
+        border-radius: 3px;
+
+        &.jenkins {
+            background: #f3d7b3;
+        }
+
+        &.github {
+            background: #000;
+        }
+
+        &.toolbelt {
+            background: @application-color;
+
+            i {
+                width: auto;
+                position: relative;
+                font-size: 21px;
+            }
+        }
+    }
+
+    .github-comment {
+        .well;
+    }
+
+    github-m-d-comment {
+        .well;
+        max-width: 600px;
+        max-height: 200px;
+        overflow: auto;
+        display: block;
+        background-color: #fafafa;
+    }
+}
+
+github-m-d-comment {
+    pre {
+        font-size: 11px;
+    }
+
+    p {
+        font-size: 13px;
+    }
+}
+
+.asset-activity-identifying-image {
+    width: 30px;
+    position: absolute;
+    left: -19px;
+    top: 9px;
+}
+
+.asset-activity-event-body {
+    margin-left: 37px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 3px;
+    position: relative;
+
+    &:before {
+        content: "'";
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        border-top: 1px solid #ccc;
+        border-left: 1px solid #ccc;
+        color: transparent;
+        left: -8px;
+        transform: rotate(-45deg);
+        background: #fff;
+        top: 19px;
+    }
+}

@@ -1,0 +1,5 @@
+<p><a ng-href="{{ GithubActivity.getLinkToUser(item.actor) }}" target="_blank">{{ item.actor.login }}</a> {{ item.payload.action }} pull request <a ng-href="{{ item.payload.pull_request.html_url }}" target="_blank">{{ item.repo.name }}</a></p>
+
+<p><strong>{{ item.payload.pull_request.title }}</strong></p>
+
+<p class="alert alert-info"><strong>{{ item.payload.pull_request.commits }}</strong> commits with <strong>{{ item.payload.pull_request.additions }}</strong> additions and <strong>{{ item.payload.pull_request.deletions }}</strong> deletions.</p>

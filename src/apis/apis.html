@@ -1,0 +1,41 @@
+<br>
+
+<div class="container api">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>
+                        API Routes
+                         <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/apis" target="_blank">JSON</a>
+                    </h1>
+
+                    <p>Create, manage, monitor, and explore our APIs.</p>
+
+                </section>
+
+                <section class="item-header-watch-button top">
+                    <dtb-resource-watcher dtb-resource-watcher-settings="Apis.watcherSettings"></dtb-resource-watcher>
+                    <br>
+                </section>
+            </header>
+
+            <ul class="nav nav-tabs landing-tabs" auto-focus="#secondarySearchInput">
+                <li ui-sref-active="active">
+                    <a ui-sref="apis.apisList">APIs</a>
+                </li>
+
+                <li ui-sref-active="active">
+                    <a ui-sref="apis.platforms">Platforms</a>
+                </li>
+            </ul>
+
+            <section class="item-detail-content">
+
+                <ui-view></ui-view>
+
+            </section>
+        </main>
+
+    </article>
+</div>

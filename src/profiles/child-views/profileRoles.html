@@ -1,0 +1,76 @@
+<br><br>
+
+<div class="blank-slate-tab" ng-if="!ProfileRoles.isLoadingRoles && (!ProfileRoles.roles || !ProfileRoles.roles.length)">
+    <i class="fa fa-info-circle"></i>
+
+    <section>
+        <p>No Roles have been added to the <strong>{{ ProfileDetail.profile.name }}</strong>
+            Profile. Add roles from within the permissions tab of your application or API.</p>
+    </section>
+</div>
+
+<div class="item-detail-content-header" ng-if="!ProfileRoles.isLoadingRoles && ProfileRoles.roles && ProfileRoles.roles.length">
+    <section>
+
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="ProfileRoles.roleSearchText"
+                   tabindex="0"
+                   placeholder="Search Roles" />
+        </div>
+
+    </section>
+
+    <section class="muted">
+        <p>
+            <a class="btn btn-link btn-xs pull-right" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/profiles/{{ ProfileDetail.profile.id }}/roles" target="_blank">JSON</a>
+        </p>
+
+        <p style="max-width: 240px;">
+            Mange your roles in the permissions tab of your application or API.
+        </p>
+    </section>
+</div>
+
+<div class="primary-loader" ng-class="{active: ProfileRoles.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="cards allow-ng-animate default-animation" ng-if="!ProfileRoles.isLoadingRoles && ProfileRoles.roles && ProfileRoles.roles.length">
+
+    <section class="card-outer asset-card" ng-repeat="role in ProfileRoles.roles | filter: ProfileRoles.roleSearchText | orderBy: 'name'">
+
+        <a class="card-inner" tabindex="0" ui-sref="applicationDetail.permissions({ id: {{ role.role.application.id }} })">
+
+            <div class="columns">
+
+                <section class="flex-3">
+                    <h3 class="card-header">{{ role.role.name }}</h3>
+
+                    <p class="card-content">{{ role.role.description }}</p>
+
+                    <hr class="dashed">
+
+                    <div class="columns clickable application vertical-center card-related-asset">
+
+                        <section class="flex-none">
+                            <div class="asset-icon small">
+                                <i class="wwt-icon-{{ role.role.application.iconName }}"></i>
+                            </div>
+                        </section>
+
+                        <section class="flex-none">
+                            <strong>{{ role.role.application.name }}</strong>
+                        </section>
+                    </div>
+
+                </section>
+
+            </div><!-- /.columns -->
+        </a>
+
+    </section>
+
+</div>

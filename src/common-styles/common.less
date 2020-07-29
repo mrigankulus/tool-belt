@@ -1,0 +1,855 @@
+/*
+ * Common styles that cannot be stored in a more modular less file
+ */
+@fa-font-path: "fonts";
+
+.app-background {
+    background-color: #f4f4f4;
+    background-attachment: fixed;
+    background-image: url('img/bg-main.png');
+    width: 100%;
+}
+
+body {
+    .proxima-nova;
+    background-color: #f4f4f4;
+}
+
+#content-main {
+    padding-top: @app-toolbar-height + @navbar-height + @sm-banner-height;
+}
+
+body.chrome,
+body.firefox {
+    .minimum-browser-support-msg {
+        display: none;
+    }
+
+    #content-main {
+        padding-top: @app-toolbar-height + @navbar-height;
+    }
+}
+
+.minimum-browser-support-msg {
+    padding: 0 50px;
+    height: 34px;
+    line-height: 1.2;
+    background: lighten(@warning-color, 38%);
+    border-bottom: 1px dotted #ccc;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    p {
+        margin: 0;
+        color: #666;
+        font-size: 13px;
+        font-weight: 600;
+        text-align: center;
+
+        strong {
+            color: @warning-color;
+        }
+    }
+
+    .fa-warning {
+        position: absolute;
+        top: -8px;
+        left: -6px;
+        font-size: 48px;
+        color: lighten(@warning-color, 30%);
+    }
+}
+
+a {
+    color: @primaryColor;
+
+    &:hover,
+    &:focus {
+        text-decoration: none;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+strong > a {
+    color: @primaryColor;
+
+    &:hover {
+        color: darken(@primaryColor, 10%);
+        text-decoration: underline;
+        .clickable;
+    }
+}
+
+hr.dashed {
+    border: 0 none;
+    border-top: 1px dashed #ccc;
+    background: none;
+    height: 0;
+}
+
+hr.double-line {
+    border: 0 none;
+    border-top: 1px solid #e8e8e8;
+    border-bottom: 1px solid #e8e8e8;
+    background: none;
+    height: 2px;
+    clear: both;
+}
+
+#wrapper {
+    min-width: 1080px;
+    .app-background;
+}
+
+.container {
+    width: 98%;
+    max-width: 1300px;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.break-all {
+    word-break: break-all;
+}
+
+.title-bar .branding:after {
+    color: #6e7780;
+    font-size: 20px;
+    top: 3px;
+}
+
+.clickable {
+    cursor: pointer;
+}
+
+.moveable {
+    cursor: move;
+    cursor: -webkit-grab;
+}
+
+.columns {
+    display: flex;
+
+    > * {
+        flex: 1;
+
+        &.flex-none {
+            flex: initial;
+        }
+
+        &.flex-2 {
+            flex: 2;
+        }
+
+        &.flex-3 {
+            flex: 3;
+        }
+
+        &.flex-4 {
+            flex: 4;
+        }
+
+        &.flex-5 {
+            flex: 5;
+        }
+
+        &.flex-6 {
+            flex: 6;
+        }
+
+        &.flex-7 {
+            flex: 7;
+        }
+
+        &.flex-8 {
+            flex: 8;
+        }
+    }
+
+    &.with-padding {
+        > * {
+            padding: 0 20px;
+        }
+    }
+
+    &.with-borders {
+        > * {
+            padding: 0 30px;
+            border-right: 1px dotted #ccc;
+
+            &:last-child {
+                border-right: none;
+            }
+        }
+
+        &.small-borders {
+            > * {
+                padding: 0 10px;
+            }
+        }
+    }
+
+    &.vertical-center {
+        align-items: center;
+    }
+
+    &.align-bottom {
+        align-items: flex-end;
+    }
+
+    &.is-single-column {
+        justify-content: center;
+    }
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+.relative-position {
+    position: relative;
+}
+
+.auto-scroll {
+    overflow: auto;
+    height: 100%;
+}
+
+.uppercase {
+    text-transform: uppercase;
+}
+
+.margin-right {
+    margin-right: 15px;
+}
+
+.single-column {
+    margin: 0 auto;
+    max-width: 500px;
+}
+
+.two-column {
+    padding: 0;
+    column-count: 2;
+    column-gap: 55px;
+
+    > * {
+        break-inside: avoid;
+    }
+}
+
+.hint {
+    color: #ACB1B6;
+    font-size: 12px;
+}
+
+.muted {
+    color: rgba(57, 63, 69, 0.55);
+}
+
+.gu-mirror {
+    list-style-type: none;
+}
+
+.bulk-upload-msg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    color: #fff;
+    z-index: 1;
+    height: 45px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(0, 0);
+    transition: all 0.2s;
+    transition-delay: 0.2s;
+
+    p {
+        position: relative;
+        margin: 0;
+        font-size: 15px;
+        font-weight: bold;
+        line-height: 1.1;
+        display: flex;
+        align-items: center;
+    }
+
+    &.error {
+        background: @danger-color;
+    }
+
+    i {
+        position: absolute;
+        color: rgba(250, 250, 250, 0.15);
+        z-index: -1;
+        bottom: -26px;
+        font-size: 78px;
+      }
+}
+
+// todo: move this somewhere else
+.formatted-list {
+    // todo: should probably move dependency list styles to this class
+    .dependency-list;
+
+    .formatted-list-show-on-hover,
+    .formatted-list-highlight-on-hover {
+        transition: all 0.3s;
+    }
+
+    > li:hover {
+        .formatted-list-show-on-hover {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .formatted-list-highlight-on-hover {
+            opacity: 0.8;
+        }
+    }
+
+    .processing {
+        opacity: 0.3;
+    }
+
+    .error {
+        color: @errorColor;
+    }
+}
+
+.error {
+    color: @errorColor;
+}
+
+.formatted-list-show-on-hover {
+    visibility: hidden;
+    opacity: 0;
+}
+
+.formatted-list-highlight-on-hover {
+    opacity: 0.2;
+}
+
+.formatted-list-prompt {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: @errorColor;
+    color: #fff;
+    font-weight: bold;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s;
+    z-index: 1;
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+}
+
+// handy for quick simple animations
+.allow-ng-animate.default-animation {
+    transition: all 0.3s;
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+}
+
+pinner {
+    color: #767676;
+    transition: all 0.3s;
+
+    &:hover {
+        color: #000;
+    }
+
+    > span {
+        cursor: pointer;
+    }
+}
+
+.page-overlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1035;
+    background: rgb(255, 255, 255);
+    opacity: .22;
+    transition: all .2s;
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        opacity: .22;
+    }
+}
+
+.messenger-content.github-error {
+    &:before {
+        content: "\f09b";
+    }
+}
+
+.error.validation-failed.messenger-content:before {
+    content: "\f071";
+}
+
+.user-creation.messenger-content:before {
+    content: "\f0c0";
+    background: #5b8d6e;
+}
+
+.success.user-creation-success.messenger-content:before {
+    content: "\f00c";
+    background: #5b8d6e;
+}
+
+.api-location-description-prompt {
+    position: relative;
+    margin: 0 auto;
+    padding: 10px 0;
+    color: #999;
+    border-bottom: 1px dotted #ddd;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .api-route-info,
+    .release-notes-route-info {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+
+        a {
+            color: #999;
+        }
+
+        p:first-child {
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        p {
+            margin: 0;
+            line-height: 1.2;
+            font-weight: normal;
+            text-align: center;
+        }
+
+        section {
+            flex: 1;
+        }
+
+        section:last-child {
+            margin-left: 10px;
+            padding-left: 10px;
+            border-left: 1px dotted #ddd;
+        }
+    }
+
+    > i {
+        position: absolute;
+        top: 4px;
+        left: -16px;
+        color: @info-color;
+        opacity: .4;
+        font-size: 60px;
+    }
+}
+
+.full-width-panel {
+    width: 100%;
+}
+
+.event-type-warning, .user-creation-errors, .partner-profiles-info {
+
+    dl {
+        margin: 0 0 10px 0;
+        color: #444;
+        font-size: 13px;
+    }
+
+    dt {
+        margin-bottom: 8px;
+        padding-bottom: 3px;
+        color: #777;
+        font-size: 11px;
+        font-weight: 500;
+        text-align: center;
+        text-transform: uppercase;
+        border-bottom: 1px dotted #ddd;
+    }
+
+    .fa-warning {
+        padding-right: 2px;
+        color: @warning-color;
+        opacity: 0.4;
+    }
+}
+
+.user-creation-errors {
+    .fa-warning {
+        color: @danger-color;
+    }
+}
+
+.status-bar-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 7px 0;
+    background: #373723;
+    box-shadow: 0 0 3px 0px rgba(0, 0, 0, 0.15);
+    border-top: 1px solid #eaeaea;
+    transition: all 0.3s;
+    transform: translate(0, 0);
+    z-index: 2;
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        transform: translate(0, 100%);
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        transform: translate(0, 0);
+    }
+
+    .actions {
+        justify-content: flex-end;
+        align-items: flex-end;
+        display: flex;
+    }
+
+    .progress {
+        margin: 0;
+        height: 10px;
+        border-radius: 10px;
+    }
+}
+
+.json-textarea {
+    max-width: 500px;
+    height: 300px;
+    border: 2px solid #ccc;
+    font-family: "Courier New";
+    font-size: 12px;
+    white-space: pre;
+}
+
+.import-list {
+    code-progress {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        left: 0;
+        background: rgba(255, 255, 255, 0.6);
+        z-index: 1;
+        padding-top: 20px;
+    }
+}
+
+// todo: put this somewhere...probably not in sip
+// as that is more about the generic side panel
+.sip-body wwt-resource-event-stream {
+    display: block;
+    padding: 25px;
+}
+
+.right-feature-links {
+    .text-center;
+
+    i {
+        height: 75px;
+        font-size: 65px
+    }
+
+    h4 {
+        margin: 0;
+        text-transform: uppercase;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    a {
+        color: #808080;
+        cursor: pointer;
+        display: block;
+        margin-bottom: 20px;
+        transition: all 0.3s;
+
+        &:hover {
+            text-decoration: none;
+            color: #333;
+        }
+    }
+}
+
+.popover-trigger {
+    color: #ccc;
+    margin-left: 3px;
+    transition: all 0.3s;
+
+    &:hover {
+        color: #666;
+    }
+}
+
+.divider-title {
+    border-bottom: 1px dashed #ccc;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #969696;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    margin-bottom: 10px;
+
+    span {
+        position: relative;
+        bottom: -8px;
+        background: #fff;
+        padding: 0 7px;
+    }
+}
+
+.min-character-required {
+    position: absolute;
+    right: 40px;
+    font-size: 12px;
+    font-style: italic;
+    color: @error-color;
+    opacity: 1;
+    transform: translate(0, 0);
+    transition: all .15s;
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        opacity: 0;
+        transform: translate(0, -5px);
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
+
+.text-overflow {
+    .text-overflow();
+}
+
+.monospaced {
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+.z-index-1 {
+    z-index: 1;
+}
+
+.default-app-switcher {
+    display: flex;
+    align-items: center;
+
+    p {
+        margin: 0;
+        color: #9d9e9f;
+        font-size: 12px;
+        font-weight: 700;
+    }
+}
+
+.demo-user-password {
+    height: 30px;
+    color: #333;
+    display: flex;
+    align-items: center;
+
+    i {
+        color: @soft-green;
+    }
+
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+
+.event-type-template-section {
+    border: 1px solid #e5e5e5;
+    padding: 10px;
+}
+
+.application-release-notes {
+    .att-single-file {
+        margin: 1rem auto 3rem;
+        width: 60%;
+        height: 10em;
+    }
+}
+
+.score-box {
+    align-items: center;
+    color: #fff;
+    display: inline-flex;
+    font-size: 22px;
+    font-weight: 700;
+    height: 48px;
+    justify-content: center;
+    min-width: 48px;
+    padding: 0 8px;
+
+    &.green {
+        background: @soft-green;
+    }
+
+    &.yellow {
+        background: @application-color;
+    }
+
+    &.red {
+        background: @api-color;
+    }
+}
+
+.score-box-ranges {
+    .green {
+        color: @soft-green;
+    }
+
+    .yellow {
+        color: @application-color;
+    }
+
+    .red {
+        color: @api-color;
+    }
+
+    .green-background{
+        background: @soft-green;
+    }
+
+    .yellow-background {
+        background: @application-color;
+    }
+
+    .red-background {
+        background: @api-color;
+    }
+}
+
+.exception-warning {
+    float: m
+}
+
+.btn-import-export {
+    float: right;
+    position: static;
+    padding-top: 5px;
+    padding-right: 10px;
+}
+
+.api-scorecard {
+    font-size: 40px;
+}
+
+.api-card-scorecard {
+    margin-right: 9px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+}
+
+.api-card-scorebox {
+    height: 100%
+}
+
+.api-scorecard-warning {
+    background: none;
+}
+
+.no-score-api-scorecard {
+    text-align: center
+}
+
+.no-scorecard-warning {
+    color: orange;
+}
+
+.show-detail {
+    padding: 4px;
+}
+
+.get-method-caret {
+    margin-left: 15px;
+}
+
+.is-processing-error {
+    margin-left: 5px;
+    float: right
+}
+
+.is-processing {
+    float: right
+}
+.show-on-row-hover {
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+tr:hover {
+    .show-on-row-hover {
+        opacity: 1;
+    }
+}
+
+.pagination-wrapper {
+    position: sticky;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.91);
+    text-align: center;
+}

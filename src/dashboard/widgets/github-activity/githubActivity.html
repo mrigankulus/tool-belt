@@ -1,0 +1,48 @@
+<i class="fa fa-cog pull-right clickable" ng-click="GithubActivity.isEditingSettings = !GithubActivity.isEditingSettings"></i>
+
+<div class="github-activity-settings allow-ng-animate" ng-if="GithubActivity.isEditingSettings">
+    <ul ng-if="GithubActivity.eventTypes">
+        <li class="columns vertical-center" ng-repeat="type in GithubActivity.eventTypes">
+
+            <section>
+                <div class="toggle-switch-small">
+                    <input type="checkbox"
+                           ng-model="type.active"
+                           class="toggle-switch-small-checkbox"
+                           ng-change="GithubActivity.saveEventSettings()"
+                           id="overrideSwitch{{ $index }}">
+
+                    <label class="toggle-switch-small-label" for="overrideSwitch{{ $index }}"></label>
+                </div>
+            </section>
+
+            <section class="flex-8 endpoint truncate">
+                {{ type.name }}
+            </section>
+
+        </li>
+    </ul>
+</div>
+
+<ul class="formatted-list" ng-if="GithubActivity.eventTypes">
+    <li ng-if="GithubActivity.githubFeed"
+        ng-repeat="item in GithubActivity.githubFeed | filter:GithubActivity.shouldShowEvent | limitTo: GithubActivity.activityLimit">
+
+        <div class="columns">
+            <section>
+                <wwt-user-image user-name="item.actor.login" image-size="small"></wwt-user-image>
+            </section>
+
+            <section class="flex-7">
+                <ng-include src="GithubActivity.getTemplateUrl(item)"></ng-include>
+                <p class="small no-margin">{{ item.created_at | friendlyDate }}</p>
+            </section>
+        </div>
+    </li>
+</ul>
+
+<br>
+
+<p class="text-center" ng-if="GithubActivity.shouldShowShowMore()">
+    <button class="btn btn-link" ng-click="GithubActivity.showMore()">Show More</button>
+</p>

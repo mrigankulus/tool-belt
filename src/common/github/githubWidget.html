@@ -1,0 +1,44 @@
+<div class="widget">
+    <header>
+        <i class="fa fa-cog" ng-click="GithubWidget.repo.isEditing = !GithubWidget.repo.isEditing" ng-if="!GithubWidget.isReadonly()"></i>
+
+        <h3><a href="{{ GithubWidget.repo.html_url }}" target="_blank">{{ repo }}</a></h3>
+
+        <div class="widget-icon"><i class="fa fa-github"></i></div>
+    </header>
+
+    <main>
+        <repo-connect ng-if="GithubWidget.repo.isEditing && !GithubWidget.isReadonly()"
+                      repo="{repo: GithubWidget.repo.name, org: GithubWidget.repo.organization.login}"
+                      on-repo-connected="GithubWidget.onRepoConnected"
+                      on-cancel="GithubWidget.onCancel"></repo-connect>
+
+        <div class="widget-error allow-ng-animate" ng-if="GithubWidget.hasError">
+            <p>There was an error loading this Repo. <a class="btn btn-link btn-xs" ui-sref=".settings">Mange Settings</a></p>
+        </div>
+
+        <div class="counts" ng-if="!GithubWidget.repo.isEditing">
+
+            <section>
+                <div class="count">
+                    <span class="allow-ng-animate" ng-if="!GithubWidget.isLoadingGitHubCounts">{{ GithubWidget.getOpenIssuesCount() }}</span>
+                </div>
+
+                <a ng-href="{{ GithubWidget.getOpenIssuesUrl() }}"
+                   class="count-type"
+                   target="_blank">Open Issues</a>
+            </section>
+
+            <section>
+                <div class="count">
+                    <span class="allow-ng-animate" ng-if="!GithubWidget.isLoadingGitHubCounts">{{ GithubWidget.getOpenPullsCount() }}</span>
+                </div>
+
+                <a ng-href="{{ GithubWidget.getOpenPullsUrl() }}"
+                   class="count-type"
+                   target="_blank">Open PRs</a>
+            </section>
+
+        </div>
+    </main>
+</div>

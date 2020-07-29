@@ -1,0 +1,51 @@
+<ol class="breadcrumb">
+    <li><a ui-sref="^">Import/Export</a></li>
+    <li class="active">Import</li>
+</ol>
+
+<div class="columns with-borders" style="margin-bottom: 100px;">
+    <section>
+        <h4>Import</h4>
+        <p>After copying the JSON from an <a ui-sref="importExportScorecard.export">export</a>, paste it here to review
+            and import.</p>
+
+        <textarea class="json-textarea" placeholder="Paste Import here"
+            ng-change="ImportScorecard.processPastedContent()"
+            ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }"
+            ng-model="ImportScorecard.pasteArea"></textarea>
+    </section>
+
+    <section style="position: relative">
+        <h4 ng-if="ImportScorecard.pasteArea">Exceptions</h4>
+        <p class="muted" ng-if="ImportScorecard.pasteArea">
+            These are the exceptions that will be created.
+        </p>
+        <div class="alert alert-danger" ng-if="ImportScorecard.badJson">
+            Sorry, can't process that JSON.
+        </div>
+        <hr>
+
+        <ul class="formatted-list">
+            <li ng-repeat="exception in ImportScorecard.parsedData">
+                <strong style="color: orange"> {{ exception.method }} &nbsp;</strong> <a href="#">
+                    {{ exception.urlPathPattern }}</a>
+                <span>
+                    <i class="fa fa-check is-processing" ng-if="exception.isProcessingError == 'complete'"></i>
+                    <i class="fa fa-warning is-processing-error"
+                        ng-if="exception.isProcessingError == 'error' || exception.isProcessingDuplicateMessage"></i>
+                    <p class="is-processing" ng-if="exception.isProcessingError == 'error'">Bad Request</p>
+                    <p class="is-processing" ng-if="exception.isProcessingDuplicateMessage">Duplicate</p>
+                </span>
+            </li>
+        </ul>
+    </section>
+</div>
+
+<section class="status-bar-bottom allow-ng-animate" ng-if="ImportScorecard.pasteArea">
+    <div class="container columns with-padding vertical-center">
+        <section class="actions">
+            <button class="btn btn-primary btn-lg" ng-click="ImportScorecard.importExceptions()"
+                ng-disabled="ImportScorecard.isImporting">Import</button>
+        </section>
+    </div>
+</section>

@@ -1,0 +1,95 @@
+<form name="groupTypeForm" ng-submit="$ctrl.update()">
+    <div class="form-group required">
+        <label>ID</label>
+        <input ng-model="$ctrl.groupType.id" readonly="true" required="true">
+    </div>
+
+    <div class="form-group required">
+        <label>Name</label>
+        <input ng-model="$ctrl.groupType.name"
+               ng-change="$ctrl.setIdFromTitle()"
+               required="true"
+               ng-readonly="$ctrl.isReadonly()">
+    </div>
+
+    <div class="form-group">
+        <label>Read Access <small>(in addition to members)</small></label>
+        <ui-select ng-model="$ctrl.groupType.readGroups"
+                   title="Read Groups"
+                   multiple
+                   limit="20"
+                   ng-disabled="$ctrl.isReadonly()">
+
+            <ui-select-match placeholder="Add Groups">{{$item.title}}</ui-select-match>
+
+            <ui-select-choices refresh-delay="200"
+                               refresh="$ctrl.searchGroups($select.search)"
+                               repeat="group.id as group in $ctrl.searchedGroups | filter: $select.search | limitTo:$select.limit">
+                {{ group.title }}
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div class="form-group">
+        <label>Write Access <small>(in addition to admins)</small></label>
+        <ui-select ng-model="$ctrl.groupType.writeGroups"
+                   title="Write Groups"
+                   multiple
+                   limit="20"
+                   ng-disabled="$ctrl.isReadonly()">
+
+            <ui-select-match placeholder="Add Groups">{{$item.title}}</ui-select-match>
+
+            <ui-select-choices refresh-delay="200"
+                               refresh="$ctrl.searchGroups($select.search)"
+                               repeat="group.id as group in $ctrl.searchedGroups | filter: $select.search | limitTo:$select.limit">
+                {{ group.title }}
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div class="form-group">
+        <label>Type Access <small>(Users who can manage this type. <b>All internal users</b> by default.)</small></label>
+        <ui-select ng-model="$ctrl.groupType.restrictToGroups"
+                   title="Write Groups"
+                   multiple
+                   limit="20"
+                   ng-disabled="$ctrl.isReadonly()">
+
+            <ui-select-match placeholder="Add Groups">{{$item.title}}</ui-select-match>
+
+            <ui-select-choices refresh-delay="200"
+                               refresh="$ctrl.searchGroups($select.search)"
+                               repeat="group.id as group in $ctrl.searchedGroups | filter: $select.search | limitTo:$select.limit">
+                {{ group.title }}
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div ng-if="!$ctrl.isReadonly()">
+      <label>Require Admin</label>
+      <br>
+      <div class="switch">
+          <input type="checkbox" id="requireAdmin" ng-model="$ctrl.groupType.requireAdmin">
+          <label for="requireAdmin">
+              <span></span>
+          </label>
+          </input>
+      </div>
+    </div>
+
+    <hr class="dashed">
+
+    <div class="form-actions split" ng-if="!$ctrl.isReadonly()">
+        <section>
+            <button class="btn btn-primary" ng-disabled="!groupTypeForm.$valid"> Save
+                <i class="fa fa-spinner fa-spin" ng-if="$ctrl.isWorking"></i>
+                <i class="fa fa-thumbs-up" ng-if="$ctrl.isFinishedWorking"></i>
+            </button>
+        </section>
+
+        <section ng-if="!$ctrl.isNew">
+            <a class="btn btn-link" ng-click="$ctrl.promptToDelete()"> Delete</a>
+        </section>
+    </div>
+</form>

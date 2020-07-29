@@ -1,0 +1,58 @@
+<header class="sip-header">
+    <h3>Users</h3>
+    <i class="fa fa-users"></i>
+</header>
+
+<div class="form-validation-msg info allow-ng-animate" ng-if="UsersForProfile.isAddingUser || UsersForProfile.successfullyAddedUser">
+    <p ng-if="UsersForProfile.isAddingUser">Adding @{{ UsersForProfile.isAddingUser.userName }} <i class="fa fa-spinner fa-spin"></i></p>
+    <p ng-if="UsersForProfile.successfullyAddedUser">@{{ UsersForProfile.successfullyAddedUser.userName }} added!</p>
+</div>
+
+<div class="sip-sub-header">
+    <h4>{{ ApplicationPermissions.activeProfile.name }}</h4>
+</div>
+
+<div class="sip-body">
+    <ul class="nav nav-tabs grey">
+        <li ng-class="{active: UsersForProfile.activeTab === 'memberList'}">
+            <a ng-click="UsersForProfile.activeTab = 'memberList'">Members</a>
+        </li>
+        <li ng-class="{active: UsersForProfile.activeTab === 'ownerList'}">
+            <a ng-click="UsersForProfile.activeTab = 'ownerList'">Write Access Groups</a>
+        </li>
+    </ul>
+
+    <div ng-if="UsersForProfile.activeTab === 'memberList'">
+        <div style="padding: 20px;" id="wwt-vue-groups" ng-controller="VueGroupsCtrl">
+            <wwt-vue-groups
+                ng-non-bindable>
+                <group-member-list
+                    :group-id="groupId"
+                    :include-readonly-warning="true">
+                </group-member-list>
+            </wwt-vue-groups>
+        </div>
+    </div>
+
+    <div style="padding: 20px;" ng-if="UsersForProfile.activeTab === 'ownerList'">
+        <div ng-if="!UsersForProfile.writeAccessGroups || !UsersForProfile.writeAccessGroups.length">
+            This group has no write access groups. Write access groups are assigned on group types.
+        </div>
+
+        <div ng-if="UsersForProfile.writeAccessGroups && UsersForProfile.writeAccessGroups.length">
+            <p>In addition to the group admins, these groups have write access to this group.</p>
+            <hr class="dashed" />
+            <ul style="list-style-type: none; padding: 0;">
+                <li ng-repeat="group in UsersForProfile.writeAccessGroups">
+                    <a ui-sref="groups.groupDetail({ id: group.id })">{{ group.title }}</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <br><br><br><br>
+</div>
+
+<footer class="sip-footer">
+    <button class="btn btn-link" ng-click="ApplicationPermissions.activeProfile = ''" type="button">Done</button>
+</footer>

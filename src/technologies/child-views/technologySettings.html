@@ -1,0 +1,49 @@
+<br><br>
+<form name="editTechnologyForm" ng-submit="TechnologySettings.update()">
+    <div class="columns with-borders">
+        <section>
+            <div class="form-group required">
+                <label id="name">NAME</label>
+                <input ng-model="TechnologySettings.technology.name" id="technologyTitle" required="true" />
+            </div>
+
+            <div class="form-group required">
+                <label id="icon">ICON NAME</label>
+
+                <wwt-icon-type-ahead target-model="TechnologySettings.technology.iconName" placeholder="'Ex: thumbs-up'"></wwt-icon-type-ahead>
+            </div>
+
+            <div class="form-group">
+                <label>KEYWORDS</label>
+
+                <keywords-typeahead keyword-parent-object="TechnologySettings.technology"></keywords-typeahead>
+            </div>
+
+            <div class="form-group required">
+                <label id="description">DESCRIPTION</label>
+                <br>
+                <textarea msd-elastic rows="3" ng-model="TechnologySettings.technology.shortDescription" required="true"></textarea>
+            </div>
+
+            <hr class="dashed">
+
+            <div class="form-actions split">
+                <section>
+                    <button class="btn btn-primary" ng-disabled="!editTechnologyForm.$valid"> Save
+                         <i class="fa fa-spinner fa-spin" ng-if="TechnologySettings.isWorking"></i>
+                         <i class="fa fa-thumbs-up" ng-if="TechnologySettings.hasUpdated"></i>
+                    </button>
+                </section>
+
+                <section>
+                    <a class="btn btn-link" ng-click="TechnologySettings.deleteTech()">Delete</a>
+                </section>
+            </div>
+        </section>
+
+        <section>
+            <connected-items-list></connected-items-list>
+        </section>
+    </div>
+
+</form>

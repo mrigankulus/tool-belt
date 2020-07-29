@@ -1,0 +1,104 @@
+<br>
+
+<section class="allow-ng-animate default-animation" ng-if="DependencyList.wwtDeps && DependencyList.wwtDeps.length">
+
+    <p class="allow-ng-animate default-animation muted text-center" ng-if="DependencyList.hasApiDeps">
+        <br>
+        <b>APIs</b> include the last <b>1,000 requests</b> (not including the user service). These results will be <b>cached</b> in your browser until you refresh.
+        <br>
+    </p>
+
+    <div class="cards third allow-ng-animate default-animation">
+        <api-card api="dep" ng-if="dep.type === 'api'" ng-repeat="dep in DependencyList.wwtDeps" includes-icon="true"></api-card>
+        <component-card component="dep" ng-if="dep.type == 'component'" ng-repeat="dep in DependencyList.wwtDeps"></component-card>
+
+    </div>
+
+    <hr class="dashed">
+</section>
+
+<repo-connect ng-if="DependencyList.canEdit && assetState.shouldShowRepoConnectForm()" on-repo-connected="assetState.oAddRepo"></repo-connect>
+
+<div class="blank-slate-tab" ng-if="!DependencyList.canEdit && DependencyList.permissionsHaveLoaded && assetState.shouldShowRepoConnectForm()">
+    <i class="fa fa-lock"></i>
+
+    <section>
+        <p>It looks like there is no connected repo and you don't have <strong>permission</strong> to add one. Please contact the service desk if you feel this is a mistake, or you'd like the required permissions.</p>
+    </section>
+</div>
+
+<div class="columns with-borders dependencies" ng-if="!assetState.shouldShowRepoConnectForm()">
+
+    <section ng-if="!assetState.currentAsset.packageJson.dependencies && !assetState.currentAsset.packageJson.peerDependencies && !assetState.currentAsset.packageJson.devDependencies">
+        <p>No dependencies listed.</p>
+    </section>
+
+    <section ng-if="DependencyList.shouldShowDeps(assetState.currentAsset.packageJson.dependencies)">
+        <h3>Dependencies</h3>
+
+        <ul class="dependency-list">
+            <li ng-repeat="(dep, version) in assetState.currentAsset.packageJson.dependencies">
+
+                <span ng-if="!DependencyList.isLinkableDep(dep)">
+                    {{ dep }} &nbsp; <small>{{ version }}</small>
+
+                    <a ng-href="{{ DependencyList.getNPMLink(dep) }}" class="npm-logo" target="_blank">
+                        <img ng-src="img/npm-logo.svg">
+                    </a>
+                </span>
+
+                <span ng-if="DependencyList.isLinkableDep(dep)">
+                    <a ui-sref="componentDetail({id: dep})">
+                        {{ dep }} &nbsp; <small>{{ version }}</small>
+                    </a>
+                </span>
+
+            </li>
+        </ul>
+
+    </section>
+
+    <section ng-if="DependencyList.shouldShowDeps(assetState.currentAsset.packageJson.peerDependencies)">
+        <h3>Peer Dependencies</h3>
+
+        <ul class="dependency-list">
+            <li ng-repeat="(dep, version) in assetState.currentAsset.packageJson.peerDependencies">
+
+                <span ng-if="!DependencyList.isLinkableDep(dep)">
+                    {{ dep }} &nbsp; <small>{{ version }}</small>
+
+                    <a ng-href="{{ DependencyList.getNPMLink(dep) }}" class="npm-logo" target="_blank">
+                        <img ng-src="img/npm-logo.svg">
+                    </a>
+                </span>
+
+                <span ng-if="DependencyList.isLinkableDep(dep)">
+                    <a ui-sref="componentDetail({id: dep})">
+                        {{ dep }} &nbsp; <small>{{ version }}</small>
+                    </a>
+                </span>
+
+            </li>
+        </ul>
+
+    </section>
+
+
+    <section ng-if="DependencyList.shouldShowDeps(assetState.currentAsset.packageJson.devDependencies)">
+        <h3>Dev Dependencies</h3>
+
+        <ul class="dependency-list">
+            <li ng-repeat="(dep, version) in assetState.currentAsset.packageJson.devDependencies">
+                <!-- todo: should we try to link these like the other components? -->
+                <span>
+                    {{ dep }} &nbsp; <small>{{ version }}</small>
+
+                    <a ng-href="{{ DependencyList.getNPMLink(dep) }}" class="npm-logo" target="_blank">
+                        <img ng-src="img/npm-logo.svg">
+                    </a>
+                </span>
+            </li>
+        </ul>
+
+    </section>
+</div>

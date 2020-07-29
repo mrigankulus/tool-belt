@@ -1,0 +1,41 @@
+<br>
+<div class="item-detail-content-header short">
+    <section>
+
+        <div class="nav nav-pills" ng-if="EventTypes.isViewingHowTo()">
+            <li ui-sref="eventTypes"><a class="clickable"><i class="fa fa-angle-left"></i> Back to Event Types</a></li>
+
+            <li ui-sref="eventTypes.howTo" ng-class="{active: EventsHowTo.isOnGeneralTab()}">
+                <a class="clickable">
+                    General Info
+                </a>
+            </li>
+
+            <li ui-sref="eventTypes.howTo.ui" ui-sref-active="active">
+                <a class="clickable">
+                    <i class="wwt-icon-code"></i> UI
+                </a>
+            </li>
+
+            <li ui-sref="eventTypes.howTo.node" ui-sref-active="active">
+                <a class="clickable">
+                    <i class="wwt-icon-node-js"></i> Node.js
+                </a>
+            </li>
+
+            <li ui-sref="eventTypes.howTo.grails" ui-sref-active="active">
+                <a class="clickable">
+                    <i class="wwt-icon-grails"></i> Grails
+                </a>
+            </li>
+
+        </div>
+
+
+    </section>
+
+</div>
+
+<hr>
+
+<ui-view></ui-view>

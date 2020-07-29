@@ -1,0 +1,13 @@
+<!-- Vue WWT App Toolbar -->
+<div id="wwt-app-toolbar" ng-controller="TitleBarCtrl as TitleBar">
+    <wwt-app-toolbar
+        ng-non-bindable
+        app-name="Dev Tool Belt"
+        v-bind:user="user">
+        <section slot="app-utilities" class="atb-app-utilities">
+            <wwt-env-banner
+                :show-in-prod="true"
+                @change-env="changeEnvironment" />
+        </section>
+    </wwt-app-toolbar>
+</div>

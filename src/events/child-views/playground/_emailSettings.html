@@ -1,0 +1,77 @@
+<a class="btn btn-link"
+   ng-if="!EventTypePlayground.isAddingEmailSettings"
+   ng-click="EventTypePlayground.isAddingEmailSettings = true">
+
+    <i class="fa fa-plus"></i> Email Settings
+</a>
+
+<section class="panel panel-default" ng-if="EventTypePlayground.isAddingEmailSettings">
+    <div class="panel-heading">Email Settings</div>
+
+    <div class="panel-body">
+        <div class="form-group">
+            <label>No Logo</label>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="noLogo" ng-model="EventTypePlayground.requiredTokenData.emailSettings.noLogo">
+                    <label for="noLogo">
+                        <span></span>
+                    </label>
+                </input>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Include Subject</label>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="includeSubject" ng-model="EventTypePlayground.requiredTokenData.emailSettings.includeSubject">
+                    <label for="includeSubject">
+                        <span></span>
+                    </label>
+                </input>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Include Actor Image</label>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="includeActorImage" ng-model="EventTypePlayground.requiredTokenData.emailSettings.includeActorImage">
+                    <label for="includeActorImage">
+                        <span></span>
+                    </label>
+                </input>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Format</label>
+            <input ng-model="EventTypePlayground.requiredTokenData.format" placeholder="Ex: markdown">
+        </div>
+
+        <div class="form-group">
+            <label>Content Type</label>
+            <input ng-model="EventTypePlayground.requiredTokenData.emailSettings.contentType" placeholder="Ex: text/calendar">
+        </div>
+
+        <div class="form-group">
+            <label>Brand <small>(Defaults to WWT)</small></label>
+            <input ng-model="EventTypePlayground.requiredTokenData.emailSettings.brand" placeholder="Ex: telcobuy">
+        </div>
+
+        <hr>
+
+        <p class="lead"><small>Best not to fiddle with these unless you have a good reason.</small></p>
+
+        <div class="form-group">
+            <label>From</label>
+            <input ng-model="EventTypePlayground.requiredTokenData.emailSettings.from" placeholder="Ex: me@wwt.com">
+        </div>
+
+        <div class="form-group">
+            <label>Reply To</label>
+            <input ng-model="EventTypePlayground.requiredTokenData.emailSettings.replyTo" placeholder="Ex: me@wwt.com">
+        </div>
+    </div>
+</section>

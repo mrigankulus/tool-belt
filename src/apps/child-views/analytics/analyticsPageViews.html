@@ -1,0 +1,52 @@
+<div ng-if="ApplicationAnalytics.chartConfig && ApplicationAnalytics.pageViewsChartConfig" class="analytics-reports">
+
+    <div class="processing-overlay" ng-class="{active: ApplicationAnalytics.isLoadingReports}"><i class="fa fa-spinner fa-spin"></i></div>
+
+    <!-- Views by date -->
+    <div class="chart-wrapper">
+        <a class="analytics-json-link" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/applications/{{ assetState.currentAsset.id }}/analytics/pageViewsByDate" target="_blank">JSON</a>
+
+        <div class="chart-inner">
+            <highchart id="chart1" ng-if="ApplicationAnalytics.chartConfig" config="ApplicationAnalytics.chartConfig"></highchart>
+        </div>
+    </div>
+
+    <hr ng-if="ApplicationAnalytics.hasGAConnection()">
+
+    <!-- Views by Page -->
+    <div class="chart-wrapper">
+        <a class="analytics-json-link" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/applications/{{ assetState.currentAsset.id }}/analytics/pageViews" target="_blank">JSON</a>
+
+        <div class="chart-inner">
+            <highchart id="chart2" ng-if="ApplicationAnalytics.pageViewsChartConfig" config="ApplicationAnalytics.pageViewsChartConfig"></highchart>
+        </div>
+    </div>
+
+    <br>
+    <hr>
+    <br>
+
+    <h3 class="text-center" ng-if="ApplicationAnalytics.hasGAConnection()">
+        Views by User <a class="btn btn-link btn-sm" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/applications/{{ assetState.currentAsset.id }}/analytics/pageViewsByUser" target="_blank">JSON</a>
+    </h3>
+
+    <ul class="analytics-user-list">
+        <div ng-repeat="item in ApplicationAnalytics.userData | limitTo: ApplicationAnalytics.getLimitTo()">
+            <section>
+                <wwt-user-image image-size="large" user-name="item['ga:customVarValue2']"></wwt-user-image>
+            </section>
+
+            <section>
+                <h3>{{ item['ga:customVarValue1'] }}</h3>
+                <p>{{ item['ga:pageviews'] | number }}</p>
+            </section>
+        </div>
+    </ul>
+
+    <button ng-if="ApplicationAnalytics.showAllUsersToggle"
+            ng-click="ApplicationAnalytics.showAllAnalyticsUsers()" class="btn btn-link">
+        <span ng-if="!ApplicationAnalytics.showAllUsers">Show All Users</span>
+        <span ng-if="ApplicationAnalytics.showAllUsers">Show Less</span>
+    </button>
+
+</div>

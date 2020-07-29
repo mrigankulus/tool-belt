@@ -1,0 +1,49 @@
+<br>
+
+<div class="container">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section>
+                    <h1>{{ TaskType.taskType.titleSingular }}</h1>
+
+                    <p ng-if="TaskType.taskType">
+                        <a ui-sref="taskTypes"><i class="fa fa-angle-left"></i> All Types</a>
+
+                        &nbsp;
+                        |
+                        &nbsp;
+
+                        <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/task-types/{{ TaskType.taskType.id }}" target="_blank">JSON</a>
+
+                        &nbsp;
+                        |
+                        &nbsp;
+
+                        Created {{ TaskType.taskType.who.creationDate | date }}
+                    </p>
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+                <div class="item-detail-content-header short" hl-sticky offset-top="95">
+                    <ul class="nav nav-tabs">
+                        <li ng-repeat="tab in TaskType.tabs"
+                            ui-sref-active="active"
+                            ng-class="{'pull-right': tab.slug === 'settings'}">
+
+                            <a ui-sref="taskType.{{ tab.slug }}">
+                                <i class="fa fa-cog" ng-if="tab.slug === 'settings'"></i>
+                                 {{ tab.displayName }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <br><br>
+                <ui-view ng-if="TaskType.taskType"></ui-view>
+                <br><br>
+            </section>
+        </main>
+    </article>
+</div>

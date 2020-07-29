@@ -1,0 +1,179 @@
+<div class="blank-slate-tab" ng-if="ApplicationPermissions.roles && !ApplicationPermissions.roles.length">
+    <i class="fa fa-user-secret"></i>
+
+    <section>
+        <h2>No Roles Yet</h2>
+
+        <p><strong><a ng-click="ApplicationPermissions.openNewRoleForm()" class="clickable">Create a role</a></strong> to get started.</p>
+    </section>
+</div>
+
+<section ng-if="ApplicationPermissions.roles && ApplicationPermissions.hasOrphanedPermissions()" class="alert alert-warning allow-ng-animate">
+
+    It looks like there are <strong>unused</strong> permissions for this app. Drop these permissions on a role to utilize them.
+
+    <ul class="formatted-list">
+        <li class="columns" ng-repeat="permission in ApplicationPermissions.allPermissions | filter: ApplicationPermissions.isOrphanedPermission | orderBy: 'name'">
+
+            <section draggable="true"
+                    effect-allowed="copy"
+                    draggable-type="custom-object"
+                    draggable-data="permission">
+
+                <span class="moveable">
+                    <i class="fa fa-th-large formatted-list-highlight-on-hover"></i>
+
+                    &nbsp;&nbsp;
+
+                    {{ permission.name }}
+
+                    &nbsp;&nbsp;
+                </span>
+
+                <i class="fa fa-trash muted clickable formatted-list-show-on-hover" ng-click="ApplicationPermissions.deletePermission(permission)"></i>
+            </section>
+        </li>
+    </ul>
+
+</section>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="ApplicationPermissions.isAddingRole">
+
+    <form class="columns vertical-center with-padding" ng-submit="ApplicationPermissions.createRole()" ng-if="ApplicationPermissions.isAddingRole">
+        <section class="flex-2">
+            <div class="form-group">
+                <label>Name</label>
+                <input ng-model="ApplicationPermissions.newRole.name"
+                       placeholder="Ex. Internal Sales Rep"
+                       id="newPermissionName"
+                       required="true"></input>
+            </div>
+        </section>
+
+        <section class="flex-2">
+            <div class="form-group">
+                <label>Description</label>
+                <textarea msd-elastic ng-model="ApplicationPermissions.newRole.description" placeholder="What does this role mean?" rows="1" required="true"></textarea>
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!ApplicationPermissions.newRoleIsValid()">
+
+                    Save
+                     <i class="fa fa-spinner fa-spin" ng-if="ApplicationPermissions.isSavingNewRole"></i>
+                </button>
+                <a class="btn btn-link" ng-click="ApplicationPermissions.isAddingRole = false">Cancel</a>
+            </div>
+        </section>
+    </form>
+
+</section><!-- /.panel-new -->
+
+<p class="muted text-center" ng-if="ApplicationPermissions.roles && ApplicationPermissions.roles.length > 1"><strong>Drag and Drop</strong> permissions onto roles to reuse them.<br><br></p>
+
+<div class="permissions-panels">
+
+    <section class="panel panel-default"
+             ng-repeat="role in ApplicationPermissions.roles | orderBy: 'name'"
+             drop="ApplicationPermissions.onDropPermission($data, $event, role)"
+             drop-effect="copy"
+             drop-accept="ApplicationPermissions.canDropOnRole(role)"
+             drag-over-class="drag-over-accept">
+
+        <div class="panel-heading">
+            <i class="fa fa-cog pull-right clickable" ng-if="ApplicationPermissions.isDeveloper"
+               ng-click="role.isEditing = !role.isEditing"></i>
+
+             {{ role.name }}
+             &nbsp;
+            <i class="fa fa-question-circle muted" uib-tooltip="{{ role.description }}" tooltip-popup-delay="300"></i>
+        </div>
+
+        <div class="panel-body" ng-if="role.isEditing" ng-class="{'is-editing' : role.isEditing}">
+
+           <div class="panel-prompt allow-ng-animate" ng-if="role.isPromptingToDeleteRole">
+                <h4 class="text-center">Are you sure?</h4>
+
+                <p class="text-center">Deleting this role cannot be undone.</p>
+
+                <div class="form-actions">
+                    <a class="wwt-mini-btn alpha-btn"
+                       ng-click="ApplicationPermissions.confirmDeleteRole(role.isPromptingToDeleteRole)">Delete</a>
+
+                    <a class="wwt-mini-btn cancel" ng-click="role.isPromptingToDeleteRole = false">Cancel</a>
+                </div>
+            </div>
+
+            <form ng-submit="ApplicationPermissions.updateRole(role)">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input ng-model="role.name" placeholder="Ex. Admin" required="true"></input>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea msd-elastic ng-model="role.description" placeholder="What does this role mean?" required="true"></textarea>
+                </div>
+
+                <div class="form-actions split">
+                    <section>
+                        <button class="btn btn-primary"
+                                type="submit">
+
+                            Save
+                             <i class="fa fa-spinner fa-spin" ng-if="role.isSavingRoleUpdate"></i>
+                        </button>
+
+                        <a class="btn btn-link" ng-click="role.isEditing = false">Cancel</a>
+                    </section>
+
+                    <section>
+                        <a class="btn btn-link" ng-click="role.isPromptingToDeleteRole = role">Delete</a>
+                    </section>
+                </div>
+            </form>
+        </div>
+
+        <div ng-if="!role.isEditing" class="auto-scroll">
+            <ul class="nav nav-tabs" ng-if="ApplicationPermissions.isDeveloper">
+                <li ng-class="{active: !role.isViewingProfiles}">
+                    <a class="clickable" ng-click="role.isViewingProfiles = false">Permissions</a>
+                </li>
+
+                <li ng-class="{active: role.isViewingProfiles}">
+                    <a class="clickable"
+                       ng-click="role.isViewingProfiles = true"
+                       uib-tooltip="Link a profile to assign users to this role."
+                       tooltip-enable="false"
+                       tooltip-popup-delay="300">
+
+                        Groups
+                         <!-- <i class="fa fa-warning"></i> -->
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="nav nav-tabs" ng-if="!ApplicationPermissions.isDeveloper">
+                <li class="active">
+                    <a>Groups</a>
+                </li>
+            </ul>
+
+            <div class="panel-body">
+
+                <ng-include ng-if="!role.isViewingProfiles"
+                            src="'common-tabs/applicationPermissions/permissions/permissions/managePermissions.html'"
+                            ng-controller="ManagePermissionsCtrl as ManagePermissions"></ng-include>
+
+                <ng-include ng-if="role.isViewingProfiles"
+                            src="'common-tabs/applicationPermissions/permissions/profiles/manageProfiles.html'"
+                            ng-controller="ManageProfilesCtrl as ManageProfiles"></ng-include>
+
+            </div>
+        </div>
+    </section>
+</div>

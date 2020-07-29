@@ -1,0 +1,12 @@
+<div class="blank-slate-tab" ng-if="!$ctrl.loading && !$ctrl.tasks">
+    <i class="fa fa-info-circle"></i>
+
+    <section>
+        <p>No <strong>Open</strong> {{ TaskType.taskType.titlePlural }}</p>
+    </section>
+</div>
+
+<div ng-if="$ctrl.tasks">
+    <h2 class="item-detail-sub-section-title">Latest 25 Open Tasks</h2>
+    <wwt-task-card ng-repeat="task in $ctrl.tasks" task="task"></wwt-task-card>
+</div>

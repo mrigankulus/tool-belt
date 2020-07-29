@@ -1,0 +1,17 @@
+<section class="dashboard-chart-container" style="overflow: hidden;" ng-style="!ApiMetrics.splunkReportsAreHidden ? {'height': '425px'} : ''" ng-class="{'active': !ApiMetrics.splunkReportsAreHidden }">
+    <header>
+        <i class="fa"
+           ng-click="ApiMetrics.toggleIsViewingSplunkReport()"
+           ng-class="{'fa-chevron-down': ApiMetrics.splunkReportsAreHidden, 'fa-chevron-up': !ApiMetrics.splunkReportsAreHidden}"></i>
+
+        <h3 class="clickable" ng-if="ApiMetrics.splunkReportsAreHidden" ng-click="ApiMetrics.toggleIsViewingSplunkReport()"><i class="fa fa-bar-chart"></i> API Metrics</h3>
+    </header>
+
+    <article ng-if="!ApiMetrics.splunkReportsAreHidden">
+        <div class="text-center">
+            <a ng-href="https://splunk.wwt.com/en-US/app/search/all_api_metrics?form.field1.earliest=-2h&form.field1.latest=now&form.environment={{ ApiMetrics.getReportEnv() }}" target="_blank">View in Splunk</a>
+        </div>
+        <br>
+        <iframe height="411" width="100%" frameborder="0" ng-src="{{ ApiMetrics.getSplunkReportUrl() }}"></iframe>
+    </article>
+</section>

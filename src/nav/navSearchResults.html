@@ -1,0 +1,47 @@
+<div wwt-scroll-trap="globalSearchScrollTrap" class="search-results">
+
+    <div ng-repeat="collection in Nav.searcherCollections.resultCollections" ng-class="collection.slug">
+
+        <h4 ng-if="collection.results.length" class="bkg-color">{{ collection.title }}</h4>
+
+        <div ng-repeat="result in collection.results | orderBy: 'title' | limitTo: collection.limit">
+            <a ui-sref="{{ result.targetState }}" tabindex="0">
+                <dl>
+                    <dt ng-if="result.icon || result.userName"
+                        ng-class="{'bkg-color': !result.userName}">
+
+                        <i class="wwt-icon-{{ result.icon || 'question' }}"
+                           ng-if="result.icon"></i>
+
+                        <wwt-user-image image-size="small"
+                                        user-name="result.userName"
+                                        ng-if="result.userName"></wwt-user-image>
+                    </dt>
+
+                    <dd>{{ result.title }}</dd>
+
+                    <div class="user-info-banner" ng-if="result.enabled == false">DISABLED</div>
+                    <div class="user-info-banner" ng-if="result.type === 'svc'">SVC USER</div>
+                    <div class="user-info-banner" ng-if="result.type === 'external'">EXTERNAL</div>
+
+                </dl>
+            </a>
+        </div>
+
+        <div ng-if="collection.results && (collection.results.length > collection.limit)">
+            <a class="search-more" ng-click="collection.limit = collection.results.lenth">
+                <dl>
+                    <dd>
+                        Show {{ collection.results.length - collection.limit }} more...
+                    </dd>
+                </dl>
+            </a>
+        </div>
+    </div>
+
+    <div class="no-search-results allow-ng-animate" ng-if="Nav.shouldShowNoResults()">
+        <i class="fa fa-search"></i>
+        <p>No results found.</p>
+    </div>
+
+</div>

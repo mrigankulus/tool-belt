@@ -1,0 +1,96 @@
+<br><br>
+<form ng-submit="ResourceTypeSettings.update()">
+    <div class="columns with-borders">
+        <section>
+            <div class="form-group required">
+
+                <label id="title">TITLE</label>
+
+                <p><small>A human-readable name used to describe the Resource Type throughout the user interface. A good name might be Service Quote.</small></p>
+
+                <input ng-model="ResourceTypeDetail.resourceType.title" placeholder="Ex: Service Quote" />
+            </div>
+
+            <div class="form-group required">
+                <label id="id">ID</label>
+
+                <p><small>The slug version of the title that is used by developers to create associations between Resource Types.</small></p>
+
+                <input ng-model="ResourceTypeDetail.resourceType.id" placeholder="Ex: service-quote" disabled="disabled" />
+            </div>
+
+            <div class="form-group required">
+                <label id="description">DESCRIPTION</label>
+
+                <p><small>A brief explanation describing the Resource Type.</small></p>
+
+                <textarea msd-elastic rows="3" ng-model="ResourceTypeDetail.resourceType.description"></textarea>
+            </div>
+        </section>
+
+        <section>
+            <h4>Optional Settings</h4>
+
+            <br>
+
+            <div class="form-group">
+
+                <label id="title">PLURAL TITLE</label>
+
+                <p><small>The plural title will be used for other applications and components when referencing this resource type in a plural context.</small></p>
+
+                <input ng-model="ResourceTypeDetail.resourceType.titlePlural" placeholder="Ex: Service Quotes" />
+            </div>
+
+            <div class="form-group">
+
+                <label id="title">SINGULAR TITLE</label>
+
+                <p><small>Your title should be in singular format, but you can use this to override that if needed. The singular format will be used in other applications and components. </small></p>
+
+                <input ng-model="ResourceTypeDetail.resourceType.titleSingular" placeholder="Ex: Service Quote" />
+            </div>
+
+            <div class="form-group">
+                <label>URL</label>
+
+                <p><small>The URL will be used by the Resources API to retrieve data about this Resource Type based on Resource IDs. The Resources API handles selecting the appropriate environment's ApiRouter to use.</small></p>
+
+                <input ng-model="ResourceTypeDetail.resourceType.url" placeholder="Ex: attachments-api/attachments" />
+            </div>
+
+            <div class="form-group">
+                <label>RESOURCE URL</label>
+                <p><small>The Resource URL will be a template URL used to retrieve data about <b>a single Resource</b> based on its Resource ID. Please see the input placeholder for the proper syntax.</small></p>
+                <input ng-model="ResourceTypeDetail.resourceType.resourceUrl" placeholder="Ex: attachments-api/attachments/{resourceId}" />
+            </div>
+
+            <div class="form-group">
+                <label>QUERY PARAMS</label>
+
+                <p><small>Query params are appended to the end of the URL if an event is querying an API.</small></p>
+
+                <input ng-model="ResourceTypeDetail.resourceType.queryParams" placeholder="Ex: pagination=false&log=false" />
+            </div>
+            <div class="form-group">
+                <input type="checkbox" ng-model="ResourceTypeDetail.resourceType.requiresModeration" ng-checked="ResourceTypeDetail.resourceType.requiresModeration" placeholder="Ex: pagination=false&log=false" />
+                <label>REQUIRE COMMENT MODERATION</label>
+            </div>
+        </section>
+    </div>
+
+    <hr class="dashed">
+
+    <div class="form-actions split">
+        <section>
+            <button class="btn btn-primary" ng-disabled="!ResourceTypeSettings.formIsValid()"> Save
+                 <i class="fa fa-spinner fa-spin" ng-if="ResourceTypeSettings.isUpdatingResourceType"></i>
+                 <i class="fa fa-thumbs-up" ng-if="ResourceTypeSettings.hasUpdatedResourceType"></i>
+            </button>
+        </section>
+
+        <section>
+            <a class="btn btn-link" ng-click="ResourceTypeSettings.deleteResourceType()">Delete</a>
+        </section>
+    </div>
+</form>

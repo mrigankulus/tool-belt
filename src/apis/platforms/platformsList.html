@@ -1,0 +1,64 @@
+<form class="item-detail-content-header-form allow-ng-animate"
+      ng-if="PlatformsList.isAddingNew"
+      ng-submit="PlatformsList.submitNewPlatform()"
+      name="newPlatformForm">
+
+    <div class="columns vertical-center">
+        <section class="flex-2">
+            <div class="form-group">
+                <label>Platform Name</label>
+                <input ng-model="PlatformsList.newPlatform.platformName" id="platformName" placeholder="Ex: CloudFoundry" required="required">
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary" ng-disabled="!newPlatformForm.$valid">Submit</button>
+                <a class="btn btn-link" ng-click="PlatformsList.cancelNewPlatform()">Cancel</a>
+            </div>
+        </section>
+    </div>
+</form>
+
+<section class="item-detail-content">
+
+    <div class="item-detail-content-header" hl-sticky offset-top="95">
+        <section>
+
+            <div class="resource-types-search">
+                <i class="fa fa-search"></i>
+
+                <input id="secondarySearchInput"
+                       type="text"
+                       class="no-input"
+                       ng-model="PlatformsList.resourceTypeSearchText"
+                       tabindex="0"
+                       placeholder="Search Platforms">
+            </div>
+
+        </section>
+
+        <section>
+            <button class="btn btn-primary btn-xs"
+                    ng-click="PlatformsList.isAddingNew = true"
+                    auto-focus="#platformName"
+                    ng-if="Platforms.canEditPlatforms">
+
+                <i class="fa fa-plus"></i> Add New Platform
+            </button>
+        </section>
+    </div>
+
+    <div class="cards">
+
+        <section class="card-outer" ng-repeat="platform in PlatformsList.platforms | filter: PlatformsList.resourceTypeSearchText | orderBy: 'platformName'">
+
+            <a class="card-inner clickable" ui-sref="^.platformDetail({id: platform.id})" tabindex="0">
+                <h3 class="card-header">{{ platform.platformName }}</h3>
+            </a>
+
+        </section>
+
+    </div>
+
+</section>

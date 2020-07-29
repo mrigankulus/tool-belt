@@ -1,0 +1,200 @@
+<br><br>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="EventTypeSubscriptions.isAddingSubscriber">
+
+    <form class="columns vertical-center with-padding" ng-submit="EventTypeSubscriptions.subscribeUser()">
+
+        <section></section>
+
+        <section class="flex-2">
+            <div class="form-group">
+                <br>
+                <user-typeahead target-model-parent="EventTypeSubscriptions.newUser"
+                                on-select-user="EventTypeSubscriptions.onSelectUserFromTypeAhead"
+                                placeholder="'Add User'"></user-typeahead>
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!EventTypeSubscriptions.newUser">
+
+                    Save
+                     <i class="fa fa-spinner fa-spin" ng-if="EventTypeSubscriptions.isSavingSubscriber"></i>
+                </button>
+                <a class="btn btn-link" ng-click="EventTypeSubscriptions.isAddingSubscriber = false;">Cancel</a>
+            </div>
+        </section>
+    </form>
+
+</section>
+
+<div class="item-detail-content-header" ng-if="EventTypeSubscriptions.subscribersHaveLoaded">
+    <section>
+
+        <div class="resource-types-search">
+            <i class="fa fa-search" ng-if="!EventTypeSubscriptions.isSearching"></i>
+            <i class="fa fa-spin fa-spinner" ng-if="EventTypeSubscriptions.isSearching"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="EventTypeSubscriptions.userSearchText"
+                   ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }"
+                   ng-change="EventTypeSubscriptions.onSearch(EventTypeSubscriptions.userSearchText)"
+                   tabindex="0"
+                   placeholder="Search Users" />
+        </div>
+    </section>
+
+    <section class="item-detail-header-actions">
+        <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/subscribable-resource-types/{{ EventTypeDetail.eventType.resourceType.id }}/event-types/{{ EventTypeDetail.eventType.id }}/subscribers?pageSize=100" target="_blank">JSON</a>
+
+        <a class="btn btn-link btn-xs" style="border-left: 1px solid #ccc;" ng-click="wwtFocusPanelSVC.togglePanel('subscriptionSettingsForm')">Settings</a>
+
+        <button class="btn btn-primary btn-xs" ng-click="EventTypeSubscriptions.isAddingSubscriber = true">
+            <i class="fa fa-plus"></i> Subscribe User
+        </button>
+    </section>
+</div>
+
+<div ng-if="EventTypeSubscriptions.subscribersHaveLoaded && !EventTypeSubscriptions.subscribers.length">
+    <br><br>
+    <div class="blank-slate-tab">
+        <i class="fa fa-users"></i>
+
+        <section>
+            <h2 ng-if="!EventTypeSubscriptions.userSearchText">No Subscribers Yet</h2>
+            <h2 ng-if="EventTypeSubscriptions.userSearchText">No Subscribers Matching "{{ EventTypeSubscriptions.userSearchText }}"</h2>
+
+            <p><a class="clickable" ng-click="EventTypeSubscriptions.isAddingSubscriber = true"><strong>Add a subscriber</strong></a> to get started.</p>
+        </section>
+    </div>
+</div>
+
+<article class="cards"
+     ng-if="EventTypeSubscriptions.subscribersHaveLoaded && EventTypeSubscriptions.subscribers.length">
+
+    <section class="card-outer" ng-repeat="user in EventTypeSubscriptions.subscribers | orderBy: 'userName'">
+
+        <a class="card-inner clickable" ng-click="EventTypeSubscriptions.currentSubscriber = user" tabindex="0">
+            <div class="columns with-borders small-borders">
+                <section>
+                    <wwt-user-image user-name="user.userName"></wwt-user-image>
+                </section>
+
+                <section class="flex-5">
+                    <h3 class="card-header">{{ '@' + user.userName }}</h3>
+                    <p class="card-content">
+                        Scope: <strong>{{ user.scope }}</strong>
+                        <br>
+                        {{ user.reason }}
+                    </p>
+                </section>
+            </div>
+        </a>
+
+    </section>
+
+</article>
+
+<div class="text-center" ng-if="EventTypeSubscriptions.subscribersHaveLoaded && EventTypeSubscriptions.subscribers.length === EventTypeSubscriptions.query.pageSize">
+    <br>
+    <a class="btn btn-link" ng-click="EventTypeSubscriptions.nextPage()">Show More</a>
+</div>
+
+<div class="slide-in-panel sip-right allow-ng-animate"
+     ng-if="EventTypeSubscriptions.currentSubscriber">
+
+     <subscription-panel subscriber="EventTypeSubscriptions.currentSubscriber"
+                         resource-type="EventTypeDetail.eventType.resourceType"
+                         subscribers="EventTypeSubscriptions.subscribers"></subscription-panel>
+</div>
+
+<div class="page-overlay allow-ng-animate" ng-if="EventTypeSubscriptions.currentSubscriber" ng-click="EventTypeSubscriptions.currentSubscriber = false"></div>
+
+<wwt-focus-panel panel-name="'subscriptionSettingsForm'"
+                 position="'right'"
+                 header-text="'Subscription Settings'"
+                 header-icon="'pencil'"
+                 backdrop="true">
+
+    <section class="fp-container">
+        <p>Public Subscription Settings tell common UIs whether or not to show this event type to users as something they can subscribe to. It doesn't actually prevent subscriptions.</p>
+        <div class="form-group">
+            <label>
+                Show for Internal Users
+            </label>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="internalUsers" ng-model="EventTypeDetail.eventType.publicSubscriptionSettings.allowInternal">
+                <label for="internalUsers">
+                    <span></span>
+                </label>
+                </input>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>
+                Show for External Users
+            </label>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="externalUsers" ng-model="EventTypeDetail.eventType.publicSubscriptionSettings.allowExternal">
+                <label for="externalUsers">
+                    <span></span>
+                </label>
+                </input>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>
+                Internal Users can subscribe to all resources.
+            </label>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="internalUsersAll" ng-model="EventTypeDetail.eventType.publicSubscriptionSettings.allowSubscribeAllInternal">
+                <label for="internalUsersAll">
+                    <span></span>
+                </label>
+                </input>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>
+                External Users can subscribe to all resources.
+            </label>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="externalUsersAll" ng-model="EventTypeDetail.eventType.publicSubscriptionSettings.allowSubscribeAllExternal">
+                <label for="externalUsersAll">
+                    <span></span>
+                </label>
+                </input>
+            </div>
+        </div>
+    </section>
+
+    <section class="fp-footer">
+        <div class="form-actions split">
+            <section>
+                <button type="submit" class="btn btn-primary"
+                        analytics=" 'Event Type Actions', 'Subscription Settings Updated' "
+                        ng-click="EventTypeSubscriptions.updateSettings()">
+                    <i class="fa fa-spin fa-spinner" ng-if="EventTypeDetail.isWorking"></i>
+                    <i class="fa fa-thumbs-up" ng-if="EventTypeDetail.isFinishedWorking"></i>
+                     Save
+                </button>
+                <a class="btn btn-link" ng-click="wwtFocusPanelSVC.togglePanel('subscriptionSettingsForm')"> Cancel</a>
+            </section>
+
+            <section>
+            </section>
+        </div>
+    </section>
+</wwt-focus-panel>

@@ -1,0 +1,10 @@
+<div class="watcher-envrionment-warning" ng-if="shouldShowEnvironmentWarning()">
+    <span popover-placement="left"
+          popover-popup-delay="300"
+          popover-trigger="mouseenter"
+          uib-popover="Important! If you watch this in {{ getEnvText() }}, you'll only be notified of changes in {{ getEnvText() }}. Those notifications won't make it to your production email inbox.">
+        <i class="fa fa-warning"></i> {{ getEnvText() }} Only!
+    </span>
+</div>
+
+<wwt-resource-watcher resource-watcher-settings="dtbResourceWatcherSettings" ng-if="dtbResourceWatcherSettings"></wwt-resource-watcher>

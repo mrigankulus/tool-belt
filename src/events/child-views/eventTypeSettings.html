@@ -1,0 +1,169 @@
+<br><br>
+<form name="eventTypeSettingsForm">
+    <div class="columns with-borders">
+        <section>
+            <div class="form-group required">
+
+                <label id="title">TITLE</label>
+
+                <p><small>A human-readable name used to describe the Event Type throughout the user interface. A good name might be Quote Won.</small></p>
+
+                <input required="true" ng-model="EventTypeDetail.eventType.title" placeholder="Ex: Quote Won">
+            </div>
+
+            <div class="form-group required">
+                <label id="id">ID</label>
+
+                <p><small>The slug version of the title that is used by developers to create associations between Event Types.</small></p>
+
+                <input required="true" ng-model="EventTypeDetail.eventType.id" placeholder="Ex: quote-won" disabled="disabled">
+            </div>
+
+            <div class="form-group required">
+
+                <label id="resourceType">RESOURCE TYPE</label>
+
+                <p><small>Associates a Resource Type to your Event Type.
+                    <span>Don't see the one you need?
+                        <strong><a ng-click="wwtFocusPanelSVC.togglePanel('newResourceTypeForm')" auto-focus="#resourceTypeTitle">Add New Resource Type</a></strong> for your Event Type.
+                    </span>
+                </small></p>
+
+                <ui-select required="true"
+                           ng-model="EventTypeDetail.eventType.resourceType"
+                           ui-select-focus-input
+                           title="Add Resource Type">
+
+                    <ui-select-match placeholder="Add Resource Type...">{{ $select.selected.title }}</ui-select-match>
+
+                    <ui-select-choices repeat="resourceType in EventTypeDetail.resourceTypesOptions | filter:$select.search | orderBy: 'title'">
+                        {{ resourceType.title }}
+                    </ui-select-choices>
+
+                </ui-select>
+            </div>
+
+            <div class="form-group">
+
+                <label id="relatedAppId">RELATED APP</label>
+
+                <p><small>Associates an Application to your Event Type. This adds the app's icon to notifications and will help users find the right events to subscribe to.</small></p>
+
+                <ui-select ng-model="EventTypeDetail.eventType.relatedAppId" ui-select-focus-input>
+
+                    <ui-select-match placeholder="Add Related Application..." allow-clear="true">
+                        <i class="wwt-icon-{{ $select.selected.iconName || EventTypeSettings.getIconNameForAppId($select.selected) }}"></i>
+                        &nbsp;{{ $select.selected.appName || EventTypeSettings.getAppNameForAppId($select.selected) }}
+                    </ui-select-match>
+
+                    <ui-select-choices repeat="app.id as app in EventTypeSettings.apps | filter:$select.search | orderBy: 'appName'">
+                        <i class="wwt-icon-{{ app.iconName }}"></i>
+                        &nbsp;{{ app.appName }}
+                    </ui-select-choices>
+
+                </ui-select>
+            </div>
+
+            <div class="form-group required">
+                <label id="description">DESCRIPTION</label>
+
+                <p><small>A brief explanation describing the event in the workflow process in which this Event Type is being created for.</small></p>
+
+                <textarea required="true" rows="3" msd-elastic ng-model="EventTypeDetail.eventType.description"></textarea>
+            </div>
+
+        </section>
+
+        <section>
+
+            <div class="form-group">
+                <label id="amqpExchange">
+                    RABBITMQ EXCHANGE
+                     <i class="fa fa-question-circle popover-trigger"
+                        popover-trigger="mouseenter"
+                        popover-popup-delay="600"
+                        uib-popover-template="'events/child-views/tips/rabbitExchange.html'"></i>
+                </label>
+
+                <ui-select ng-model="EventTypeDetail.eventType.amqpExchange"
+                           ui-select-focus-input
+                           limit="30"
+                           reset-search-input="false"
+                           title="Add RabbitMQ Exchange">
+
+                    <ui-select-match placeholder="Add RabbitMQ Exchange..." allow-clear="true">{{ $select.selected.title || $select.selected }}</ui-select-match>
+
+                    <ui-select-choices repeat="amqpExchange.title as amqpExchange in EventTypeDetail.amqpExchangeOptions | filter:$select.search | limitTo:$select.limit"
+                        refresh="amqpExchangeUtil.refreshAmqpResults($select)"
+                        refresh-delay="0"
+                        ui-disable-choice="amqpExchange.isUsedBy">
+
+                        <span ng-if="amqpExchange.userEntered"><strong>Create Exchange: </strong>{{ amqpExchange.title }}</span>
+                        <span ng-if="!amqpExchange.userEntered">{{ amqpExchange.title }}</span>
+                         <small ng-if="amqpExchange.isUsedBy">(used by: <strong>{{ amqpExchange.isUsedBy.title }}</strong>)</small>
+                    </ui-select-choices>
+
+                </ui-select>
+            </div>
+
+            <div class="form-group" ng-if="false">
+                <label id="amqpRoutingKey">ROUTING KEY FILTER</label>
+
+                <p><small>Used for advanced message routing. Defaults to '#' if left blank.</small></p>
+
+                <input ng-model="EventTypeDetail.eventType.amqpRoutingKey" placeholder="Ex: wwt.service-quoting.quote.won">
+            </div>
+
+            <div class="form-group">
+                <label id="pathToResourceId">
+                    RESOURCE ID PATH
+                     <i class="fa fa-question-circle popover-trigger"
+                        popover-trigger="mouseenter"
+                        popover-popup-delay="600"
+                        uib-popover-template="'events/child-views/tips/pathToResourceId.html'"></i>
+                </label>
+
+                <input ng-model="EventTypeDetail.eventType.pathToResourceId" placeholder="Ex: 'quote.won' pathToResourceId would be 'quote.id'">
+            </div>
+
+            <div class="form-group">
+                <label id="queryParams">
+                    QUERY PARAMS
+                     <i class="fa fa-question-circle popover-trigger"
+                        popover-trigger="mouseenter"
+                        popover-popup-delay="600"
+                        uib-popover-template="'events/child-views/tips/queryParams.html'"></i>
+                </label>
+
+                <input ng-model="EventTypeDetail.eventType.queryParams" placeholder="Ex: pagination=false&log=false">
+            </div>
+
+            <div class="columns with-borders">
+                <section style="padding-left: 0;">
+                    <ng-include src="'events/child-views/settings-views/generalSettings.html'"></ng-include>
+                </section>
+
+                <section style="padding-right: 0;">
+                    <ng-include src="'events/child-views/settings-views/digestSettings.html'"></ng-include>
+                </section>
+            </div>
+        </section>
+    </div>
+
+    <hr class="dashed">
+
+    <div class="form-actions split">
+
+        <section>
+            <button class="btn btn-primary" ng-click="EventTypeSettings.update()" ng-disabled="!eventTypeSettingsForm.$valid"> Save
+                <i class="fa fa-spinner fa-spin" ng-if="EventTypeSettings.isWorking"></i>
+                <i class="fa fa-thumbs-up" ng-if="EventTypeSettings.isFinishedWorking"></i>
+            </button>
+        </section>
+
+        <section>
+            <a class="btn btn-link" ng-click="EventTypeSettings.deleteEventType()"> Delete</a>
+        </section>
+    </div>
+
+</form>

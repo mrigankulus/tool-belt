@@ -1,0 +1,195 @@
+.asset-icon {
+    width: 90px;
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 45px;
+    background: @primaryColor;
+    color: #fff;
+    margin-right: 20px;
+    position: relative;
+    transition-delay: 0.2s;
+    transition: all 1s;
+
+    i {
+        font-style: normal;
+        font-weight: normal;
+        height: 100%;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+.asset-icon-progress {
+    position: absolute;
+    top: -9px;
+    right: -9px;
+    font-size: 15px;
+    color: #6c6c6c;
+    background: #fff;
+    border: 2px solid #9c6c9e;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: all 0.3s;
+    transform-origin: 20px 10px;
+
+    .fa-thumbs-up {
+        color: @successColor;
+    }
+
+    i {
+        top: 0;
+    }
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        transform: scale(0);
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        transform: scale(1);
+    }
+}
+
+.api .asset-icon,
+.application .api .asset-icon {
+    background: @api-color;
+}
+
+.application .asset-icon,
+    // override for linking an app in the api permissions sections
+.api .application .asset-icon,
+.user .application .asset-icon {
+    background: @application-color;
+}
+
+.technology .asset-icon {
+    background: @technology-color;
+}
+
+.component .asset-icon {
+    background: @component-color;
+}
+
+.resource .asset-icon {
+    background: @resource-color;
+}
+
+.event .asset-icon {
+    background: @event-color;
+}
+
+.user .asset-icon {
+    background: @default-color;
+}
+
+.profile .asset-icon {
+    background: @default-color;
+}
+
+.partner .asset-icon {
+    background: @default-color;
+    border: 3px solid @default-color;
+
+    &.partner-customer {
+        color: @partner-customer-color;
+        background: lighten(@partner-customer-color, 30%);
+        border-color: @partner-customer-color;
+    }
+
+    &.partner-vendor {
+        color: @partner-vendor-color;
+        background: lighten(@partner-vendor-color, 20%);
+        border-color: @partner-vendor-color;
+    }
+
+    &.partner-manufacturer {
+        color: @partner-manufacturer-color;
+        background: lighten(@partner-manufacturer-color, 30%);
+        border-color: @partner-manufacturer-color;
+    }
+}
+
+.cron-job .asset-icon {
+    background: @cron-job-color;
+}
+
+// asset icon ribbon
+.asset-icon-ribbon-wrapper {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    height: 90px;
+    width: 90px;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.asset-icon-ribbon {
+    padding: 2px 0;
+    position: relative;
+    top: 16px;
+    left: -21px;
+    width: 94px;
+    color: #fff;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+    text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
+    background-color: @disabled-color;
+    transform: rotate(-45deg);
+}
+
+.asset-icon-ribbon:before, .asset-icon-ribbon:after {
+    content: "";
+    position: absolute;
+    bottom: -3px;
+    border-top: 3px solid darken(@disabled-color, 20%);
+    border-left: 3px solid transparent;
+    border-right: 3px solid transparent;
+}
+
+.asset-icon-ribbon:before {
+    left: 0;
+}
+
+.asset-icon-ribbon:after {
+    right: 0;
+}
+
+.asset-icon .att-upload-trigger {
+    margin-top: 6px;
+}
+
+.asset-icon .drop-zone-overlay .drop-zone-msg .fa {
+    color: rgba(42,42,42,0.08);
+}
+
+.asset-icon .drop-zone-msg span {
+    margin-top: 0;
+}
+
+.asset-edit-icon {
+    font-size: 14px;
+    color: #656464;
+    position: absolute;
+    z-index: 2;
+    top: 11px;
+    right: -30px;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.asset-icon:hover .asset-edit-icon {
+    opacity: 1;
+}

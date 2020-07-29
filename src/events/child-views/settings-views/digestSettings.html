@@ -1,0 +1,88 @@
+<div class="form-group">
+    <label>Enable Digests</label>
+    <br>
+    <div class="switch">
+        <input type="checkbox" id="shouldDigest" ng-model="EventTypeDetail.eventType.notificationDigestSettings.shouldDigest">
+        <label for="shouldDigest">
+            <span></span>
+        </label>
+        </input>
+    </div>
+</div>
+
+<section ng-if="EventTypeDetail.eventType.notificationDigestSettings.shouldDigest" class="allow-ng-animate default-animation">
+    <div class="alert alert-info">
+        Note that users cannot reply to digest emails.
+    </div>
+
+    <div class="form-group">
+        <label>
+            Pool Duration
+             <i class="fa fa-question-circle popover-trigger"
+                popover-trigger="mouseenter"
+                popover-popup-delay="600"
+                uib-popover-template="'events/child-views/tips/poolDurationTip.html'"></i>
+        </label>
+
+        <div class="columns">
+            <section class="flex-none" style="width: 50px">
+                <input type="number" ng-model="EventTypeDetail.eventType.notificationDigestSettings.poolDuration" placeholder="Ex: 1">
+            </section>
+
+            <section>
+                <ui-select ng-model="EventTypeDetail.eventType.notificationDigestSettings.poolDurationType">
+                    <ui-select-match placeholder="Duration">{{ $select.selected }}</ui-select-match>
+                    <ui-select-choices repeat="choice in ['seconds', 'minutes', 'hours'] | filter:$select.search | limitTo:$select.limit">
+                          {{ choice }}
+                    </ui-select-choices>
+                </ui-select>
+            </section>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>
+            Deliver
+             <i class="fa fa-question-circle popover-trigger"
+                popover-trigger="mouseenter"
+                popover-popup-delay="600"
+                uib-popover-template="'events/child-views/tips/deliverySelectionTip.html'"></i>
+        </label>
+
+        <ui-select ng-model="EventTypeDetail.eventType.notificationDigestSettings.deliverySelection">
+            <ui-select-match placeholder="allNotifications" allow-clear="true">{{ $select.selected }}</ui-select-match>
+            <ui-select-choices repeat="choice in ['allNotifications', 'lastNotification'] | filter:$select.search | limitTo:$select.limit">
+                  {{ choice }}
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div class="form-group">
+        <label>
+            Pool With
+             <i class="fa fa-question-circle popover-trigger"
+                popover-trigger="mouseenter"
+                popover-popup-delay="600"
+                uib-popover-template="'events/child-views/tips/poolWithTip.html'"></i>
+        </label>
+
+        <ui-select ng-model="EventTypeDetail.eventType.notificationDigestSettings.poolWith">
+            <ui-select-match placeholder="resourceType" allow-clear="true">{{ $select.selected }}</ui-select-match>
+            <ui-select-choices repeat="choice in ['resourceType', 'relatedApp'] | filter:$select.search | limitTo:$select.limit">
+                  {{ choice }}
+            </ui-select-choices>
+        </ui-select>
+    </div>
+
+    <div class="form-group">
+        <label>
+            Email Subject
+             <i class="fa fa-question-circle popover-trigger"
+                popover-trigger="mouseenter"
+                popover-popup-delay="600"
+                uib-popover-template="'events/child-views/tips/digestEmailSubjectTip.html'"></i>
+        </label>
+
+        <input ng-model="EventTypeDetail.eventType.notificationDigestSettings.emailSubject" placeholder="Ex: Interesting Updates!">
+    </div>
+</section>

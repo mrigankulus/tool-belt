@@ -1,0 +1,73 @@
+<br>
+<br>
+
+<div class="blank-slate-tab">
+    <section>
+        <p>
+            <strong>Related Routes</strong> are
+            <a ui-sref="apis">API Routes</a> with a sub-domain prefix that matches this route's main application:
+            <strong>
+                <span ng-bind="appName"></span>
+            </strong>.
+        </p>
+        <br>
+    </section>
+</div>
+
+<hr class="dashed ng-scope">
+
+<div class="item-detail-content-header" ng-if="!APIRelatedRoutes.isDeletingAllOverrides">
+    <button class="btn btn-xs btn-link" ng-click="APIRelatedRoutes.turnAllOverridesOn()" analytics="'API Related Routes Overrides', 'Turn On All'" ng-disabled="APIRelatedRoutes.allOnDisabled">Turn All My Overrides On</button>
+    |
+    <button class="btn btn-xs btn-link"  ng-click="APIRelatedRoutes.turnAllOverridesOff()" analytics="'API Related Routes Overrides', 'Turn Off All'" ng-disabled="APIRelatedRoutes.allOffDisabled">Turn All My Overrides Off</button> |
+    <button class="btn btn-link btn-xs" ng-click="APIRelatedRoutes.openGenerateOverridesForm()">
+        Generate All Overrides
+        <i class="fa fa-question-circle" uib-popover="Automatically create all overrides for all related routes within the same application, given a hostname and port. This also overrides all existing override endpoints on all the Related Routes, with the provided endpoint."
+            popover-trigger="mouseenter" popover-popup-delay="300" popover-append-to-body="true"></i>
+    </button> |
+    <button class="btn btn-link btn-xs" ng-click="APIRelatedRoutes.isDeletingAllOverrides = true" ng-disabled="!APIRelatedRoutes.userHasOverrides"> Delete All Overrides </button>
+
+</div>
+
+<div class="form-actions inline-prompt delete-route" ng-if="APIRelatedRoutes.isDeletingAllOverrides">
+    <section>
+        <button class="btn btn-warning btn-sm" analytics="'API Related Routes Overrides','Delete All Overrides'" ng-click="APIRelatedRoutes.isDeletingAllOverrides = false; APIRelatedRoutes.deleteAllOverrides()">
+            Delete</button>
+        <button class="btn btn-link btn-sm" ng-click="APIRelatedRoutes.isDeletingAllOverrides = false"> Cancel</a>
+    </section>
+
+    <span>
+        <p>Are you sure you want to
+            <strong> Delete</strong> all Overrides?</p>
+    </span>
+</div>
+
+<li class="columns with-padding vertical-center" ng-if="APIRelatedRoutes.isGeneratingOverrides">
+    <section class="flex-5">
+        <div class="input-with-suggestions">
+
+            <input class="no-input" placeholder="http://<your-ip-address>:<your-port>" ng-model="APIRelatedRoutes.overrideEndpoint" title="Override URL"/>
+            <i class="fa fa-question-circle" uib-popover="Your override url will be http://<your-ip-address>:<your-port>. To
+                find your IP address on a Mac, go to terminal and type `ifconfig | grep 'inet 10.'`" popover-title="Override URL"
+                popover-trigger="mouseenter" popover-popup-delay="300" popover-append-to-body="true"></i>
+        </div>
+    </section>
+
+    <section class="flex-1">
+        <div class="form-actions">
+            <button class="btn btn-default btn-xs" ng-click="APIRelatedRoutes.createAllOverrides(APIRelatedRoutes.overrideEndpoint)" analytics="'API Related Routes Overrides', 'Create All Overrides'" ng-disabled="!APIRelatedRoutes.overrideEndpoint">Save</button>
+
+            <button class="btn btn-link btn-xs" ng-click="APIRelatedRoutes.isGeneratingOverrides = false">Cancel</button>
+        </div>
+    </section>
+</li>
+
+<div class="blank-slate-tab" ng-if="APIRelatedRoutes.apisHaveLoaded && !APIRelatedRoutes.apis.length">
+    <section>
+        <p>This application has no managed routes.</p>
+    </section>
+</div>
+
+<div class="cards allow-ng-animate default-animation" ng-if="APIRelatedRoutes.apis && APIRelatedRoutes.apis.length">
+    <api-card api="api" ng-repeat="api in APIRelatedRoutes.apis"></api-card>
+</div>

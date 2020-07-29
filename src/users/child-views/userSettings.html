@@ -1,0 +1,126 @@
+<br><br>
+
+<div class="blank-slate-tab" ng-if="UserDetail.user.internal || UserDetail.user.type == 'svc' || UserDetail.user.type == 'proxy'">
+    <section>
+        <h1 class="text-center muted">Coming Soon!</h1>
+    </section>
+</div>
+
+<div class="single-column" ng-if="!UserDetail.user.internal && (UserDetail.user.type === 'external' || UserDetail.user.type === 'old')">
+
+    <form name="editUserForm" ng-submit="UserSettings.updateUser()">
+
+        <div class="form-group required">
+            <label>FIRST NAME</label>
+
+            <input ng-model="UserDetail.user.firstName" type="text" required />
+        </div>
+
+        <div class="form-group required">
+            <label>LAST NAME</label>
+
+            <input ng-model="UserDetail.user.lastName" type="text" required />
+        </div>
+
+        <div class="form-group">
+            <label>USERNAME</label>
+            <i class="fa fa-question-circle popover-trigger" uib-popover="For 'external' users, their username will also be updated when their email address is modified."
+                popover-trigger="mouseenter" popover-popup-delay="300" popover-append-to-body="true"></i>
+
+            <input ng-model="UserDetail.user.email" type="email" disabled />
+        </div>
+
+        <div class="form-group required">
+            <label>EMAIL</label>
+
+            <input ng-model="UserDetail.user.email" type="email" required />
+        </div>
+
+        <br>
+
+        <div class="form-group split">
+
+            <div>
+                <label>DEFAULT APPLICATION</label>
+
+                <div class="faux-select2">
+
+                    <ui-select ng-model="UserSettings.selectedApp"
+                               ng-change="UserSettings.updateUserDefaultAppInUi(UserSettings.selectedApp)"
+                               ui-select-focus-input
+                               title="Add Default Application">
+
+                        <ui-select-match placeholder="Select Default Application...">
+                            <i class="wwt-icon-{{ $select.selected.iconName}}"></i> {{ $select.selected.appName }}
+                        </ui-select-match>
+
+                        <ui-select-choices repeat="app in UserSettings.apps | filter:$select.search | orderBy: 'appName'">
+                            <i class="wwt-icon-{{ app.iconName }}"></i> {{ app.appName || app.appName }}
+                        </ui-select-choices>
+
+                    </ui-select>
+
+                    <span class="faux-select2-selected" ng-if="UserSettings.userPreferences">
+                        <i class="wwt-icon-{{ UserSettings.getIconNameForAppId(UserSettings.userPreferences.defaultApplication.id) }}"></i>
+                        {{ UserSettings.userPreferences.defaultApplication.name || UserSettings.userPreferences.defaultApplication.displayName }}
+                    </span>
+
+                </div>
+            </div>
+
+            <div ng-if="UserDetail.user.type === 'external' && UserSettings.isWWTDemoUser()">
+                <label>SET USER PASSWORD</label>
+
+                <i class="fa fa-question-circle popover-trigger"
+                   popover-trigger="mouseenter"
+                   popover-popup-delay="600"
+                   uib-popover-template="'users/child-views/tips/passwordSetupLink.html'"></i>
+
+                <a class="demo-user-password" ng-href="{{ UserSettings.getPasswordSetupLink }}" target="_blank">
+                    <i class="wwt-icon-lock"></i> Set Password
+                </a>
+
+            </div>
+
+        </div>
+
+        <hr class="dashed">
+
+        <div class="form-actions split" ng-if="!UserSettings.isPromptingToSendInvite">
+            <section>
+                <button type="submit" class="btn btn-primary" ng-disabled="!editUserForm.$valid"> Update
+                    <i class="fa fa-spinner fa-spin" ng-if="UserSettings.isUpdatingUser"></i>
+                    <i class="fa fa-thumbs-up" ng-if="UserSettings.hasUpdatedUser"></i>
+                </button>
+            </section>
+
+            <section>
+                <a class="btn btn-link" ng-click="UserSettings.isPromptingToSendInvite = true"> Send Invitation</a>
+            </section>
+
+            <section>
+                <a class="btn btn-link" ng-click="UserSettings.disableUser()" ng-if="UserDetail.user.enabled == true"> Disable</a>
+                <a class="btn btn-link" ng-click="UserSettings.reEnableUser()" ng-if="UserDetail.user.enabled == false"> Re-enable</a>
+            </section>
+        </div>
+
+        <div class="form-actions split inline-prompt warning" ng-if="UserSettings.isPromptingToSendInvite">
+            <section>
+                <button type="button" class="btn btn-warning" ng-click="UserSettings.sendManualUserInvite(user)">
+                    <span ng-if="!UserSettings.isProcessing && !UserSettings.isDoneProcessing">Send Invite</span>
+                    <span ng-if="UserSettings.isProcessing">Sending <i class="fa fa-spinner fa-spin"></i></span>
+                    <span ng-if="UserSettings.isDoneProcessing">Sent <i class="fa fa-check"></i></span>
+                </button>
+                <a class="btn btn-link" ng-click="UserSettings.isPromptingToSendInvite = false"> Cancel</a>
+            </section>
+
+            <section>
+                <p>Send invitation to <strong>{{ UserDetail.user.fullName }}</strong>?</p>
+            </section>
+        </div>
+
+    </form>
+
+</div>
+
+<br><br>

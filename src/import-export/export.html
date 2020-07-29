@@ -1,0 +1,99 @@
+<ol class="breadcrumb">
+    <li><a ui-sref="^">Import/Export</a></li>
+    <li class="active">Export</li>
+</ol>
+
+<div class="blank-slate-tab">
+    <i class="fa fa-plus"></i>
+
+    <section>
+        <h2>Add Items to your Export</h2>
+
+        <p><small>Currently supporting resource types (which will include event types), and components.</small></p>
+
+        <br>
+
+        <ui-select class="no-select2"
+                   ng-model="Export.searchTerm"
+                   limit="50"
+                   ui-select-focus-input
+                   append-to-body="true"
+                   ng-change="Export.onSearchResultSelected($select.selected)">
+
+            <ui-select-match placeholder="Search Resource Types and Components" allow-clear="true">
+                <div>
+                    <i class="wwt-icon-{{$select.selected.formatted.icon}}" ng-if="$select.selected.formatted.icon"></i>
+                     <span ng-bind-html="$select.selected.formatted.title"></span>
+                </div>
+            </ui-select-match>
+
+            <ui-select-choices repeat="result in Export.searchResults | filter: $select.search | limitTo:$select.limit" group-by="Export.mapToGroup"
+                               refresh="Export.searchExportables($select.search)"
+                               refresh-delay="200">
+
+                <div>
+                    <i class="wwt-icon-{{result.formatted.icon}}" ng-if="result.formatted.icon"></i>
+                     <span ng-bind-html="result.formatted.title | highlight: $select.search"></span>
+                </div>
+            </ui-select-choices>
+
+        </ui-select>
+    </section>
+</div>
+
+<hr class="dashed">
+
+<div class="columns with-borders">
+    <section>
+        <ul class="formatted-list">
+            <li ng-repeat="item in importer.exportListPreprocessed"
+                class="allow-ng-animate default-animation"
+                ng-class="[{'resource': item.importType === 'resourceType'}, item.importType]">
+
+                <div class="columns">
+                    <section class="flex-none">
+                        <div class="asset-icon">
+                            <i class="wwt-icon-{{ item.icon }}" ng-if="item.importType != 'resourceType'"></i>
+                            <i ng-if="item.importType === 'resourceType'">R</i>
+                        </div>
+                    </section>
+
+                    <section>
+                        <h4>&nbsp;{{ item.title }}</h4>
+                        <p>&nbsp;{{ item.description }}</p>
+
+                        <div class="import-export-item-options" ng-if="item.eventTypes && item.eventTypes.length">
+                            <hr class="dashed">
+                            <h5>Event Types</h5>
+
+                            <div class="form-group" ng-repeat="eventType in item.eventTypes">
+                                <input type="checkbox"
+                                       ng-model="eventType.isSelected"
+                                       id="exportable{{ eventType.id + $index }}"
+                                       ng-change="importer.onEventTypeCheck(eventType, item)">
+
+                                <label for="exportable{{ eventType.id + $index }}">{{ eventType.title }}</label>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </li>
+        </ul>
+    </section>
+
+    <section>
+        <div class="allow-ng-animate default-animation" ng-if="importer.exportListPreprocessed && importer.exportListPreprocessed.length">
+            <h4>Export</h4>
+            <p>When you're ready to export, copy this JSON, head over to your target environment, and paste import it there.</p>
+
+            <pre style="max-width: 500px;max-height: 300px; overflow: auto;" id="exportContent">{{ importer.exportListProcessed | json }}</pre>
+
+            <button class="btn btn-primary"
+                    ngclipboard
+                    data-clipboard-target="#exportContent"
+                    ngclipboard-success="Export.onCopy(e)">Copy</button>
+
+            <span class="lead muted" ng-if="Export.shouldShowCopiedMessage">&nbsp;Copied to Clipboard <i class="fa fa-thumbs-up"></i></span>
+        </div>
+    </section>
+</div>

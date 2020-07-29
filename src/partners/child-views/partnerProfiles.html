@@ -1,0 +1,154 @@
+<div class="primary-loader" ng-class="{active: PartnerProfilesUsers.isLongProfileDataLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="blank-slate-tab" ng-if="PartnerProfilesUsers.profileDataLoaded && !PartnerProfilesUsers.profiles.length">
+    <i class="z-index-1">P</i>
+
+    <section class="relative-position">
+        <h2>No Profiles Yet</h2>
+        <p ng-if="PartnerProfilesUsers.canApplyProfiles">
+            <a class="clickable" ng-click="PartnerProfilesUsers.isAddingProfile = true">
+                <strong>Add profiles</strong></a> to {{ PartnerDetail.partner.name }}
+        </p>
+
+        <i class="fa fa-exclamation-triangle partner-profiles-warning"
+           ng-if="!PartnerProfilesUsers.profiles.length && PartnerProfilesUsers.users.length"
+           title="Add a Profile to proceed"></i>
+    </section>
+</div>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="PartnerProfilesUsers.isAddingProfile">
+
+    <form class="columns vertical-center with-padding" ng-submit="PartnerProfilesUsers.addProfileToPartner()">
+
+        <section></section>
+
+        <section class="flex-2">
+            <br>
+            <div class="form-group">
+                <ui-select ng-model="PartnerProfilesUsers.newProfile"
+                           limit="20"
+                           ui-select-focus-input
+                           autofocus="true"
+                           class="no-select2">
+
+                    <ui-select-match placeholder="Select a Profile" allow-clear="true">
+                        {{ $select.selected.name }}
+                    </ui-select-match>
+
+                    <ui-select-choices repeat="profile in PartnerProfilesUsers.allProfiles | filter: $select.search | limitTo:$select.limit"
+                                       ui-disable-choice="PartnerProfilesUsers.partnerHasProfile(profile)">
+                        <strong>{{ profile.name }}</strong>
+                        <span ng-if="PartnerProfilesUsers.partnerHasProfile(profile)">({{ PartnerDetail.partner.name }} already has this profile)</span>
+                    </ui-select-choices>
+                </ui-select>
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!PartnerProfilesUsers.newProfile">
+                    Save
+                    <i class="fa fa-spinner fa-spin" ng-if="PartnerProfilesUsers.isSavingProfile"></i>
+                </button>
+                <a class="btn btn-link" ng-click="PartnerProfilesUsers.isAddingProfile = false;">Cancel</a>
+            </div>
+        </section>
+    </form>
+</section>
+
+<div class="item-detail-overlay" ng-if="PartnerProfilesUsers.isAddingProfile" ng-click="PartnerProfilesUsers.isAddingProfile = false"></div>
+
+<div class="item-detail-content-header" ng-if="PartnerProfilesUsers.profileDataLoaded && PartnerProfilesUsers.profiles.length">
+
+    <section class="search-section">
+
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input type="text"
+                   class="no-input"
+                   ng-model="PartnerProfilesUsers.profilesSearchText"
+                   tabindex="0"
+                   id="secondarySearchInput"
+                   placeholder="Search Profiles">
+        </div>
+
+    </section>
+
+    <section class="item-detail-header-actions">
+
+        <button class="btn btn-primary btn-xs"
+                ng-if="PartnerProfilesUsers.canApplyProfiles"
+                ng-click="PartnerProfilesUsers.isAddingProfile = true">
+            <i class="fa fa-plus"></i> Add Profile
+        </button>
+
+    </section>
+
+</div>
+
+<section class="partner-sub-header" ng-if="PartnerProfilesUsers.profiles.length">
+    <h3>Profiles for {{ PartnerDetail.partner.name }}</h3>
+    <p class="muted" ng-if="PartnerProfilesUsers.users.length">Drag and drop Profiles to assign to Users</p>
+</section>
+
+<div class="cards full allow-ng-animate default-animation" hl-sticky offset-top="20"
+     ng-if="PartnerProfilesUsers.profiles && PartnerProfilesUsers.profiles.length">
+
+    <section class="card-outer asset-card more-space"
+             ng-repeat="profile in PartnerProfilesUsers.profiles | filter: PartnerProfilesUsers.profilesSearchText | orderBy: 'name' | limitTo: PartnerProfilesUsers.profilesLimit">
+
+        <div class="card-trash" ng-if="PartnerProfilesUsers.canApplyProfiles">
+            <i class="fa fa-trash"
+               ng-click="profile.isPromptingToDelete = true"
+               uib-tooltip="Remove profile from partner"
+               tooltip-popup-delay="500"
+               tooltip-append-to-body="true"></i>
+        </div>
+
+        <div class="card-danger-prompt allow-ng-animate default-animation" ng-if="profile.isPromptingToDelete">
+            <p class="text-center">Are you sure?</p>
+
+            <div class="form-actions">
+                <a class="wwt-mini-btn alpha-btn"
+                   ng-click="PartnerProfilesUsers.removeProfileFromPartner(profile)">
+                    Delete <i class="fa fa-spinner fa-spin" ng-if="profile.isProcessing"></i>
+                </a>
+
+                <a class="wwt-mini-btn cancel" ng-click="profile.isPromptingToDelete = false">Cancel</a>
+            </div>
+        </div>
+
+        <a class="card-inner card-draggable extra-padding clickable"
+           draggable="true"
+           effect-allowed="copy"
+           draggable-type="custom-object"
+           draggable-data="profile"
+           ui-sref="profileDetail({profileId: profile.id})"
+           tabindex="0">
+
+            <div class="columns">
+                <section>
+                    <i class="fa fa-th-large" uib-tooltip="Drag 'n drop profile on a user."
+                       tooltip-popup-delay="500" tooltip-append-to-body="true"></i>
+                </section>
+                <section class="flex-1">
+                    <h3 class="card-header">{{ profile.name }}</h3>
+                    <p class="card-content">{{ profile.description }}</p>
+
+                    <div class="alert alert-danger" ng-if="profile.error && profile.error === 404">Profile Not Found</div>
+                </section>
+            </div>
+        </a>
+
+    </section>
+
+</div>
+
+<hr ng-if="PartnerProfilesUsers.shouldShowShowMoreProfiles()">
+
+<p class="text-center" ng-if="PartnerProfilesUsers.shouldShowShowMoreProfiles()">
+    <button class="btn btn-link" ng-click="PartnerProfilesUsers.showMoreProfiles()">Show All</button>
+</p>

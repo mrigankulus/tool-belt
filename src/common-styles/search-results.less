@@ -1,0 +1,167 @@
+.search-results-container {
+    position: absolute;
+    top: @navbar-height;
+    right: 18px;
+    min-height: @nav-search-min-height;
+    max-height: 300px;
+    width: @nav-search-width - 6px;
+    background: #fff;
+    box-shadow: 0 1px 6px 1px rgba(0, 0, 0, .42);
+    z-index: 1045;
+    opacity: 1;
+    overflow: auto;
+    transition: all .2s;
+    display: flex;
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        opacity: 0;
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        opacity: 1;
+    }
+}
+
+.search-results {
+    width: 100%;
+    overflow: auto;
+
+    h4 {
+        padding: 8px 10px;
+        color: #fff;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    a {
+        display: block;
+
+        &:hover, &:focus {
+            background: rgba(0, 0, 0, .04);
+        }
+    }
+
+    dl {
+        position: relative;
+        margin: 4px 10px;
+        min-height: 26px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: all .2s;
+    }
+
+    dt {
+        padding-top: 5px;
+        color: #fff;
+    }
+
+    dd {
+        margin-left: 6px;
+        color: #555;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .user-info-banner {
+        margin-left: 10px;
+        padding: 2px 5px;
+        color: #fff;
+        font-size: 11px;
+        font-weight: bold;
+        text-align: center;
+        text-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
+        background-color: @disabled-color;
+    }
+
+    .search-more {
+        display: block;
+
+        dd {
+            font-size: 12px;
+
+        }
+    }
+
+    .pages .bkg-color {
+        background: #32699b;
+    }
+
+    .applications .bkg-color {
+        background: @application-color;
+    }
+
+    .apis .bkg-color {
+        background: @api-color;
+    }
+
+    .components .bkg-color {
+        background: @component-color;
+    }
+
+    .technologies .bkg-color {
+        background: @technology-color;
+    }
+
+    .resourceTypes .bkg-color {
+        background: @resource-color;
+    }
+
+    .eventTypes .bkg-color {
+        background: @event-color;
+    }
+
+    .profiles .bkg-color {
+        background: @profile-color;
+    }
+
+    .users .bkg-color {
+        background: @user-color;
+    }
+
+    .partners .bkg-color {
+        background: @partner-color;
+    }
+
+    .cron-jobs .bkg-color {
+        background: @cron-job-color;
+    }
+}
+
+.no-search-results {
+    min-height: @nav-search-min-height;
+    opacity: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    transform: scale(1);
+    opacity: 1;
+    transition: all .2s;
+
+    i {
+        margin-bottom: 6px;
+        font-size: 45px;
+        color: rgba(39, 81, 120, .08);
+    }
+
+    p {
+        margin: 0;
+        color: #555;
+    }
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        transform: scale(.8);
+        opacity: 0;
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        transform: scale(1);
+        opacity: 1;
+    }
+}

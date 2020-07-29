@@ -1,0 +1,119 @@
+<br><br>
+
+<div class="blank-slate-tab" ng-if="UserApplications.dataLoaded && !UserApplications.userApps.length">
+    <i>A</i>
+
+    <section>
+        <h2>No Application Access</h2>
+
+        <p><a class="clickable" ui-sref="userDetail.profiles"><strong>Add Profiles</strong></a> to give @{{ UserDetail.user.userName }} access to applications.</p>
+    </section>
+</div>
+
+<div class="item-detail-content-header short" ng-if="UserApplications.dataLoaded && UserApplications.userApps.length">
+    <section class="search-section">
+
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input type="text"
+                   class="no-input"
+                   ng-model="UserApplications.appSearchText"
+                   tabindex="0"
+                   id="secondarySearchInput"
+                   placeholder="Search Applications">
+        </div>
+
+    </section>
+
+    <section class="item-detail-header-actions">
+
+        <div>
+
+            <div class="flex">
+                <p class="muted no-margin"><strong>@{{ UserDetail.user.userName }}</strong> has access to these applications</p>
+
+                <p class="no-margin">
+                    &nbsp;
+                    |
+                    <a class="btn btn-link btn-xs"
+                       ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/applications?userId={{ UserDetail.user.id }}" target="_blank">JSON</a></p>
+            </div>
+
+            <div class="default-app-switcher">
+                <p>DEFAULT APPLICATION: </p>
+                <div class="faux-select2 pull-right">
+
+                    <ui-select ng-model="UserApplications.selectedApp"
+                               ng-change="UserApplications.updateUserDefaultAppInUi(UserApplications.selectedApp)"
+                               ui-select-focus-input
+                               title="Update Default Application">
+
+                        <ui-select-match placeholder="Select Default Application...">
+                            <i class="wwt-icon-{{ $select.selected.iconName}}"></i> {{ $select.selected.appName }}
+                        </ui-select-match>
+
+                        <ui-select-choices repeat="app in UserApplications.apps | filter:$select.search | orderBy: 'appName'">
+                            <i class="wwt-icon-{{ app.iconName }}"></i> {{ app.appName || app.appName }}
+                        </ui-select-choices>
+
+                    </ui-select>
+
+                    <span class="faux-select2-selected muted" ng-if="UserApplications.userPreferences">
+                        <i class="wwt-icon-{{ UserApplications.getIconNameForAppId(UserApplications.userPreferences.defaultApplication.id) }}"></i>
+                        {{ UserApplications.userPreferences.defaultApplication.name || UserApplications.userPreferences.defaultApplication.displayName }}
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+<div class="primary-loader" ng-class="{active: UserApplications.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<div class="cards allow-ng-animate default-animation" ng-if="UserApplications.userApps && UserApplications.userApps.length">
+
+    <section class="card-outer asset-card application" ng-repeat="app in UserApplications.userApps | filter: UserApplications.appSearchText | orderBy: 'appName' | limitTo: UserApplications.appsLimit">
+
+        <a class="card-inner clickable" ui-sref="applicationDetail({id: app.id})" tabindex="0">
+
+            <new-asset-banner item="app"></new-asset-banner>
+
+            <div class="columns">
+                <section class="flex-none">
+                    <div class="asset-icon">
+                        <i class="wwt-icon-{{ app.iconName || 'question' }}"></i>
+                    </div>
+                </section>
+
+                <section class="flex-3">
+                    <h3 class="card-header">{{ app.displayName || app.appName }}</h3>
+
+                    <p class="card-content">{{ app.appDescription }}</p>
+
+                    <div class="card-connections">
+                        <i class="fa fa-github" ng-if="app.connectedRepos && app.connectedRepos.length"></i>
+
+                        <i class="fa fa-lightbulb-o" ng-if="app.connectedVisionBoards && app.connectedVisionBoards.length"></i>
+
+                        <i><img src="img/jenkins.png" ng-if="app.connectedJenkinsJobs && app.connectedJenkinsJobs.length"></i>
+                    </div>
+                </section>
+
+            </div><!-- /.columns -->
+        </a>
+
+    </section>
+
+</div>
+
+<hr ng-if="UserApplications.shouldShowShowMore()">
+
+<p class="text-center" ng-if="UserApplications.shouldShowShowMore()">
+    <button class="btn btn-link" ng-click="UserApplications.showMore()" ng-click="UserApplications.showMore()">Show All</button>
+</p>

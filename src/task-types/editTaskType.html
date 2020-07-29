@@ -1,0 +1,87 @@
+<form name="editTaskTypeForm" ng-submit="$ctrl.onSubmit()">
+
+    <div class="form-group required" ng-if="$ctrl.taskType.id">
+        <label>ID</label>
+
+        <input ng-model="$ctrl.taskType.id" readonly="true" type="text" required />
+    </div>
+
+    <div class="form-group required">
+        <label>TITLE SINGULAR</label>
+
+        <input ng-model="$ctrl.taskType.titleSingular" type="text" required />
+    </div>
+
+    <div class="form-group required">
+        <label>TITLE PLURAL</label>
+
+        <input ng-model="$ctrl.taskType.titlePlural" type="text" required />
+    </div>
+
+    <div class="form-group">
+        <label>RELATED APP</label>
+
+        <p><small>(Optional) Events for this task type will be branded as your application.</p></small>
+
+        <ui-select ng-model="$ctrl.taskType.relatedAppId" ui-select-focus-input>
+
+            <ui-select-match placeholder="Add Related Application..." allow-clear="true">
+                <i class="wwt-icon-{{ $select.selected.iconName || $ctrl.getIconNameForAppId($select.selected) }}"></i>
+                &nbsp;{{ $select.selected.appName || $ctrl.getAppNameForAppId($select.selected) }}
+            </ui-select-match>
+
+            <ui-select-choices repeat="app.id as app in $ctrl.apps | filter:$select.search | orderBy: 'appName'">
+                <i class="wwt-icon-{{ app.iconName }}"></i>
+                &nbsp;{{ app.appName }}
+            </ui-select-choices>
+
+        </ui-select>
+    </div>
+
+    <div class="form-group">
+        <label>Only Assignees Can Complete</label>
+        <p><small>(Optional) If this is set to false, any user that can see the task can complete it.</p></small>
+        <div class="switch">
+            <input type="checkbox" id="onlyAssigneesCanComplete" ng-model="$ctrl.taskType.onlyAssigneesCanComplete">
+            <label for="onlyAssigneesCanComplete">
+                <span></span>
+            </label>
+            </input>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Disable Auto Assign For Groups</label>
+        <p><small>(Optional) If this is set to true, assignment group members will not be auto assigned to new tasks.</p></small>
+        <div class="switch">
+            <input type="checkbox" id="disableAutoAssignForGroup" ng-model="$ctrl.taskType.disableAutoAssignForGroup">
+            <label for="disableAutoAssignForGroup">
+                <span></span>
+            </label>
+            </input>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>MANAGE SUBSCRIPTIONS URL</label>
+        <p><small>Custom URL for manage subscriptions link in emails.</p></small>
+
+        <input ng-model="$ctrl.taskType.manageSubscriptionsUrl" type="text" placeholder="https://myapp.apps.wwt.com/manage-subscriptions" />
+    </div>
+
+    <br>
+
+    <div class="form-actions split sticky-bottom">
+        <section>
+            <button type="submit" class="btn btn-primary" ng-disabled="!editTaskTypeForm.$valid">
+                {{ $ctrl.taskType.id ? 'Update' : 'Create' }}
+                <i class="fa fa-spinner fa-spin" ng-if="$ctrl.isUpdating"></i>
+                <i class="fa fa-thumbs-up" ng-if="$ctrl.hasUpdated"></i>
+            </button>
+        </section>
+
+        <section ng-if="$ctrl.taskType.id">
+            <a class="btn btn-link" ng-click="$ctrl.promptToDelete()"> Delete</a>
+        </section>
+    </div>
+</form>

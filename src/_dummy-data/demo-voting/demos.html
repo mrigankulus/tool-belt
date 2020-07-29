@@ -1,0 +1,64 @@
+<br><br>
+
+<div class="container">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>wwt.com rules! &nbsp;&middot;&nbsp; {{ Demos.demo.id | date }} <small>({{ Demos.demo.id }})</small></h1>
+                </section>
+            </header>
+
+            <section class="allow-ng-animate default-animation item-detail-content" ng-if="Demos.demo">
+                <br>
+                <div class="columns">
+                    <section>
+                        <h2>Text {{ Demos.textTrigger }} to {{ Demos.textNumber }}</h2>
+                    </section>
+
+                    <section class="flex-none">
+                        <form ng-submit="Demos.addPresenter()">
+                            <label>Add Presenter by Name</label>
+                            <div class="form-group columns vertical-center">
+                                <section style="margin-right: 10px;">
+                                    <input ng-model="Demos.newPresenter">
+                                </section>
+
+                                <section>
+                                    <button class="btn btn-primary">Submit</button>
+                                </section>
+                            </div>
+
+                        </form>
+                    </section>
+                </div>
+                <div class="chart-wrapper">
+                    <div class="chart-inner" ng-if="!Demos.isLoading">
+                        <highchart id="voting-chart" ng-if="Demos.chartConfig" config="Demos.chartConfig"></highchart>
+                    </div>
+                </div>
+
+                <div ng-if="Demos.canAdmin">
+                  <hr class="dashed">
+                  <div class="form-actions">
+                    <section>
+                      <a class="btn btn-link" ng-click="Demos.demo.runLoad()">Run Load</a>
+                    </section>
+
+                    <section class="columns vertical-center">
+                      <section class="flex-none">
+                        <a class="btn btn-link" ng-click="Demos.demo.clearData()">Clear Data</a>
+                      </section>
+
+                      <section class="flex-none" style="margin-left: 10px;">
+                        <small>Don't forget <a href="/application/2614/permissions/manage">activity feed permission</a>.</small>
+                      </section>
+                    </section>
+                  </div>
+                </div>
+            </section>
+        </main>
+
+    </article>
+
+</div>

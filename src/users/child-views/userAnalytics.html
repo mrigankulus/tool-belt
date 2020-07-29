@@ -1,0 +1,10 @@
+<br><br>
+
+<analyze-report-frame ng-if="UserAnalytics.reportId"
+                      report-id="UserAnalytics.reportId"
+                      get-detail-params="UserAnalytics.getDetailParams"></analyze-report-frame>
+
+<analyze-report-frame ng-if="UserAnalytics.forUserReportId"
+                      report-id="UserAnalytics.forUserReportId"
+                      get-detail-params="UserAnalytics.getForUserDetailParams"
+                      select="UserAnalytics.forUserSelect"></analyze-report-frame>

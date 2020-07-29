@@ -1,0 +1,262 @@
+.test-notification {
+    // copying pre styles, but don't want to use <pre> tag here
+    padding: 9.5px;
+    font-size: 13px;
+    font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+    line-height: 1.42857143;
+    word-wrap: break-word;
+    color: #333;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    input {
+        display: inline-block;
+        width: auto;
+    }
+
+    ul {
+        list-style-type: none;
+        margin-top: 5px;
+
+        li {
+            margin-bottom: 5px;
+        }
+    }
+
+    > ul {
+        padding: 0;
+    }
+}
+
+.notification-action-form {
+    display: flex;
+
+    input {
+        margin: 0 10px;
+        //.placeholder-text(@color: #999, @fontSize: 14px, @fontWeight: 300);
+    }
+
+    .action-link-text {
+        margin-left: 0;
+    }
+}
+
+.tokens {
+    flex: 1;
+    min-height: 250px;
+    min-width: 268px;
+
+    .title {
+        margin: 0;
+        padding: 15px 15px 10px;
+        //color: #2d5f8c;
+    }
+
+    .tabs {
+        margin-top: 5px;
+        display: flex;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+
+        > * {
+            flex: 1;
+            text-align: center;
+            padding: 6px 0;
+            color: #b3b3b3;
+            background-color: #f2f2f2;
+
+            &:first-child {
+                border-right: 1px solid #ccc;
+            }
+
+            &.active-tab {
+                border-bottom: 3px solid @soft-green;
+                color: #666;
+                font-weight: 600;
+                background: none;
+                cursor: default;
+            }
+        }
+    }
+
+    .left-tab {
+        flex: 1;
+        text-align: center;
+        padding: 6px 0;
+
+        border-bottom: 3px solid @soft-green;
+        margin-bottom: -1px;
+    }
+
+    .right-tab {
+        flex: 1;
+        float: right;
+        border-left: 1px solid #ccc;
+        text-align: center;
+        padding: 6px 0;
+
+    }
+
+    i {
+        color: #ccc;
+        font-size: 12px;
+        transition: all .2s;
+
+        &:hover {
+            color: #666;
+        }
+    }
+
+    .fa-question-circle {
+        padding-left: 3px;
+        font-size: 14px;
+
+    }
+
+    .tokens-list-area {
+        min-height: 158px;
+
+        input {
+            padding-left: 15px;
+        }
+
+        .search-input {
+            position: relative;
+        }
+
+        .fa-search, .search-reset {
+            position: absolute;
+            top: 9px;
+            cursor: pointer;
+        }
+
+        .search-reset {
+            padding: 5px;
+            top: 3px;
+            right: -4px;
+            font-size: 16px;
+        }
+
+        .btn-dashed {
+            margin: 5px;
+        }
+    }
+
+    .token {
+        ul {
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            margin: 5px;
+            padding: 3px 9px;
+            display: inline-block;
+            position: relative;
+            background: #cad6dd;
+            border: 1px solid #cad6dd;
+            opacity: 1;
+            transform: scale(1);
+            transition: all 0s;
+            cursor: pointer;
+
+            &.ng-enter,
+            &.ng-leave.ng-leave-active {
+                opacity: 0;
+                transform: scale(0.88);
+            }
+
+            &.ng-leave,
+            &.ng-enter.ng-enter-active {
+                opacity: 1;
+                transform: scale(1);
+                transition: all .2s;
+            }
+
+            &.default-token {
+                background: #f5f5f5;
+                border-color: #ccc;
+                color: #666;
+                cursor: default;
+            }
+
+        }
+
+    }
+
+    .ui-select-choices-row {
+        strong {
+            text-transform: capitalize;
+        }
+    }
+
+    .select2-chosen {
+        text-transform: capitalize;
+    }
+
+}
+
+.notifications-disabled {
+    opacity: 1;
+    transform: scale(1);
+    transition: all .2s;
+
+    &.ng-enter,
+    &.ng-leave.ng-leave-active {
+        opacity: 0;
+        transform: scale(.65);
+    }
+
+    &.ng-leave,
+    &.ng-enter.ng-enter-active {
+        opacity: 1;
+        transform: scale(1);
+        transition: all .2s;
+    }
+}
+
+.notifications-disabled-prompt {
+    margin: 0 auto;
+    padding: 10px 25px;
+    min-height: 68px;
+    font-size: 15px;
+    color: rgba(57, 63, 69, 0.55);
+    border-bottom: 1px dotted #ddd;
+    text-shadow: 0 1px #fff;
+    font-style: normal;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    > section {
+        margin-left: 15px;
+    }
+
+    > i {
+        color: @warning-color;
+        font-size: 45px;
+        text-shadow: 0 2px #fff;
+        font-style: normal;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    h3 {
+        margin: 0;
+        font-size: 20px;
+    }
+
+    a {
+        cursor: pointer;
+
+        &:hover {
+            color: @wwtBlue;
+            text-decoration: underline;
+        }
+    }
+}

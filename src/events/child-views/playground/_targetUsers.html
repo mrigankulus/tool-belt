@@ -1,0 +1,150 @@
+<a class="btn btn-link"
+   ng-if="!EventTypePlayground.isAddingTargetUsers"
+   ng-click="EventTypePlayground.isAddingTargetUsers = true">
+
+    <i class="fa fa-plus"></i> Target Users
+</a>
+
+<section class="panel panel-default" ng-if="EventTypePlayground.isAddingTargetUsers">
+    <div class="panel-heading">Target Users</div>
+
+    <div class="panel-body">
+        <p>The recommended way to subscribe users is to allow them to subscribe themselves via the watcher component and/or the subscriptions application. Be careful not to spam users. <i class="fa fa-smile-o"></i> Don't use this unless you're familiar with events and notifications and you're confident this is the right choice.</p>
+
+        <div class="form-group">
+            <label>Users to Subscribe</label>
+            <br>
+
+            <ui-select multiple
+                       ng-model="EventTypePlayground.requiredTokenData.targetUsers.subscriberUserNames"
+                       title="UserNames">
+
+                <ui-select-match placeholder="Add Users">{{$item}}</ui-select-match>
+
+                <ui-select-choices refresh-delay="200"
+                                   refresh="EventTypePlayground.searchUsersReturningUserNames($select.search)"
+                                   repeat="user in EventTypePlayground.availableUsers | filter:$select.search">
+                      {{ user }}
+                </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group">
+            <label>Restrict Notification to These Users</label>
+            <br>
+            <ui-select multiple
+                       ng-model="EventTypePlayground.requiredTokenData.targetUsers.restrictToUserNames"
+                       title="UserNames">
+
+                <ui-select-match placeholder="Add Users">{{$item}}</ui-select-match>
+
+                <ui-select-choices refresh-delay="200"
+                                   refresh="EventTypePlayground.searchUsersReturningUserNames($select.search)"
+                                   repeat="user in EventTypePlayground.availableUsers | filter:$select.search">
+                      {{ user }}
+                </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group" ng-if="EventTypePlayground.requiredTokenData.targetUsers.subscriberUserNames">
+            <label>Subscribe to Event Type Only</label>
+            <br>
+            <small>Subscribing users through the event subscribes them to all event types for the given resource. Use this to only subscribe them to this event type.</small>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="restrictSubscriptionToThisEventType" ng-model="EventTypePlayground.requiredTokenData.targetUsers.restrictSubscriptionToThisEventType">
+                    <label for="restrictSubscriptionToThisEventType">
+                        <span></span>
+                    </label>
+                </input>
+            </div>
+        </div>
+
+        <div class="form-group" ng-if="!EventTypeDetail.eventType.allowExternalUsers">
+            <label>Allow External Users</label><br>
+            <small>Your event type does not allow external users. You can allow specific external users here.</small>
+            <br>
+            <ui-select multiple
+                       ng-model="EventTypePlayground.requiredTokenData.targetUsers.externalUsersList"
+                       title="UserNames">
+
+                <ui-select-match placeholder="Add Users">{{$item}}</ui-select-match>
+
+                <ui-select-choices refresh-delay="200"
+                                   refresh="EventTypePlayground.searchUsersReturningUserNames($select.search)"
+                                   repeat="user in EventTypePlayground.availableUsers | filter:$select.search">
+                      {{ user }}
+                </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group">
+            <label>Restrict to Profiles</label>
+            <br>
+            <ui-select multiple
+                       ng-model="EventTypePlayground.requiredTokenData.targetUsers.restrictToProfiles">
+
+                <ui-select-match placeholder="Add Users">{{$item.name}}</ui-select-match>
+
+                <ui-select-choices refresh-delay="200"
+                                   refresh="EventTypePlayground.searchProfiles($select.search)"
+                                   repeat="profile.id as profile in EventTypePlayground.availableProfiles | filter:$select.search">
+                      {{ profile.name }}
+                </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group">
+            <label>Restrict to Groups</label>
+            <br>
+            <ui-select multiple
+                       ng-model="EventTypePlayground.requiredTokenData.targetUsers.restrictToGroups">
+
+                <ui-select-match placeholder="Add Users">{{$item.title}}</ui-select-match>
+
+                <ui-select-choices refresh-delay="200"
+                                   refresh="EventTypePlayground.getGroups($select.search)"
+                                   repeat="group.id as group in EventTypePlayground.availableGroups | filter:$select.search">
+                      {{ group.title }}
+                </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group">
+            <label>One Time Email Addresses <br><small>Send a notification to an email address.</small></label>
+            <br>
+            <ui-select multiple
+                       tagging
+                       ng-model="EventTypePlayground.requiredTokenData.targetUsers.oneTimeEmailAddresses"
+                       title="Email Addresses">
+
+                <ui-select-match placeholder="Add Email Address (hit enter)">{{$item}}</ui-select-match>
+
+                <ui-select-choices repeat="email in EventTypePlayground.requiredTokenData.targetUsers.oneTimeEmailAddresses | filter:$select.search">
+                      {{ email }}
+                </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group">
+            <label>Restrict to One Time Email Addresses</label>
+            <br>
+            <small>Ignore subscriptions on event and only send notifications to the <code>oneTimeEmailAddresses</code> you provide.</small>
+            <br>
+            <div class="switch">
+                <input type="checkbox" id="restrictToOneTimeEmailAddresses" ng-model="EventTypePlayground.requiredTokenData.targetUsers.restrictToOneTimeEmailAddresses">
+                    <label for="restrictToOneTimeEmailAddresses">
+                        <span></span>
+                    </label>
+                </input>
+            </div>
+        </div>
+    </div>
+
+</section>

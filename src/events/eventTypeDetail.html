@@ -1,0 +1,146 @@
+<br>
+
+<div class="container event allow-ng-animate default-animation" ng-if="EventTypeDetail.canViewEvents">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section>
+                    <div class="asset-icon"><i>E</i></div>
+                </section>
+
+                <section>
+                    <h1>{{ EventTypeDetail.eventType.title }}</h1>
+
+                    <p>{{ EventTypeDetail.eventType.description }}</p>
+
+                    <p>
+                        <a ui-sref="importExport"><i class="fa fa-arrows-v"></i> Import/Export</a>
+
+                        &nbsp;
+                        |
+                        &nbsp;
+
+                        <a class="clickable" ng-click="EventTypeDetail.historyPanelIsOpen = true"><i class="fa fa-history"></i> History</a>
+
+                        &nbsp;
+                        |
+                        &nbsp;
+
+                        Resource Type:
+                        <a ui-sref="resourceTypeDetail({id: EventTypeDetail.eventType.resourceType.id })">
+                            {{ EventTypeDetail.eventType.resourceType.title }}
+                        </a>
+
+                        &nbsp;
+                        |
+                        &nbsp;
+                        <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/event-types/{{ EventTypeDetail.eventType.id }}" target="_blank">JSON</a>
+                    </p>
+
+                </section>
+
+                <!--
+                <section class="item-header-watch-button">
+                    <dtb-resource-watcher dtb-resource-watcher-settings="EventTypeDetail.watcherSettings"></dtb-resource-watcher>
+                </section>
+                -->
+            </header>
+
+            <div class="item-detail-content-warning error allow-ng-animate default-animation"
+                 ng-if="EventTypeDetail.hasErrors()">
+
+                <i class="fa fa-warning"></i>
+
+                <section>
+                    <p ng-if="EventTypeDetail.eventType.deleted"><strong>Deleted!</strong> This event type has been deleted. Would you like to <strong><a ng-click="EventTypeDetail.restore()">restore</a></strong> it? <i class="fa fa-spinner fa-spin" ng-if="EventTypeDetail.isRestoring"></i></p></p>
+
+                    <p ng-if="EventTypeDetail.eventType.title && !EventTypeDetail.eventType.amqpExchange">This event type has no <strong>RabbitMQ Exchange</strong> associated with it. Without the exchange, users will not be able to subscribe to this event, and things won't work as expected. Please consider adding an exchange via the <strong><a ui-sref=".settings">settings</a></strong> tab.</p>
+
+                    <p ng-if="!EventTypeDetail.eventType.resourceType">The <strong>Resource Type</strong> for this Event is missing. Add a <strong>Resource Type</strong> from the <strong><a ui-sref=".settings">settings</a></strong> tab.</p>
+                </section>
+            </div>
+
+            <div class="item-detail-content-warning allow-ng-animate default-animation" ng-if="EventTypeDetail.isDefaultEventType()">
+
+                <i class="fa fa-info"></i>&nbsp;
+
+                <section ng-if="EventTypeDetail.eventType.id.includes('files-uploaded')">
+                    <p>This is a default event. The <a ui-sref="componentDetail({id: 'wwt-attachments'})">wwt-attachments</a> component (minimum v0.1.7) will fire this event for you at exchange {{ EventTypeDetail.getDefaultExchange() }}.</p>
+                </section>
+
+                <section ng-if="EventTypeDetail.eventType.id.includes('comment-added')">
+                    <p>This is a default event. The <a ui-sref="componentDetail({id: 'wwt-activity-feed'})">wwt-activity-feed</a> component will fire this event for you at exchange {{ EventTypeDetail.getDefaultExchangeForComment() }}.</p>
+                </section>
+            </div>
+
+            <section class="item-detail-content" ng-class="{ 'error': EventTypeDetail.hasErrors() }">
+                <div class="item-detail-content-header short" hl-sticky offset-top="95">
+                    <ul class="nav nav-tabs">
+                        <li ng-repeat="tab in EventTypeDetail.tabs"
+                            ui-sref-active="active"
+                            ng-class="{'pull-right': tab.slug === 'settings'}">
+
+                            <a ui-sref="eventTypeDetail.{{ tab.slug }}">
+                                <i class="fa fa-cog" ng-if="tab.slug === 'settings'"></i>
+                                 {{ tab.displayName }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="notifications-disabled allow-ng-animate" ng-if="EventTypeDetail.eventType.pauseNotifications">
+
+                    <div class="notifications-disabled-prompt" ng-if="!EventTypeDetail.isPromptingToResumeNotification">
+                        <i class="fa fa-warning"></i>
+                        <section>
+                            <h3>Notifications Disabled</h3>
+                            <p>All notifications for this Event Type have been temporarily disabled.
+                                <strong ng-click="EventTypeDetail.isPromptingToResumeNotification = true"><a>Resume?</a></strong>
+                            </p>
+                        </section>
+                    </div>
+
+                    <div class="notifications-disabled-prompt inline-prompt" ng-if="EventTypeDetail.isPromptingToResumeNotification">
+                        <section>
+                            <p>Are you sure you want to <strong>Resume</strong> Notifications <br> for <strong>{{ EventTypeDetail.eventType.title }}</strong> Event Type?</p>
+                        </section>
+
+                        <section>
+                            <a class="btn btn-link" ng-click="EventTypeDetail.isPromptingToResumeNotification = false"> Cancel</a>
+                            <button type="submit" class="btn btn-warning" ng-click="EventTypeDetail.resumeNotifications()"> Resume</button>
+                        </section>
+                    </div>
+
+                </div>
+
+                <ui-view></ui-view>
+
+            </section>
+        </main>
+
+    </article>
+
+    <wwt-focus-panel panel-name="'newResourceTypeForm'"
+                     position="'right'"
+                     header-text="'New Resource Type'"
+                     header-icon="'plus-circle'"
+                     backdrop="true"
+                     >
+         <ng-include src="'resources/newResourceType.html'" ng-controller="NewResourceTypeCtrl as NewResourceType"></ng-include>
+    </wwt-focus-panel>
+</div>
+
+<div class="slide-in-panel sip-right allow-ng-animate"
+     ng-if="EventTypeDetail.historyPanelIsOpen">
+
+    <header class="sip-header">
+        <h3>History</h3>
+        <i class="fa fa-history"></i>
+    </header>
+
+    <section class="sip-body" wwt-scroll-trap="historyPanelScrollTrap">
+        <wwt-resource-event-stream wwt-resource-event-stream-settings="EventTypeDetail.resourceEventStreamSettings"></wwt-resource-event-stream>
+    </section>
+</div>
+
+<div class="page-overlay allow-ng-animate" ng-if="EventTypeDetail.historyPanelIsOpen" ng-click="EventTypeDetail.historyPanelIsOpen = false"></div>

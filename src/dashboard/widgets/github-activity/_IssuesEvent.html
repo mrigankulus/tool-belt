@@ -1,0 +1,1 @@
+<a ng-href="{{ GithubActivity.getLinkToUser(item.actor) }}" target="_blank">{{ item.actor.login }}</a> {{ item.payload.action }} issue <a ng-href="{{ item.payload.issue.html_url }}" target="_blank">{{ item.payload.issue.title }}</a>

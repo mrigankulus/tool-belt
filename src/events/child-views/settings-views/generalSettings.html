@@ -1,0 +1,129 @@
+<div class="form-group">
+    <label>
+        Allow Actor Notifications
+         <i class="fa fa-question-circle popover-trigger"
+            popover-trigger="mouseenter"
+            popover-popup-delay="600"
+            uib-popover-template="'events/child-views/tips/allowActorUserNotification.html'"></i>
+    </label>
+    <br>
+    <div class="switch">
+        <input type="checkbox" id="allowActorUserNotification" ng-model="EventTypeDetail.eventType.allowActorUserNotification">
+        <label for="allowActorUserNotification">
+            <span></span>
+        </label>
+        </input>
+    </div>
+</div>
+
+<div class="form-group">
+    <label>
+        Allow External Users
+         <i class="fa fa-question-circle popover-trigger"
+            popover-trigger="mouseenter"
+            popover-popup-delay="600"
+            uib-popover-template="'events/child-views/tips/allowExternalUsers.html'"></i>
+    </label>
+    <br>
+    <div class="switch">
+        <input type="checkbox" id="allowExternalUsers" ng-model="EventTypeDetail.eventType.allowExternalUsers">
+        <label for="allowExternalUsers">
+            <span></span>
+        </label>
+        </input>
+    </div>
+</div>
+
+<div class="form-group">
+    <label>
+        Pause Events
+         <i class="fa fa-question-circle popover-trigger"
+            popover-trigger="mouseenter"
+            popover-popup-delay="600"
+            uib-popover-template="'events/child-views/tips/pauseEventsTip.html'"></i>
+    </label>
+    <br>
+    <div class="switch">
+        <input type="checkbox" id="eventsArePaused" ng-model="EventTypeDetail.eventType.eventsArePaused">
+        <label for="eventsArePaused">
+            <span></span>
+        </label>
+        </input>
+    </div>
+</div>
+
+
+<div class="form-group">
+    <label>
+        Embed Recipients in TokenData
+         <i class="fa fa-question-circle popover-trigger"
+            popover-trigger="mouseenter"
+            popover-popup-delay="600"
+            uib-popover-template="'events/child-views/tips/embedRecipientsInTokenData.html'"></i>
+    </label>
+    <br>
+    <div class="switch">
+        <input type="checkbox" id="embedRecipientsInTokenData" ng-model="EventTypeDetail.eventType.embedRecipientsInTokenData">
+        <label for="embedRecipientsInTokenData">
+            <span></span>
+        </label>
+        </input>
+    </div>
+</div>
+
+<div class="form-group">
+    <label>
+        Disable Activity Feed Events
+         <i class="fa fa-question-circle popover-trigger"
+            popover-trigger="mouseenter"
+            popover-popup-delay="600"
+            uib-popover-template="'events/child-views/tips/disableActivityFeedEvents.html'"></i>
+    </label>
+    <br>
+    <div class="switch">
+        <input type="checkbox" id="disableActivityFeedEvents" ng-model="EventTypeDetail.eventType.disableActivityFeedEvents">
+        <label for="disableActivityFeedEvents">
+            <span></span>
+        </label>
+        </input>
+    </div>
+</div>
+
+<div class="form-group">
+    <label>
+        Include Privacy Disclaimer in Emails
+    </label>
+    <br>
+    <div class="switch">
+        <input type="checkbox" id="includePrivacyDisclaimer" ng-model="EventTypeDetail.eventType.includePrivacyDisclaimer">
+        <label for="includePrivacyDisclaimer">
+            <span></span>
+        </label>
+        </input>
+    </div>
+</div>
+
+<div class="form-group" ng-if="EventTypeDetail.availableProfiles">
+    <label>
+        Restrict To Profiles
+         <i class="fa fa-question-circle popover-trigger"
+            popover-trigger="mouseenter"
+            popover-popup-delay="600"
+            uib-popover-template="'events/child-views/tips/restrictToProfiles.html'"></i>
+    </label>
+
+    <ui-select multiple
+               tagging
+               tagging-label=""
+               ng-model="EventTypeDetail.eventType.profiles"
+               limit="30"
+               title="UserNames">
+
+        <ui-select-match placeholder="Add Profiles">{{EventTypeDetail.getProfileNameForId($item.id)}}</ui-select-match>
+
+        <ui-select-choices repeat="profile in EventTypeDetail.availableProfiles | filter:$select.search | limitTo:$select.limit">
+              {{ profile.name }}
+        </ui-select-choices>
+
+    </ui-select>
+</div>

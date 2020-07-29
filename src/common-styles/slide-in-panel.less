@@ -1,0 +1,126 @@
+.slide-in-panel {
+    position: fixed;
+    top: @app-toolbar-height + @navbar-height;
+    bottom: 0;
+    min-width: 450px;
+    max-width: 550px;
+    background: #fafafa;
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+
+    @media all and (max-width: 480px) {
+        width: 100%;
+        min-width: 100%;
+    }
+
+    &.sip-right {
+        right: 0;
+        width: 35%;
+        border-left: 1px solid #ccc;
+
+        transition: all 0.2s;
+        .translate(0, 0);
+
+        &.ng-enter,
+        &.ng-leave.ng-leave-active {
+            .translate(100%, 0);
+        }
+
+        &.ng-leave,
+        &.ng-enter.ng-enter-active {
+            .translate(0, 0);
+        }
+    }
+}
+
+wwt-focus-panel .slide-in-panel.sip-right {
+    top: 0;
+    width: 94%;
+    min-width: 415px;
+    border: none;
+    box-shadow: -3px 0 4px 0 rgba(0, 0, 0, 0.25);
+    border-left: none;
+}
+
+.sip-header {
+    padding: 0 15px;
+    background: #373737;
+    box-shadow: 0 2px 4px -1px rgba(55, 55, 55, 0.9);
+    display: flex;
+    align-items: center;
+    min-height: @sip-header-height;
+    height: @sip-header-height;
+    z-index: 2;
+
+    h3 {
+        margin: 0;
+        color: #fff;
+        font-size: 14px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    i {
+        position: absolute;
+        top: 0;
+        right: 8px;
+        font-size: 55px;
+        color: rgba(255, 255, 255, 0.05);
+        z-index: 1;
+
+        &.fa-plus-circle {
+            top: 1px;
+        }
+    }
+
+}
+
+.sip-sub-header {
+    display: flex;
+    align-items: center;
+    min-height: 45px;
+    background: #fff;
+    border-bottom: 1px solid #dbdee0;
+    padding: 0 17px;
+}
+
+.sip-body {
+    overflow: auto;
+    height: 100%;
+}
+
+.sip-container {
+    padding: 20px;
+}
+
+.sip-footer {
+    padding: 0 15px;
+    position: absolute;
+    bottom: 0;
+    height: @sip-footer-height;
+    width: 100%;
+    background-color: rgba(224, 224, 224, 0.95);
+    border-top: 1px solid #c1c4cb;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 3;
+
+    .btn-link {
+        margin-right: 4px;
+        color: #888;
+    }
+
+}
+
+.history-panel {
+    padding: 20px;
+    overflow: auto;
+}
+
+subscription-panel {
+    position: relative;
+    height: calc(~"100vh - 95px");
+}

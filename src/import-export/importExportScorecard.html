@@ -1,0 +1,52 @@
+<br><br>
+
+<div class="container">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>Import/Export</h1>
+
+                    <p>Import/Export allows you to easily transfer API Exceptions throughout different environments. Export in one environment (ex. DEV) and import in another (ex. PROD).</p>
+
+                </section>
+            </header>
+
+            <div class="item-detail-content-warning">
+                <i class="fa fa-warning"></i>
+                <p><strong>Beta!</strong> Import/Export is a beta feature that should be used with caution. It currently only supports API Exceptions for the Endpoint-Security-Analyzer.</p>
+            </div>
+
+            <section class="item-detail-content">
+                <br>
+                <div class="blank-slate-tab" ng-if="ImportExportScorecard.isOnLandingPage()">
+                    <i class="fa fa-arrows-v"></i>
+
+                    <section>
+                        <h2>Are we importing or exporting?</h2>
+                    </section>
+                </div>
+
+                <hr class="dashed" ng-if="ImportExportScorecard.isOnLandingPage()" />
+
+                <div class="columns with-padding import-welcome-options" ng-if="ImportExportScorecard.isOnLandingPage()">
+                    <section class="text-center" ui-sref=".export">
+                        <h3 class="uppercase"><i class="fa fa-cloud-upload"></i> Export</h3>
+                        <p class="muted">Export will allow you to select items to export, and give you a JSON representation of those items. Copy that JSON to your clipboard, then paste it into the Import section of the environment you'd like to copy to.</p>
+                    </section>
+
+                    <section class="text-center" ui-sref=".import">
+                        <h3 class="uppercase"><i class="fa fa-cloud-download"></i> Import</h3>
+                        <p class="muted">If you already have JSON that you've exported from another environment, select import to add those items in this environment.</p>
+                    </section>
+                </div>
+
+                <!-- import or export view -->
+                <ui-view></ui-view>
+
+            </section>
+        </main>
+
+    </article>
+
+</div>

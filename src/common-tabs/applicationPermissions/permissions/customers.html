@@ -1,0 +1,15 @@
+<h2 class="lead text-center">These customer have the appropriate profile to give them access to this application.</h2>
+
+<br>
+
+<ul class="formatted-list two-column" ng-init="ApplicationPermissions.customersStarterLimit = 15; ApplicationPermissions.customersLimit = ApplicationPermissions.customersStarterLimit">
+    <li ng-repeat="customer in ApplicationPermissions.customers | limitTo: ApplicationPermissions.customersLimit">{{ customer.name }}</li>
+</ul>
+
+<section ng-if="ApplicationPermissions.customers.length > ApplicationPermissions.customersLimit"
+         class="text-center">
+
+    <hr>
+
+    <a class="btn btn-link" ng-click="ApplicationPermissions.customersLimit = ApplicationPermissions.customersLimit + ApplicationPermissions.customersStarterLimit">Show More</a>
+</section>

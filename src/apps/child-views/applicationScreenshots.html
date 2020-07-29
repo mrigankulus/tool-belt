@@ -1,0 +1,13 @@
+<br />
+
+<div class="blank-slate-tab" ng-if="ApplicationScreenshots.application.appName === 'Dev Tool Belt'" style="margin-top: 25px;">
+    <i class="fa fa-smile-o"></i>
+
+    <section>
+        <h2>You're looking at it, silly!</h2>
+
+        <p>This is the Dev Tool Belt! Browse around.</p>
+    </section>
+</div>
+
+<wwt-attachments wwt-attachments-settings="attachmentsSettings" ng-if="ApplicationScreenshots.application.id && ApplicationScreenshots.application.appName !== 'Dev Tool Belt'"></wwt-attachments>

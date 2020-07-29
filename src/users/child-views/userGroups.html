@@ -1,0 +1,64 @@
+<br>
+<div class="item-detail-content-header" style="align-items: center;">
+    <section>
+        <div class="resource-types-search">
+            <i class="fa fa-search" ng-if="!UserGroups.isSearching"></i>
+            <i class="fa fa-spin fa-spinner" ng-if="UserGroups.isSearching"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="UserGroups.searchText"
+                   ng-model-options="{ debounce: 300 }"
+                   ng-change="UserGroups.loadGroups(1)"
+                   tabindex="0"
+                   placeholder="Search Groups">
+
+        </div>
+    </section>
+
+    <!--
+    <section>
+      <div class="alert alert-warning" style="min-width: 600px; margin: 0;">
+        Does not include dynamic groups like <code>internal-access</code> and <code>customer-access</code>.
+      </div>
+    </section>
+    -->
+
+    <section class="item-detail-header-actions">
+        <a class="btn btn-link btn-xs"
+           ui-sref="groups">Manage Groups</a>
+    </section>
+</div>
+
+<section ng-if="UserGroups.loaded && !UserGroups.groups.length">
+    <br><br>
+
+    <div class="blank-slate-tab">
+        <i class="fa fa-users"></i>
+
+        <section>
+            <h2>No Groups</h2>
+
+            <p>There were not groups found.</p>
+        </section>
+    </div>
+</section>
+
+<section class="allow-ng-animate default-animation" ng-if="UserGroups.groups.length">
+    <div class="cards">
+        <group-card class="card-outer" group="group" ng-repeat="group in UserGroups.groups"></group-card>
+    </div>
+</section>
+
+<div class="pagination-wrapper" ng-if="UserGroups.pagination && UserGroups.pagination.pages > 1">
+    <ul uib-pagination=""
+        v-if="UserGroups.pagination && UserGroups.pagination.total"
+        total-items="UserGroups.pagination.total"
+        ng-model="UserGroups.currentPageNumber"
+        max-size="8"
+        class="pagination-sm"
+        boundary-link-numbers="false"
+        rotate="true"
+        ng-change="UserGroups.loadGroups(UserGroups.currentPageNumber)"></ul>
+</div>

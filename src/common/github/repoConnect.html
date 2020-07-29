@@ -1,0 +1,50 @@
+<form class="repo-connect-form"
+      ng-submit="RepoConnect.connectRepo()"
+      ng-if="!RepoConnect.connectedRepo"
+      ng-class="{inline: inline}">
+
+    <h3 ng-if="!inline">Connect Github Repo</h3>
+
+    <!-- todo: some conditional styling would be better -->
+    <br ng-if="!inline">
+
+    <div class="form-group">
+
+        <ui-select ng-model="RepoConnect.selectedRepo"
+                   limit="30"
+                   ui-select-focus-input
+                   autofocus="true"
+                   ng-change="RepoConnect.onSelectedRepo($select.selected)">
+
+            <ui-select-match placeholder="Add GitHub Repo..." allow-clear="true">
+                {{ $select.selected.owner.login }} / {{ $select.selected.name }}
+            </ui-select-match>
+
+            <ui-select-choices
+                refresh="RepoConnect.searchRepos($select.search)"
+                refresh-delay="200"
+                repeat="repo in RepoConnect.availableRepos | filter: $select.search | limitTo:$select.limit">
+
+                <div>
+                     <span ng-bind-html="repo.owner.login | highlight: $select.search"></span>
+                      / <span ng-bind-html="repo.name | highlight: $select.search"></span>
+                </div>
+            </ui-select-choices>
+
+        </ui-select>
+
+    </div>
+
+    <!-- todo: some conditional styling would be better -->
+    <br ng-if="!inline">
+
+    <footer class="form-actions">
+        <section>
+            <button class="btn btn-primary"
+                    type="submit"
+                    ng-disabled="!RepoConnect.newRepo.repo || !RepoConnect.newRepo.org">Connect</button>
+
+            <button class="btn btn-link" type="button" ng-click="RepoConnect.onCancel()">Cancel</button>
+        </section>
+    </footer>
+</form>

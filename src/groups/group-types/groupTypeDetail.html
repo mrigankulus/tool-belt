@@ -1,0 +1,77 @@
+<br>
+<main ng-if="$ctrl.loaded" class="allow-ng-animate default-animation">
+    <h4>
+        <span class="uppercase">{{ $ctrl.groupType.name }}</span><br><br>
+        <small class="muted clickable" ui-sref="groups.groupTypes"><i class="fa fa-angle-left"></i> View All Types</small>
+    </h4>
+
+    <br>
+
+    <div class="columns with-borders">
+        <section>
+            <h4>Groups</h4>
+
+            <div class="resource-types-search">
+                <i class="fa fa-search" ng-if="!$ctrl.isSearching"></i>
+                <i class="fa fa-spin fa-spinner" ng-if="$ctrl.isSearching"></i>
+
+                <input id="secondarySearchInput"
+                       type="text"
+                       class="no-input"
+                       ng-model="$ctrl.searchText"
+                       ng-model-options="{ debounce: 300 }"
+                       ng-change="$ctrl.search($ctrl.searchText)"
+                       tabindex="0"
+                       placeholder="Search Groups"
+                       style="width: 100%;">
+
+            </div>
+
+            <seciton ng-if="$ctrl.loaded && !$ctrl.groups.length">
+                <p class="alert alert-info">You do not have access to any groups in this type.</p>
+            </seciton>
+
+            <section class="allow-ng-animate default-animation" ng-if="$ctrl.groups.length" style="max-height: 50vh; overflow: auto;">
+                <div class="cards-full">
+                    <group-card class="card-outer" group="group" ng-repeat="group in $ctrl.groups"></group-card>
+                </div>
+
+                <hr ng-if="$ctrl.shouldShowShowMore()">
+
+                <p class="text-center" ng-if="$ctrl.shouldShowShowMore()">
+                    <button class="btn btn-link" ng-click="$ctrl.showMore()" ng-click="$ctrl.showMore()">Show All</button>
+                </p>
+            </section>
+
+            <div class="pagination-wrapper" ng-if="$ctrl.pagination && $ctrl.pagination.pages > 1">
+                <ul uib-pagination=""
+                    v-if="$ctrl.pagination && $ctrl.pagination.total"
+                    total-items="$ctrl.pagination.total"
+                    ng-model="$ctrl.currentPageNumber"
+                    max-size="8"
+                    class="pagination-sm"
+                    boundary-link-numbers="false"
+                    rotate="true"
+                    ng-change="$ctrl.onPageChange()"></ul>
+            </div>
+        </section>
+
+        <section>
+            <h4>Settings</h4>
+
+            <group-type-form ng-if="$ctrl.groupType" group-type="$ctrl.groupType"></group-type-form>
+        </section>
+    </div>
+
+    <hr class="dashed"/>
+
+    <div class="columns with-borders">
+        <section>
+            <h4>Analytics</h4>
+            <analyze-report-frame ng-if="$ctrl.reportId"
+                                  report-id="$ctrl.reportId"
+                                  select="$ctrl.reportSelect"
+                                  get-detail-params="$ctrl.getDetailParams"></analyze-report-frame>
+        </section>
+    </div>
+</main>

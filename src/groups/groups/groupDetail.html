@@ -1,0 +1,37 @@
+<br>
+<main ng-if="$ctrl.group" class="allow-ng-animate default-animation">
+    <h4>
+        <span class="uppercase">{{ $ctrl.group.title }}</span><br>
+        <span style="font-size: 14px; margin: 10px 0; display: inline-block;">{{ $ctrl.group.description }}</span>
+
+        <div class="columns with-borders">
+            <section class="flex-none" style="padding-left: 0; padding-right: 10px;">
+                <small><a class="muted clickable" ui-sref="groups"><i class="fa fa-angle-left"></i> View All Groups</a></small>
+            </section>
+
+            <section class="flex-none" style="padding-left: 10px;">
+                <small><a class="muted clickable" ng-click="wwtFocusPanelSVC.togglePanel('historyPanel')"><i class="fa fa-history"></i> History</a></small>
+            </section>
+        </div>
+    </h4>
+
+    <br>
+
+    <div class="columns with-borders">
+        <section>
+            <ng-include src="'groups/groups/vueGroups.html'" ng-controller="VueGroupsCtrl as $ctrl"></ng-include>
+        </section>
+
+        <section>
+            <ng-include src="'groups/groups/groupSettings.html'" ng-controller="GroupSettingsCtrl as $ctrl"></ng-include>
+        </section>
+    </div>
+</main>
+
+<wwt-focus-panel panel-name="'historyPanel'" position="'right'" header-text="'History'" header-icon="'history'" backdrop="true">
+    <section class="fp-container">
+        <wwt-activity-feed type="resourceHistory"
+                           resource="$ctrl.feedSettings"
+                           ng-if="$ctrl.feedSettings"></wwt-activity-feed>
+    </section>
+</wwt-focus-panel>

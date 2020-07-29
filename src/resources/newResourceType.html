@@ -1,0 +1,66 @@
+<main class="container new-asset-form">
+
+    <form name="newResourceTypeForm" ng-submit="NewResourceType.create()">
+
+        <div class="fp-form-validation-msg error allow-ng-animate" ng-if="NewResourceType.titleAlreadyExists">
+            <p ng-if="NewResourceType.titleAlreadyExists && !NewResourceType.titleIsRestorable">Sorry, that title is already in use.</p>
+            <p ng-if="NewResourceType.titleAlreadyExists && NewResourceType.titleIsRestorable">That title has been used and deleted. Please use a <br> different title, or
+                <strong class="clickable" ng-click="NewResourceType.restoreResourceType(NewResourceType.titleIsRestorable)"
+                        analytics=" 'Asset Restored', 'Resource Type Restored', NewResourceType.new.title + ' (id: ' + NewResourceType.new.id + ')' ">
+                    Restore "{{ NewResourceType.new.title }}"</strong>.</p>
+        </div>
+
+        <div class="form-group required" ng-class="{'has-error': NewResourceType.titleAlreadyExists}">
+            <label id="title">TITLE</label>
+
+            <p><small>A human-readable name used to describe the Resource Type throughout the user interface. A good name might be Service Quote.</small></p>
+
+            <input id="resourceTypeTitle" ng-model="NewResourceType.new.title"
+                   placeholder="Ex: Service Quote" autocomplete="off" required="true"
+                   ng-model-options="{ debounce: { 'default': 500, 'blur': 0 } }"
+                   ng-change="NewResourceType.validateTitle()" />
+        </div>
+
+        <div class="form-group required">
+
+            <label id="title">PLURAL TITLE</label>
+
+            <p><small>The plural title will be used for other applications and components when referencing this resource type in a plural context.</small></p>
+
+            <input ng-model="NewResourceType.new.titlePlural"
+                   placeholder="Ex: Service Quotes"
+                   required="true" />
+        </div>
+
+        <div class="form-group required">
+            <label id="id">ID</label>
+
+            <p><small>The slug version of the title that is used by developers to create associations between Resource Types.</small></p>
+
+            <input ng-model="NewResourceType.new.id" placeholder="Ex: service-quote" disabled="disabled" required="true" />
+        </div>
+
+        <div class="form-group required">
+            <label id="description">DESCRIPTION</label>
+
+            <p><small>A brief explanation describing the Resource Type.</small></p>
+
+            <textarea msd-elastic rows="3" ng-model="NewResourceType.new.description" required="true"></textarea>
+        </div>
+
+        <div class="form-actions split fixed-footer">
+            <section>
+                <button type="submit" class="btn btn-primary"
+                        ng-disabled="!newResourceTypeForm.$valid || NewResourceType.titleAlreadyExists"> Submit
+                    <i class="fa fa-spinner fa-spin" ng-if="NewResourceType.isCreatingResourceType"></i>
+                    <i class="fa fa-thumbs-up" ng-if="NewResourceType.hasCreatedResource"></i>
+                </button>
+                <a class="btn btn-link" ng-if="!NewEventType.isAddResourceTypeForm" ng-click="wwtFocusPanelSVC.closePanel('newResourceTypeForm')"> Cancel</a>
+
+                <a class="btn btn-link" ng-if="NewEventType.isAddResourceTypeForm" ng-click="NewEventType.isAddResourceTypeForm = false"> Cancel</a>
+            </section>
+        </div>
+
+    </form>
+
+</main>

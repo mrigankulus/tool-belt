@@ -1,0 +1,124 @@
+<br>
+
+<div class="container event allow-ng-animate default-animation" ng-if="EventTypes.canViewEvents">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>Event Types
+                        <div class="btn btn-link btn-xs" uib-dropdown is-open="status.isopen">
+                            <button class="btn btn-link btn-xs" uib-dropdown-toggle>
+                                Help <i class="fa fa-caret-down"></i>
+                            </button>
+
+                            <ul class="dropdown-menu" uib-dropdown-menu>
+                                <li ng-class="{active: false}"><a ui-sref="eventTypes.howTo">General Info</a></li>
+                                <li class="divider"></li>
+                                <li><a ui-sref="eventTypes.howTo.ui"><i class="wwt-icon-code"></i> UI</a></li>
+                                <li><a ui-sref="eventTypes.howTo.grails"><i class="wwt-icon-grails"></i> Grails</a></li>
+                                <li><a ui-sref="eventTypes.howTo.node"><i class="wwt-icon-node-js"></i> Node.js</i></a></li>
+                            </ul>
+                        </div>
+
+                        <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/event-types" target="_blank">JSON</a>
+                    </h1>
+
+                    <p>Events are actions that an application produces to allow for outside applications to kick off a related process.</p>
+
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95"
+                     ng-if="!EventTypes.isViewingHowTo()">
+
+                    <section>
+                        <div class="resource-types-search">
+                            <i class="fa fa-search"></i>
+
+                            <input id="secondarySearchInput"
+                                   type="text"
+                                   class="no-input"
+                                   ng-model="EventTypes.eventTypeSearchText"
+                                   tabindex="0"
+                                   placeholder="Search Event Types" />
+                        </div>
+                    </section>
+
+                    <section class="item-detail-header-actions">
+                        <a class="btn btn-link btn-xs" ui-sref="importExport">Import/Export</a>
+
+                        <button class="btn btn-primary btn-xs" ng-click="wwtFocusPanelSVC.togglePanel('newEventTypeForm')" auto-focus="#eventTypeTitle">
+                            <i class="fa fa-plus"></i> Add New Event Type
+                        </button>
+                    </section>
+                </div>
+
+                <!-- todo: should probably explore named views -->
+                <ui-view ng-if="EventTypes.isViewingHowTo()"></ui-view>
+
+                <div class="primary-loader" ng-if="!EventTypes.isViewingHowTo()" ng-class="{active: EventTypes.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+
+                <section>
+                    <h3 class="divider-title" ng-if="EventTypes.recentEventTypes.length && !EventTypes.eventTypeSearchText && !EventTypes.isViewingHowTo()"><span>Recently Viewed</span></h3>
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="EventTypes.recentEventTypes.length && !EventTypes.eventTypeSearchText && !EventTypes.isViewingHowTo()">
+
+                        <section class="card-outer asset-card" ng-repeat="eventType in EventTypes.recentEventTypes" ng-if="eventType">
+
+                            <a class="card-inner clickable" ui-sref="eventTypeDetail({id: eventType.id})" tabindex="0">
+                                <h3 class="card-header">{{ eventType.title }}</h3>
+
+                                <p class="card-content">{{ eventType.description }}</p>
+
+                                <div class="card-warnings">
+                                    <i class="fa fa-warning" ng-if="eventType.pauseNotifications == true || eventType.amqpExchange == null || eventType.resourceType == null"
+                                       uib-popover-template="'common/eventTypeWarnings.html'" popover-trigger="mouseenter" popover-popup-delay="200" popover-append-to-body="true"></i>
+                                </div>
+                            </a>
+
+                        </section>
+
+                    </div>
+                </section>
+
+                <section>
+                    <h3 class="divider-title" ng-if="EventTypes.recentEventTypes.length && !EventTypes.eventTypeSearchText && !EventTypes.isViewingHowTo()"><span>All</span></h3>
+
+                    <div class="cards allow-ng-animate default-animation" ng-if="EventTypes.eventTypes && EventTypes.eventTypes.length && !EventTypes.isViewingHowTo()">
+
+                        <section class="card-outer asset-card" ng-repeat="eventType in EventTypes.eventTypes | filter: {title: EventTypes.eventTypeSearchText} | orderBy: 'title'">
+
+                            <a class="card-inner clickable" ui-sref="eventTypeDetail({id: eventType.id})" tabindex="0">
+                                <h3 class="card-header">{{ eventType.title }}</h3>
+
+                                <p class="card-content">{{ eventType.description }}</p>
+
+                                <div class="card-warnings">
+                                    <i class="fa fa-warning" ng-if="eventType.pauseNotifications == true || eventType.amqpExchange == null || eventType.resourceType == null"
+                                       uib-popover-template="'common/eventTypeWarnings.html'" popover-trigger="mouseenter" popover-popup-delay="200" popover-append-to-body="true"></i>
+                                </div>
+                            </a>
+
+                        </section>
+
+                    </div>
+                </section>
+
+            </section>
+        </main>
+
+    </article>
+
+    <wwt-focus-panel panel-name="'newEventTypeForm'"
+                     position="'right'"
+                     header-text="'New Event Type'"
+                     header-icon="'plus-circle'"
+                     backdrop="true">
+
+        <ng-include src="'events/newEventType.html'" ng-controller="NewEventTypeCtrl as NewEventType"></ng-include>
+    </wwt-focus-panel>
+
+</div>

@@ -1,0 +1,84 @@
+<br>
+
+<div class="container api">
+
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section>
+                    <div class="asset-icon">
+                        <i>API</i>
+                    </div>
+                </section>
+
+                <section>
+                    <h1>{{ assetState.currentAsset.apiName }} </h1>
+                    <p ng-if="featureFlagsSVC.flagIsActive('versioning')">
+                        <strong> Version {{assetState.currentAsset.version }} &nbsp; | &nbsp; </strong>
+                         {{ assetState.currentAsset.description }}</p>
+                         <p ng-if="!featureFlagsSVC.flagIsActive('versioning')">{{ assetState.currentAsset.description }}</p>
+                    <span>
+                        <span uib-dropdown is-open="status.isopen" dropdown-append-to-body="true">
+                            <a uib-dropdown-toggle class="clickable">
+                                Logs
+                                <span class="caret"></span>
+                            </a>
+
+                            <ul class="dropdown-menu" uib-dropdown-menu>
+                                <li ng-repeat="report in APIDetail.reports">
+                                    <a ng-href="{{ report.url }}" target="_blank">
+                                        {{ report.title }}
+                                    </a>
+                                </li>
+                            </ul>
+
+                        </span>
+
+                        &nbsp; | &nbsp;
+                        <a  ng-class="{ 'documentation-disabled' : !documentationUrlUsable  }" ng-href= "{{ APIDetail.documentationUrl }}" target="_blank" uib-tooltip="You can Update your link in the Settings tab." tooltip-popup-delay="300">Documentation</a>
+                        &nbsp; | &nbsp;
+
+                        <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/apis/{{ assetState.currentAsset.id }}"
+                            target="_blank">JSON</a>
+                    </span>
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+                <div class="item-detail-content-header short" hl-sticky offset-top="95">
+                    <ul class="nav nav-tabs">
+                        <li ng-repeat="tab in APIDetail.tabs | filter:{inTabsDotDotDot: false}" ui-sref-active="active" ng-if="APIDetail.shouldShowVersionsTab()"
+                            ng-class="{'pull-right': tab.slug === 'settings'}">
+
+                            <a ui-sref="apiDetail.{{ tab.slug }}">
+                                <i class="fa fa-cog" ng-if="tab.slug === 'settings'"></i>
+                                {{ APIDetail.getFriendlyTitle(tab.displayName) }}
+                            </a>
+                        </li>
+                        <li class="tab-dot-dot-dot" ng-if="APIDetail.shouldShowTabsDotDotDot()" uib-dropdown ng-class="{'active': APIDetail.isDotDotDotActive()}"
+                            on-toggle="toggled(open)">
+                            <a href uib-dropdown-toggle>...</a>
+                            <ul class="dropdown-menu" uib-dropdown-menu>
+                                <li ng-repeat="tab in APIDetail.tabs | filter:{inTabsDotDotDot: true}" ui-sref-active="active">
+                                    <a ui-sref="apiDetail.{{ tab.slug }}">
+                                        {{ tab.displayName }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="api-location-description-prompt" ng-if="APIDetail.isCloudFoundryPlatformAPI()">
+                    <i class="fa fa-info-circle"></i>
+                    <api-location-description api="APIDetail.api" class="full-width-panel"></api-location-description>
+                </div>
+
+                <ui-view></ui-view>
+
+            </section>
+
+        </main>
+    </article>
+
+</div>

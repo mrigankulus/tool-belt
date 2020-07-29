@@ -1,0 +1,5 @@
+<p><a ng-href="{{ GithubActivity.getLinkToUser(item.actor) }}" target="_blank">{{ item.actor.login }}</a> commented on <a ng-href="{{ item.payload.issue.html_url }}" target="_blank">{{ item.payload.issue.title }}</a></p>
+
+<p ng-if="isDashboard" class="github-comment break-all"><small><span ng-bind-html="item.payload.comment.body | stripTags | limitTo: (isDashboard ? 100 : 1000) | emoticons"></span><a ng-href="{{ item.payload.comment.html_url }}" target="_blank">...</a></small></p>
+
+<github-m-d-comment ng-if="!isDashboard" comment="{{ item.payload.comment.body }}"></github-m-d-comment>

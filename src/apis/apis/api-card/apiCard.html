@@ -1,0 +1,65 @@
+<section class="card-outer asset-card api" ng-class="{'includes-icon': includesIcon}">
+
+    <div class="api-override" ng-if="ApiCard.findOverrideFromApi(api)">
+        <section>
+            <label for="overrideSwitch{{ $index }}">My Override</label>
+        </section>
+
+        <section>
+            <div class="toggle-switch-small">
+                <input type="checkbox" ng-checked="ApiCard.overrideIsActive(api)"
+                    ng-click="ApiCard.toggleOverrideState(api)" class="toggle-switch-small-checkbox"
+                    id="overrideSwitch{{ $id }}">
+
+                <label class="toggle-switch-small-label" for="overrideSwitch{{ $id }}"></label>
+            </div>
+        </section>
+
+    </div>
+
+    <a class="card-inner clickable score-card score-card-{{ api.scoreCard.totalScoreColor }}"
+        ui-sref="apiDetail({id: api.id})" tabindex="0">
+
+        <new-asset-banner item="api"></new-asset-banner>
+
+        <div class="columns api-card-scorebox">
+            <section class="flex-3">
+                <div ng-if="api.activeOverrides.length" class="allow-ng-animate default-animation card-dots"
+                    uib-tooltip="Active Overrides" tooltip-append-to-body="true" tooltip-popup-delay="500">
+
+                    <i class="fa fa-circle" ng-class="{'danger': ApiCard.overrideIsSvcUser(override)}"
+                        ng-repeat="override in api.activeOverrides"></i>
+                </div>
+
+
+                <h3 class="card-header">{{ api.apiName }} <span class="card-version"
+                        ng-if="featureFlagsSVC.flagIsActive('versioning')">| v{{ api.version }}</span></h3>
+                <p class="card-content score-box-ranges">
+                    {{ api.description | truncate }}
+                    <br> Route Prefix: {{ api.routePrefix }}
+                    <br>
+                    <br>
+                    <span
+                        ng-if="ApiCard.env == 'local' || ApiCard.env == 'dev' || ApiCard.env == 'test' || ApiCard.env == 'tst'"
+                        class="label label-default {{api.scoreCard.totalScoreColor}}-background"
+                        style="margin-right: 3px; font-size: 100%">
+                        Score: {{ api.scoreCard.totalScore | number }}
+                    </span>
+                    <div ng-if="ApiCard.findOverrideFromApi(api)">
+                        <!-- make room for api overrides -->
+                        <br>
+                    </div>
+                </p>
+                <div class="card-connections">
+                    <i class="fa fa-github" ng-if="api.connectedRepos && api.connectedRepos.length"></i>
+                    <i class="fa fa-lightbulb-o"
+                        ng-if="api.connectedVisionBoards && api.connectedVisionBoards.length"></i>
+                    <i>
+                        <img src="img/jenkins.png" ng-if="api.connectedJenkinsJobs && api.connectedJenkinsJobs.length">
+                    </i>
+                </div>
+            </section>
+        </div>
+    </a>
+
+</section>

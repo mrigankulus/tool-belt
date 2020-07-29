@@ -1,0 +1,138 @@
+<!-- Todo: having trouble starting this with the github repo
+<repo-connect on-repo-connected="NewApplication.onRepoConnected"></repo-connect>
+-->
+
+<main class="container new-asset-form">
+
+    <div class="blank-slate-tab" ng-if="!NewApplication.canEditApps && NewApplication.permissionsHaveLoaded">
+        <i class="fa fa-lock"></i>
+
+        <section>
+            <p>It looks like you don't have <strong>permission</strong> to create applications. Please contact the service desk to request permission.</p>
+        </section>
+    </div>
+
+    <form name="newApplicationForm" ng-submit="NewApplication.createApplication()" ng-if="NewApplication.canEditApps">
+        <div class="form-group required">
+            <label id="name">NAME</label>
+            <input ng-model="NewApplication.application.appName" required="true" id="inputName" autocomplete="off" />
+        </div>
+
+        <div class="form-group required">
+            <label id="icon">ICON NAME</label>
+
+            <wwt-icon-type-ahead target-model="NewApplication.application.iconName" placeholder="'Ex: thumbs-up'"></wwt-icon-type-ahead>
+        </div>
+
+        <div class="form-group required">
+            <label>URL</label>
+
+            <div class="form-group">
+                <div class="input-group url-input-group">
+                    <span class="no-select">
+
+                        <select ng-model="NewApplication.application.fixedUrlFlag" class="no-select">
+                            <option value="N">wwt.com/app-name</option>
+                            <option value="Y">your-custom.url.com/sweetness</option>
+                        </select>
+
+
+                        https://{{ NewApplication.application.fixedUrlFlag === 'N' ? 'www.wwt.com/' : '' }}
+                         <i class="fa fa-caret-down"></i>
+                    </span>
+
+                    <input id="url" ng-model="NewApplication.application.appLocation" placeholder="app-name" required="true" autocomplete="off" />
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="form-group required">
+            <label id="description">DESCRIPTION</label>
+            <br>
+            <textarea msd-elastic ng-model="NewApplication.application.appDescription" required="true"></textarea>
+        </div>
+
+        <section class="advanced-settings" ng-if="NewApplication.application.isViewingAdvancedSettings">
+            <hr>
+
+            <div class="form-group">
+                <label>MOBILE OPTIMIZED</label>
+                <select ng-model="NewApplication.application.mobileEnabledFlag">
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>SHOW IN APP SWITCHER</label>
+                <select ng-model="NewApplication.application.showInNav">
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>ALL INTERNAL USERS</label>
+                <select ng-model="NewApplication.application.allInternalFlag">
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>ALL EXTERNAL USERS</label>
+                <select ng-model="NewApplication.application.allExternalFlag">
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label>DEFAULT EXTERNAL FLAG</label>
+
+                <p><small>Let's leave this disabled until we do some more testing as this will impact other things.</small></p>
+
+                <select disabled="disabled" ng-model="NewApplication.application.defaultExternalApp">
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+            </div>
+
+            <hr>
+
+            <div class="form-group">
+                <label>DEFAULT INTERNAL FLAG</label>
+
+                <p><small>Let's leave this disabled until we do some more testing as this will impact other things.</small></p>
+
+                <select disabled="disabled" ng-model="NewApplication.application.defaultInternalApp">
+                    <option value="Y">Yes</option>
+                    <option value="N">No</option>
+                </select>
+            </div>
+
+        </section><!-- /.advanced-settings -->
+
+        <a class="btn-link clickable"
+            type="none"
+            ng-click="NewApplication.application.isViewingAdvancedSettings = !NewApplication.application.isViewingAdvancedSettings">
+
+            {{ NewApplication.application.isViewingAdvancedSettings ? 'Hide' : 'Show'; }} Advanced Settings
+        </a>
+
+        <div class="form-actions split fixed-footer">
+            <section>
+                <button class="btn btn-primary" type="submit" ng-disabled="!newApplicationForm.$valid"> Submit
+                    <span ng-if="NewApplication.application.isWorking"><i class="fa fa-spinner fa-spin"></i></span>
+                </button>
+                <a class="btn btn-link" ng-click="wwtFocusPanelSVC.closePanel('newApplicationForm')"> Cancel</a>
+            </section>
+        </div>
+
+    </form>
+
+</main>

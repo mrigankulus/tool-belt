@@ -1,0 +1,23 @@
+<section class="card-outer asset-card technology">
+
+<a class="card-inner clickable" ui-sref="technologyDetail({id: technology.id})" tabindex="0">
+
+    <new-asset-banner item="technology"></new-asset-banner>
+
+    <div class="columns">
+        <section class="flex-none">
+            <div class="asset-icon">
+                <i class="wwt-icon-{{ technology.iconName || 'question' }}"></i>
+            </div>
+        </section>
+
+        <section class="flex-3">
+            <h3 class="card-header">{{ technology.name }}</h3>
+
+            <p class="card-content">{{ technology.shortDescription | truncate }}</p>
+        </section>
+
+    </div><!-- /.columns -->
+</a>
+
+</section>

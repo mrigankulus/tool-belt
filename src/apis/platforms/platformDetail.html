@@ -1,0 +1,218 @@
+<section class="allow-ng-animate default-animation" ng-if="PlatformDetail.platform.platformName">
+    <form class="item-detail-content-header-form allow-ng-animate"
+          ng-if="PlatformDetail.isEditing"
+          ng-submit="PlatformDetail.updatePlatform(PlatformDetail.platform)"
+          name="editPlatformForm">
+
+        <div class="columns vertical-center">
+            <section class="flex-2">
+                <div class="form-group">
+                    <label>Platform Name</label>
+                    <input ng-model="PlatformDetail.platform.platformName" id="platformName" placeholder="Ex: CloudFoundry" required="required">
+                </div>
+            </section>
+
+            <section>
+                <div class="form-actions">
+                    <button class="btn btn-primary" ng-disabled="!editPlatformForm.$valid">Submit</button>
+                    &nbsp;
+                    <a class="btn btn-link" ng-click="PlatformDetail.promptToDelete()"><i class="fa fa-trash"></i> Delete</a>
+                    <a class="btn btn-link" ng-click="PlatformDetail.isEditing = false">Cancel</a>
+                </div>
+            </section>
+        </div>
+    </form>
+
+    <div class="item-detail-content-header">
+        <section>
+            <h4><span class="uppercase">{{ PlatformDetail.platform.platformName }}</span> &nbsp; <small class="muted clickable" ui-sref="^">View All <strong>Platforms</strong></small></h4>
+        </section>
+
+        <section>
+            <button class="btn btn-link btn-xs"
+                    ng-click="PlatformDetail.isEditing = true"
+                    ng-if="Platforms.canEditPlatforms"
+                    auto-focus="#platformName">
+
+                <i class="fa fa-pencil"></i> Edit Platform
+            </button>
+        </section>
+    </div>
+    <hr>
+
+    <ul class="formatted-list">
+        <li ng-repeat="environment in PlatformDetail.environments">
+            <div class="columns with-padding"
+                 ng-class="{clickable: Platforms.canEditPlatforms}"
+                 ng-if="!environment.isEditing"
+                 ng-click="PlatformDetail.openEditEnvirnment(environment)">
+
+                <section class="flex-none" style="min-width: 80px;">{{ environment.environment }}</section>
+                <section class="flex-1">URL: {{ environment.baseUrl }}</section>
+                <section class="flex-3">Proxy: {{ environment.proxyUrl }}</section>
+            </div>
+
+            <div class="formatted-list-prompt allow-ng-animate" ng-if="environment.isPromptingToDelete === true">
+                Are you sure?
+                &nbsp;&nbsp;
+                <a class="wwt-mini-btn cancel" ng-click="environment.isPromptingToDelete = false">Cancel</a>
+                <a class="wwt-mini-btn alpha-btn" ng-click="PlatformDetail.deleteEnvironment(environment)">Delete</a>
+            </div>
+
+            <form class="columns with-padding vertical-center"
+                  name="editEnvironmemntForm"
+                  ng-if="environment.isEditing"
+                  ng-submit="PlatformDetail.updateEnvironment(environment)">
+
+                <section>
+
+                    <ui-select class="no-select2"
+                               ng-model="environment.environment"
+                               uib-tooltip="Environment Label"
+                               tooltip-popup-delay="500"
+                               required="true"
+                               ui-select-focus-input>
+
+                        <ui-select-match placeholder="Environment Label" allow-clear="true">
+                            {{ $select.selected }}
+                        </ui-select-match>
+
+                        <ui-select-choices repeat="environmentLabel in PlatformDetail.environmentLabels | filter: $select.search | limitTo:$select.limit">
+                            <span ng-bind-html="environmentLabel | highlight: $select.search"></span>
+                        </ui-select-choices>
+
+                    </ui-select>
+
+                </section>
+
+                <section>
+                    <input class="no-input"
+                           uib-tooltip="Base URL"
+                           tooltip-popup-delay="500"
+                           placeholder="Base URL"
+                           required="true"
+                           ng-model="environment.baseUrl">
+                </section>
+
+                <section>
+                    <input class="no-input"
+                           uib-tooltip="Proxy URL"
+                           tooltip-popup-delay="500"
+                           placeholder="Proxy URL"
+                           required="true"
+                           ng-model="environment.proxyUrl">
+                </section>
+
+                <section>
+                    <div class="form-actions">
+                        <button class="btn btn-primary btn-xs" ng-disabled="!editEnvironmemntForm.$valid">Save</button>
+
+                        &nbsp;
+
+                        <a class="btn btn-link btn-xs" ng-click="environment.isPromptingToDelete = true"><i class="fa fa-trash"></i> Delete</a>
+
+                        <a class="btn btn-link btn-xs" ng-click="environment.isEditing = false">Cancel</a>
+
+                    </div>
+                </section>
+            </form>
+        </li>
+
+        <li class="columns with-padding" ng-if="!PlatformDetail.isAddingEnvironment && Platforms.canEditPlatforms">
+            <section>
+                <span class="clickable formatted-list-highlight-on-hover" ng-click="PlatformDetail.isAddingEnvironment = true"><i class="fa fa-plus-circle"></i> Add Environment</span>
+            </section>
+        </li>
+
+        <li ng-if="PlatformDetail.isAddingEnvironment">
+            <form class="columns with-padding vertical-center"
+                  name="newEnvironmemntForm"
+                  ng-submit="PlatformDetail.createNewEnvironment()">
+
+                <section>
+
+                    <ui-select class="no-select2"
+                               ng-model="PlatformDetail.newEnvironment.environment"
+                               uib-tooltip="Environment Label"
+                               tooltip-popup-delay="500"
+                               required="true"
+                               ui-select-focus-input>
+
+                        <ui-select-match placeholder="Environment Label" allow-clear="true">
+                            {{ $select.selected }}
+                        </ui-select-match>
+
+                        <ui-select-choices repeat="environmentLabel in PlatformDetail.environmentLabels | filter: $select.search | limitTo:$select.limit">
+                            <span ng-bind-html="environmentLabel | highlight: $select.search"></span>
+                        </ui-select-choices>
+
+                    </ui-select>
+
+                </section>
+
+                <section>
+                    <input class="no-input"
+                           uib-tooltip="Base URL"
+                           tooltip-popup-delay="500"
+                           placeholder="Base URL"
+                           required="true"
+                           ng-model="PlatformDetail.newEnvironment.baseUrl">
+                </section>
+
+                <section>
+                    <input class="no-input"
+                           uib-tooltip="Proxy URL"
+                           tooltip-popup-delay="500"
+                           placeholder="Proxy URL"
+                           required="true"
+                           ng-model="PlatformDetail.newEnvironment.proxyUrl">
+                </section>
+
+                <section>
+                    <div class="form-actions">
+                        <button class="btn btn-default btn-xs" ng-disabled="!newEnvironmemntForm.$valid">Save</button>
+
+                        <a class="btn btn-link btn-xs" ng-click="PlatformDetail.newEnvironment = {}; PlatformDetail.isAddingEnvironment = false">Cancel</a>
+                    </div>
+                </section>
+            </form>
+        </li>
+    </ul>
+
+    <br><hr class="dashed"><br>
+
+    <div class="blank-slate-tab" ng-if="PlatformDetail.apis && !PlatformDetail.apis.length">
+        <i>API</i>
+
+        <section>
+            <h2>Nothing Yet</h2>
+
+            <p>There are no APIs in this platform. You can set the platform for an API in that API's settings.</p>
+        </section>
+    </div>
+
+    <h5 class="text-center"
+        ng-if="PlatformDetail.apis && PlatformDetail.apis.length">APIs in this Platform</h5>
+
+    <div class="cards">
+
+        <section class="card-outer asset-card extra-bottom-padding" ng-repeat="api in PlatformDetail.apis">
+
+            <a class="card-inner clickable" ui-sref="apiDetail({id: api.id})" tabindex="0">
+                <h3 class="card-header">{{ api.apiName }}</h3>
+
+                <p class="card-content">{{ api.description }}</p>
+
+                <div class="card-connections">
+                    <i class="fa fa-github" ng-if="api.connectedRepos && api.connectedRepos.length"></i>
+
+                    <i class="fa fa-lightbulb-o" ng-if="api.connectedVisionBoards && api.connectedVisionBoards.length"></i>
+
+                    <i><img src="img/jenkins.png" ng-if="api.connectedJenkinsJobs && api.connectedJenkinsJobs.length"></i>
+                </div>
+            </a>
+
+        </section>
+
+    </div>
+</section>

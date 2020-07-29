@@ -1,0 +1,106 @@
+<br><br>
+
+<section class="item-detail-content-header-form large allow-ng-animate" ng-if="ProfileUserApprovalRoles.isAddingRole">
+
+    <form class="columns vertical-center with-padding" ng-submit="ProfileUserApprovalRoles.addRole()">
+
+        <section></section>
+
+        <section class="flex-2">
+            <br>
+            <div class="form-group">
+                <ui-select ng-model="ProfileUserApprovalRoles.selectedRole"
+                           limit="40"
+                           ui-select-focus-input
+                           autofocus="true"
+                           class="no-select2">
+
+                    <ui-select-match placeholder="Search Roles" allow-clear="true">
+                        {{ $select.selected.application }} // {{ $select.selected.role }}
+                    </ui-select-match>
+
+                    <ui-select-choices
+                        ui-disable-choice="ProfileUserApprovalRoles.choiceIsDisabled(role)"
+                        repeat="role in ProfileUserApprovalRoles.availableRoles | filter: $select.search | limitTo:$select.limit">
+
+                        {{ role.application }} // {{ role.role }}
+                        <small ng-if="ProfileUserApprovalRoles.choiceIsDisabled(role)"><br>-- Role Already in Profile --</small>
+                    </ui-select-choices>
+
+                </ui-select>
+            </div>
+        </section>
+
+        <section>
+            <div class="form-actions">
+                <button class="btn btn-primary"
+                        type="submit"
+                        ng-disabled="!ProfileUserApprovalRoles.selectedRole">
+
+                    Save
+                     <i class="fa fa-spinner fa-spin" ng-if="ProfileUserApprovalRoles.isSavingRole"></i>
+                </button>
+                <a class="btn btn-link" ng-click="ProfileUserApprovalRoles.isAddingRole = false;">Cancel</a>
+            </div>
+        </section>
+    </form>
+
+</section>
+
+<div class="item-detail-overlay" ng-if="ProfileUserApprovalRoles.isAddingRole" ng-click="ProfileUserApprovalRoles.isAddingRole = false"></div>
+
+<div class="item-detail-content-header" ng-if="!ProfileUserApprovalRoles.isLoading && !ProfileUserApprovalRoles.shouldShowBlankSlate()">
+    <section>
+
+        <div class="resource-types-search">
+            <i class="fa fa-search"></i>
+
+            <input id="secondarySearchInput"
+                   type="text"
+                   class="no-input"
+                   ng-model="ProfileUserApprovalRoles.searchText"
+                   ng-model-options="{ debounce: 300 }"
+                   tabindex="0"
+                   placeholder="Search Roles">
+
+        </div>
+
+    </section>
+
+    <section class="item-detail-header-actions">
+        <a class="btn btn-link btn-xs pull-right" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/profiles/{{ ProfileDetail.profile.id }}/user-approval-roles" target="_blank">JSON</a>
+
+        <button class="btn btn-primary btn-xs" ng-click="ProfileUserApprovalRoles.isAddingRole = true" ng-if="ProfileDetail._callerRights.write">
+            <i class="fa fa-plus"></i> Add Role
+        </button>
+    </section>
+</div>
+
+<div class="blank-slate-tab" ng-if="ProfileUserApprovalRoles.shouldShowBlankSlate()">
+    <i class="fa fa-info-circle"></i>
+
+    <section>
+        <p>No roles have been added to the <strong>{{ ProfileDetail.profile.name }}</strong>
+            Profile. <span ng-if="ProfileDetail._callerRights.write"><strong><a ng-click="ProfileUserApprovalRoles.isAddingRole = true">Add a Role</a></strong> to assign it this profile.</span></p>
+    </section>
+</div>
+
+<div class="cards allow-ng-animate default-animation" ng-if="ProfileUserApprovalRoles.roles.length">
+    <section class="card-outer asset-card" ng-repeat="roleAssociation in ProfileUserApprovalRoles.roles | filter:ProfileUserApprovalRoles.searchText">
+
+        <div class="card-trash" ng-if="ProfileDetail._callerRights.write">
+            <i class="fa fa-trash"
+               ng-click="ProfileUserApprovalRoles.removeRoleFromProfile(roleAssociation)"
+               uib-tooltip="Remove Role from Profile."
+               tooltip-popup-delay="500"
+               tooltip-append-to-body="true"></i>
+        </div>
+
+        <a class="card-inner">
+            <h3 class="card-header">{{ roleAssociation.application }}</h3>
+
+            <p class="card-content">{{ roleAssociation.role }}</p>
+        </a>
+
+    </section>
+</div>

@@ -1,0 +1,38 @@
+<br>
+
+<div class="container allow-ng-animate default-animation">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>Groups</h1>
+
+                    <p>Manage groups of users from the <a href="https://github.wwt.com/custom-apps/groups-api" target="_blank" style="text-decoration: underline;">groups-api</a>.</p>
+                </section>
+            </header>
+
+            <div class="alert alert-warning" style="margin-top: 20px;">
+                <div class="pull-right" style="margin-top: -5px;">
+                    <a ng-href="{{ aboutProfileGroupConversionUrl }}" class="btn btn-link pull-right">More Info</a>
+                </div>
+                Heads up! Profiles have been converted to groups. <br>Check <a ng-href="{{ aboutProfileGroupConversionUrl }}">this out</a> for more info and please open a service now ticket assigned to the Core team with any questions or concerns.
+            </div>
+
+            <ul class="nav nav-tabs landing-tabs" auto-focus="#secondarySearchInput">
+                <li ng-class="{active: $state.is('groups') || $state.includes('groups.groupDetail')}">
+                    <a ui-sref="groups">Groups</a>
+                </li>
+
+                <li ng-class="{active: $state.is('groups.groupTypes') || $state.includes('groups.groupTypeDetail')}">
+                    <a ui-sref="groups.groupTypes">Group Types</a>
+                </li>
+            </ul>
+
+            <section class="item-detail-content">
+                <ui-view>
+                    <ng-include src="'groups/groups/groups.html'" ng-controller="GroupsCtrl as $ctrl"></ng-include>
+                </ui-view>
+            </section>
+        </main>
+    </article>
+</div>

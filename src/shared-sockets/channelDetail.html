@@ -1,0 +1,9 @@
+<section style="padding: 20px;">
+    <p>Listening for messages on "{{ Sockets.activeChannel }}".</p>
+
+    <ul class="formatted-list">
+        <li ng-repeat="event in ChannelDetail.events">
+            <json-formatter json="event"></json-formatter>
+        </li>
+    </ul>
+</section>

@@ -1,0 +1,136 @@
+<br>
+
+<div class="container cron-job allow-ng-animate default-animation" ng-if="CronJobs.canViewCronJobs">
+    <article class="item-detail">
+        <main>
+            <header class="item-header">
+                <section class="left-border">
+                    <h1>
+                        Cron Jobs
+                         <a class="btn btn-link btn-xs" ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/crontriggers/triggers" target="_blank">JSON</a>
+                    </h1>
+
+                    <p>Create jobs for your app using the <a href="https://github.wwt.com/custom-apps/crontrigger" target="_blank">cron-trigger API</a>.</p>
+
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+
+                <div class="item-detail-content-header" hl-sticky offset-top="95" ng-if="!EventTypes.isViewingHowTo()">
+                    <section>
+
+                        <div class="resource-types-search">
+                            <i class="fa fa-search"></i>
+
+                            <input id="secondarySearchInput"
+                                   type="text"
+                                   class="no-input"
+                                   ng-model="CronJobs.jobsSearchText"
+                                   tabindex="0"
+                                   placeholder="Search Jobs" />
+                        </div>
+                    </section>
+
+                    <section class="item-detail-header-actions">
+                        <button class="btn btn-primary btn-xs" ng-click="wwtFocusPanelSVC.togglePanel('newCronJobForm')" auto-focus="#id">
+                            <i class="fa fa-plus"></i> Add New Job
+                        </button>
+                    </section>
+                </div>
+
+                <div class="primary-loader" ng-class="{active: CronJobs.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+                <div class="cards allow-ng-animate default-animation" ng-if="CronJobs.jobs && CronJobs.jobs.length">
+
+                    <section class="card-outer asset-card" ng-repeat="job in CronJobs.jobs | filter: CronJobs.jobsSearchText | limitTo: CronJobs.currentCount | orderBy: 'id'">
+
+                        <a class="card-inner clickable" ui-sref="cronJobDetail({id: job.id})" tabindex="0">
+                            <h3 class="card-header">{{ job.id }}</h3>
+
+                            <p class="card-content">Last Run: {{ job.lastRun | friendlyDate }}</p>
+                        </a>
+
+                    </section>
+
+                </div>
+
+                <div class="text-center" ng-if="CronJobs.shouldShowShowMore()">
+                    <hr class="dashed">
+                    <a class="btn btn-link" ng-click="CronJobs.showMore()">
+                        Show More
+                    </a>
+                </div>
+
+            </section>
+        </main>
+
+    </article>
+
+
+    <wwt-focus-panel panel-name="'newCronJobForm'"
+                     position="'right'"
+                     header-text="'New Cron Job'"
+                     header-icon="'plus-circle'"
+                     backdrop="true">
+
+        <section class="fp-container new-asset-form">
+            <form>
+                <div class="fp-form-validation-msg error allow-ng-animate" ng-if="CronJobs.idAlreadyExists">
+                    <p ng-if="CronJobs.idAlreadyExists">Sorry, that ID is already in use.</p>
+                </div>
+
+                <div class="fp-form-validation-msg error allow-ng-animate" ng-if="CronJobs.isHttps()">
+                    <p ng-if="CronJobs.isHttps()">http instead of https please.</p>
+                </div>
+
+                <div class="form-group required" ng-class="{'has-error': CronJobs.idAlreadyExists}">
+                    <label>
+                        ID <small><i class="fa fa-spinner fa-spin" ng-if="NewEventType.isValidatingTitle"></i></small>
+                    </label>
+                    <input ng-model="CronJobs.newJob.id" ng-change="CronJobs.onIdChange()" placeholder="Job ID" required />
+                </div>
+
+                <div class="form-group required">
+                    <label>URL</label>
+                    <input ng-model="CronJobs.newJob.url" placeholder="URL" required />
+                </div>
+
+                <div class="form-group required">
+                    <label>Method</label>
+                    <br>
+                    <div class="no-select">
+                        <select ng-model="CronJobs.newJob.method">
+                            <option value="">HTTP Method</option>
+                            <option value="POST">POST</option>
+                            <option value="PUT">PUT</option>
+                            <option value="GET">GET</option>
+                            <option value="DELETE">DELETE</option>
+                        </select>
+
+                        <span>{{ CronJobs.newJob.method || 'Select' }} <i class="fa fa-caret-down"></i></span>
+                    </div>
+                </div>
+
+                <div class="form-group required">
+                    <label>Schedule</label>
+                    <br>
+                    <cron-selection ng-model="CronJobs.newJob.schedule" config="{quartz: true}"></cron-selection>
+                    <br>
+                    <input ng-model="CronJobs.newJob.schedule" placeholder="Schedule" required />
+                </div>
+
+            </form>
+        </section>
+
+        <section class="fp-footer">
+            <a class="btn btn-primary pull-right"
+               ng-click="CronJobs.createJob()"
+               ng-disabled="!CronJobs.formIsValid()">Submit</a>
+
+            <a class="btn btn-link pull-right"
+               ng-click="wwtFocusPanelSVC.togglePanel('newCronJobForm')">Cancel</a>
+        </section>
+    </wwt-focus-panel>
+
+</div>

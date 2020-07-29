@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="dev-tool-belt" id="ng-app">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title dynamic-title="Dev Tool Belt">Dev Tool Belt</title>
+    <base href="/">
+
+    <link rel="icon" type="image/ico" href="img/favicon.ico">
+    <link href="//fonts.googleapis.com/css?family=Fira+Sans:400,500,500i,700" rel="stylesheet">
+    <!-- element-ui is for some vue components -->
+    <link href="//cdn.apps.wwt.com/packages/artifactory/@wwt:element-ui-theme/1/dist/index.css" type="text/css" rel="stylesheet" />
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/styles/github-gist.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.4.0/highlight.min.js"></script>
+
+    <script type="text/javascript">
+        window.wwtTestBrowserSupportCustom = function(browserTestFunction) {
+            browserTestFunction('Dev Tool Belt', [
+                        {
+                            browserTitle: "Chrome",
+                            minimumVersion: 55,
+                            browserLogo: 'chrome-logo.png',
+                            browserLink: 'https://www.google.com/intl/en_us/chrome/browser/'
+                        },
+                        {
+                            browserTitle: "Firefox",
+                            minimumVersion: 57,
+                            browserLogo: 'firefox-logo.png',
+                            browserLink: 'https://www.mozilla.org/en-US/firefox/new/'
+                        },
+                        {
+                            browserTitle: 'Safari',
+                            minimumVersion: 13,
+                            browserLogo: 'safari-logo.png',
+                            browserLink: 'http://support.apple.com/downloads/#safari'
+                        }
+                    ],
+                    'img/');
+        };
+    </script>
+</head>
+
+<body class="{{ currentEnvironmentId }}">
+
+    <div id="wrapper">
+
+        <message></message>
+
+        <div ng-include src="'titleBar/titleBar.html'"></div>
+
+        <div ng-include src="'nav/nav.html'" ng-if="canViewApp"></div>
+
+        <div id="content-main" ui-view auto-scroll="false" ng-if="canViewApp"></div>
+
+    </div>
+
+    <script type="text/javascript" src="wwtScriptLoader.js"></script>
+</body>
+</html>

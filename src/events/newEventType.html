@@ -1,0 +1,217 @@
+<main class="container new-asset-form">
+
+    <form name="newEventTypeForm" ng-submit="NewEventType.create()">
+
+        <div class="fp-form-validation-msg warning allow-ng-animate" ng-if="NewEventType.shouldShowIdPathWarning()">
+            <p>We recommend using '{{ NewEventType.defualtPathToResourceId }}' for the Resource ID Path on this Resource Type. Users will not be able to subscribe to events if multiple Resource ID Paths are in use.</p>
+        </div>
+
+        <div class="fp-form-validation-msg error allow-ng-animate" ng-if="NewEventType.titleAlreadyExists">
+            <p ng-if="NewEventType.titleAlreadyExists && !NewEventType.titleIsRestorable">Sorry, that title is already in use.</p>
+            <p ng-if="NewEventType.titleAlreadyExists && NewEventType.titleIsRestorable">That title has been used and deleted. Please use a <br> different title, or
+                <strong class="clickable" ng-click="NewEventType.restoreEventType(NewEventType.titleIsRestorable)"
+                        analytics=" 'Asset Restored', 'Event Type Restored', NewEventType.new.title + ' (id: ' + NewEventType.new.id + ')' ">
+                    Restore "{{ NewEventType.new.title }}"</strong>.</p>
+        </div>
+
+        <div class="form-group required" ng-class="{'has-error': NewEventType.titleAlreadyExists}">
+            <label id="title">TITLE
+                <small><i class="fa fa-spinner fa-spin" ng-if="NewEventType.isValidatingTitle"></i></small>
+            </label>
+
+            <p><small>A human-readable name used to describe the Event Type throughout the user interface. A good name might be Quote Won.</small></p>
+
+            <input id="eventTypeTitle"
+                   required="true"
+                   ng-model="NewEventType.new.title"
+                   placeholder="Ex: Quote Won" autocomplete="off"
+                   ng-model-options="{ debounce: { 'default': 500, 'blur': 0 } }"
+                   ng-change="NewEventType.validateTitle()" />
+        </div>
+
+        <div class="form-group required">
+            <label id="id">ID</label>
+
+            <p><small>The slug version of the title that is used by developers to create associations between Event Types.</small></p>
+
+            <input required="true"
+                   ng-model="NewEventType.new.id"
+                   placeholder="Ex: quote-won" disabled="disabled" />
+        </div>
+
+
+        <div class="form-group required">
+            <label id="resourceType">RESOURCE TYPE</label>
+
+            <p><small>Associates a Resource Type to your Event Type.
+                <span ng-if="NewEventType.shouldShowAddResourceTypeButton()">Don't see the one you need?
+                    <strong><a ng-click="NewEventType.openAddResourceTypeForm()" auto-focus="#resourceTypeTitle">Add New Resource Type</a></strong> for your Event Type.
+                </span>
+            </small></p>
+
+            <ui-select required="true"
+                       ng-if="!NewEventType.shouldPrefillResourceType()"
+                       ng-model="NewEventType.new.resourceType"
+                       on-select="NewEventType.setPathToResourceId()"
+                       ui-select-focus-input
+                       title="Add Resource Type">
+
+                <ui-select-match placeholder="Add Resource Type...">{{ $select.selected.title }}</ui-select-match>
+
+                <ui-select-choices repeat="resourceType in NewEventType.resourceTypesOptions | filter:$select.search | orderBy: 'title'">
+                    {{ resourceType.title }}
+                </ui-select-choices>
+
+            </ui-select>
+
+            <input type="text" disabled="disabled"
+                   ng-if="NewEventType.shouldPrefillResourceType()" ng-model="NewEventType.new.resourceType.title" />
+        </div>
+
+        <div class="form-group">
+
+            <label id="relatedAppId">RELATED APP</label>
+
+            <p><small>Associates an Application to your Event Type. This adds the app's icon to notifications and will help users find the right events to subscribe to.</small></p>
+
+            <ui-select ng-model="NewEventType.new.relatedAppId" ui-select-focus-input>
+
+                <ui-select-match placeholder="Add Related Application..." allow-clear="true">
+                    <i class="wwt-icon-{{ $select.selected.iconName }}"></i>
+                    &nbsp;{{ $select.selected.appName }}
+                </ui-select-match>
+
+                <ui-select-choices repeat="app.id as app in NewEventType.apps | filter:$select.search | orderBy: 'appName'">
+                    <i class="wwt-icon-{{ app.iconName }}"></i>
+                    &nbsp;{{ app.appName }}
+                </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group">
+            <label id="amqpExchange">
+                RABBITMQ EXCHANGE
+                 <i class="fa fa-question-circle popover-trigger"
+                    popover-trigger="mouseenter"
+                    popover-popup-delay="600"
+                    uib-popover-template="'events/child-views/tips/rabbitExchange.html'"></i>
+            </label>
+
+            <ui-select ng-model="NewEventType.new.amqpExchange"
+                       ui-select-focus-input
+                       limit="30"
+                       reset-search-input="false"
+                       title="Add RabbitMQ Exchange">
+
+                <ui-select-match placeholder="Add RabbitMQ Exchange..." allow-clear="true">{{ $select.selected.title }}</ui-select-match>
+
+                <ui-select-choices repeat="amqpExchange.title as amqpExchange in NewEventType.amqpExchangeOptions | filter:$select.search | limitTo:$select.limit"
+                                   refresh="amqpExchangeUtil.refreshAmqpResults($select)"
+                                   refresh-delay="0"
+                                   ui-disable-choice="amqpExchange.isUsedBy">
+
+                    <span ng-if="amqpExchange.userEntered"><strong>Create Exchange: </strong>{{ amqpExchange.title }}</span>
+                    <span ng-if="!amqpExchange.userEntered">{{ amqpExchange.title }}</span>
+                    <small ng-if="amqpExchange.isUsedBy">(used by: <strong>{{ amqpExchange.isUsedBy.title }}</strong>)</small>
+                </ui-select-choices>
+
+            </ui-select>
+        </div>
+
+        <div class="form-group required">
+            <label id="description">DESCRIPTION</label>
+
+            <p><small>A brief explanation describing the event in the workflow process in which this Event Type is being created for.</small></p>
+
+            <textarea required="true" rows="3" msd-elastic ng-model="NewEventType.new.description"></textarea>
+        </div>
+
+        <section class="advanced-settings" ng-show="NewEventType.new.isViewingAdvancedSettings">
+            <hr>
+
+            <div class="form-group" ng-if="false">
+                <label id="amqpRoutingKey">ROUTING KEY FILTER</label>
+
+                <p><small>Used for advanced message routing. Defaults to '#' if left blank.</small></p>
+
+                <input ng-model="NewEventType.new.amqpRoutingKey" placeholder="Ex: wwt.service-quoting.quote.won">
+            </div>
+
+            <div class="form-group">
+                <label id="pathToResourceId">
+                    RESOURCE ID PATH
+                     <i class="fa fa-question-circle popover-trigger"
+                        popover-trigger="mouseenter"
+                        popover-popup-delay="600"
+                        uib-popover-template="'events/child-views/tips/pathToResourceId.html'"></i>
+                </label>
+
+                <input ng-model="NewEventType.new.pathToResourceId"
+                       placeholder="Ex: 'quote.won' pathToResourceId would be 'quote.id'"
+                       ng-model-options="{ debounce: { 'default': 300, 'blur': 0 } }">
+            </div>
+
+            <div class="form-group">
+                <label id="queryParams">
+                    QUERY PARAMS
+                     <i class="fa fa-question-circle popover-trigger"
+                        popover-trigger="mouseenter"
+                        popover-popup-delay="600"
+                        uib-popover-template="'events/child-views/tips/queryParams.html'"></i>
+                </label>
+
+                <input ng-model="NewEventType.new.queryParams" placeholder="Ex: pagination=false&log=false">
+            </div>
+
+            <div class="form-group">
+                <label>
+                    Allow Actor Notifications
+                     <i class="fa fa-question-circle popover-trigger"
+                        popover-trigger="mouseenter"
+                        popover-popup-delay="600"
+                        uib-popover-template="'events/child-views/tips/allowActorUserNotification.html'"></i>
+                </label>
+                <br>
+                <div class="switch">
+                    <input type="checkbox" id="allowActorUserNotification" ng-model="NewEventType.new.allowActorUserNotification">
+                    <label for="allowActorUserNotification">
+                        <span></span>
+                    </label>
+                    </input>
+                </div>
+            </div>
+
+        </section>
+
+        <a class="btn-link clickable" type="none"
+           ng-click="NewEventType.toggleAdvancedSettings()">
+            {{ NewEventType.new.isViewingAdvancedSettings ? 'Hide' : 'Show'; }} Advanced Settings
+        </a>
+
+        <div class="form-actions split fixed-footer">
+            <section>
+                <button class="btn btn-primary" type="submit" ng-disabled="!newEventTypeForm.$valid"> Submit
+                    <i class="fa fa-spinner fa-spin" ng-if="NewEventType.isCreatingEventType"></i>
+                    <i class="fa fa-thumbs-up" ng-if="NewEventType.hasCreatedEvent"></i>
+                </button>
+                <a class="btn btn-link" ng-click="wwtFocusPanelSVC.closePanel('newEventTypeForm')"> Cancel</a>
+            </section>
+        </div>
+
+    </form>
+
+</main>
+
+<div class="slide-in-panel sip-right sip-right-secondary allow-ng-animate" ng-if="NewEventType.isAddResourceTypeForm">
+    <header class="sip-header">
+        <h3>New Resource Type</h3>
+        <i class="fa fa-plus-circle"></i>
+    </header>
+
+    <section class="sip-body">
+        <ng-include src="'resources/newResourceType.html'" ng-controller="NewResourceTypeCtrl as NewResourceType"></ng-include>
+    </section>
+</div>
+
+<div class="page-overlay allow-ng-animate" ng-if="NewEventType.isAddResourceTypeForm" ng-click="NewEventType.isAddResourceTypeForm = false"></div>

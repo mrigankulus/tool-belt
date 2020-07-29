@@ -1,0 +1,15 @@
+<h2 class="lead text-center">These users have the appropriate profile to give them access to this application.</h2>
+
+<div class="cards third" ng-init="ApplicationPermissions.usersLimitStart = 12; ApplicationPermissions.usersLimit = ApplicationPermissions.usersLimitStart">
+    <user-card user="user" ng-repeat="user in ApplicationPermissions.users | orderBy: 'fullName' | limitTo: ApplicationPermissions.usersLimit"></user-card>
+</div>
+
+<div class="text-center" ng-if="ApplicationPermissions.users.length > ApplicationPermissions.usersLimit">
+    <hr class="dashed">
+
+    <a class="btn btn-link"
+       ng-click="ApplicationPermissions.usersLimit = ApplicationPermissions.usersLimit + ApplicationPermissions.usersLimitStart">
+
+        Show More
+    </a>
+</div>

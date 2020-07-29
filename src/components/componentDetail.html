@@ -1,0 +1,77 @@
+<br>
+
+<div class="container component">
+
+    <article class="item-detail">
+
+        <main>
+
+            <header class="item-header">
+                <section>
+                    <div class="asset-icon"><i class="wwt-icon-{{assetState.currentAsset.iconName}}"></i></div>
+                </section>
+
+                <section>
+                    <h1>{{ assetState.currentAsset.name }} <small>{{assetState.currentAsset.packageJson.version }}</small></h1>
+
+                    <p>{{ assetState.currentAsset.shortDescription }}</p>
+
+                    <p>
+                        <pinner ng-if="assetState.currentAsset.name" asset-type="component"></pinner>
+
+                        &nbsp;
+                        |
+                        &nbsp;
+
+                        <a ng-href="https://apirouter.apps{{ envExtended.getTargetEnvModifier() }}.wwt.com/dev-assets/components/{{ assetState.currentAsset.id }}" target="_blank">JSON</a>
+                    </p>
+
+                </section>
+
+
+                <section class="item-header-watch-button">
+                    <dtb-resource-watcher dtb-resource-watcher-settings="Component.watcherSettings"></dtb-resource-watcher>
+                </section>
+            </header>
+
+            <section class="item-detail-content">
+                <div class="item-detail-content-header short" hl-sticky offset-top="95">
+                    <ul class="nav nav-tabs">
+                        <li ng-repeat="tab in Component.tabs"
+                            ui-sref-active="active"
+                            ng-class="{'pull-right': tab.slug === 'settings'}">
+
+                            <a ui-sref="componentDetail.{{ tab.slug }}">
+                                <i class="fa fa-cog" ng-if="tab.slug === 'settings'"></i>
+                                 {{ tab.displayName }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <ui-view></ui-view>
+            </section>
+        </main>
+
+        <aside>
+            <section hl-sticky offset-top="116">
+                <div ng-repeat="repo in assetState.currentAsset.connectedRepos">
+                    <github-widget readonly="!Component.canEditComponents" org="repo.org" repo="repo.repo"></github-widget>
+                    <br>
+                </div>
+
+                <div ng-repeat="board in Component.component.connectedVisionBoards">
+                    <vision-widget group-id="board.id" group-name="board.name"></vision-widget>
+                    <br>
+                </div>
+
+                <jenkins-widget></jenkins-widget>
+
+                <ng-include ng-if="assetState.currentAsset.id" src="'common/relate-things-ad.html'"></ng-include>
+
+            </section>
+        </aside>
+
+    </article>
+
+</div>

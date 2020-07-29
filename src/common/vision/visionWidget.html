@@ -1,0 +1,31 @@
+<div class="widget">
+    <header>
+        <h3><a ng-href="{{ VisionWidget.getVisionLink() }}" target="_blank">{{VisionWidget.groupName || 'Vision'}}</a></h3>
+
+        <div class="widget-icon"><i class="fa fa-lightbulb-o"></i></div>
+    </header>
+
+    <main>
+        <div class="widget-error allow-ng-animate" ng-if="VisionWidget.hasError">
+            <p>There was an error loading this Vision Board. <a class="btn btn-link btn-xs" ui-sref=".settings">Mange Settings</a></p>
+        </div>
+
+        <div class="counts">
+
+            <section>
+                <div class="count">
+                    <span class="allow-ng-animate" ng-if="!VisionWidget.isLoadingVisionCounts">{{ VisionWidget.openIdeasCount }}</span>
+                </div>
+                <div class="count-type">Open</div>
+            </section>
+
+            <section>
+                <div class="count">
+                    <span class="allow-ng-animate" ng-if="!VisionWidget.isLoadingVisionCounts">{{ VisionWidget.closedIdeasCount }}</span>
+                </div>
+                <div class="count-type">Completed</div>
+            </section>
+
+        </div>
+    </main>
+</div>

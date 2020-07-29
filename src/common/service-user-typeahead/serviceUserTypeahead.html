@@ -1,0 +1,29 @@
+<ui-select ng-model="targetModelParent.user"
+        limit="40"
+        ui-select-focus-input
+        autofocus="true"
+        ng-change="$ctrl.onSelectUser($select.selected)">
+
+    <ui-select-match placeholder="{{ placeholder || 'User' }}" allow-clear="true">
+        {{ $select.selected.fullName }} (@{{ $select.selected.userName }})
+    </ui-select-match>
+
+    <ui-select-choices
+        refresh="$ctrl.searchUsers($select.search)"
+        refresh-delay="200"
+        repeat="user in $ctrl.availableUsers | filter: $select.search | limitTo:$select.limit">
+
+        <div class="columns vertical-center">
+            <section class="flex-1">
+                <wwt-user-image image-size="small" user-name="user.userName"></wwt-user-image>
+            </section>
+
+            <section class="flex-5">
+                <span ng-bind-html="user.fullName | highlight: $select.search"></span>
+                <br>
+                <span>@{{ user.userName }}</span>
+            </section>
+        </div>
+    </ui-select-choices>
+
+</ui-select>

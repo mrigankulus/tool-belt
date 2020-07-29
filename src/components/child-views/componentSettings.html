@@ -1,0 +1,91 @@
+<br><br>
+
+<div class="blank-slate-tab" ng-if="!Component.canEditComponents && Component.permissionsHaveLoaded">
+    <i class="fa fa-lock"></i>
+
+    <section>
+        <p>It looks like you don't have <strong>permission</strong> to edit this component. Please <a ng-if="Component.getRepoURL()" ng-href="{{ Component.getRepoURL() }}" target="_blank">open an issue</a> <span ng-if="Component.getRepoURL()">or</span> contact the service desk to request permission.</p>
+    </section>
+</div>
+
+<div class="columns with-borders" ng-if="Component.canEditComponents">
+
+    <section>
+
+        <form name="componentSettingsForm" ng-submit="ComponentSettings.update()">
+
+            <div class="form-group required">
+                <label id="name">NAME</label>
+                <input ng-model="assetState.currentAsset.name" required="true" />
+            </div>
+
+            <div class="form-group required">
+                <label id="id">ID</label>
+                <input ng-model="assetState.currentAsset.id" disabled="disabled" required="true" />
+            </div>
+
+            <div class="form-group required">
+                <label id="icon">ICON NAME</label>
+
+                <wwt-icon-type-ahead target-model="assetState.currentAsset.iconName" placeholder="'Ex: thumbs-up'"></wwt-icon-type-ahead>
+            </div>
+
+            <div class="form-group">
+                <label>Technologies <small><a ui-sref="technologies">Manage Technologies</a></small></label>
+
+                <ui-select multiple
+                           tagging
+                           tagging-label=""
+                           ng-model="assetState.currentAsset.technologies"
+                           title="Technologies">
+
+                    <ui-select-match placeholder="Add Technologies">{{$item.name || '** Removed **'}}</ui-select-match>
+
+                    <ui-select-choices refresh-delay="200"
+                                       refresh="ComponentSettings.searchTechnologies($select.search)"
+                                       repeat="tech in ComponentSettings.availableTechnologies | filter:$select.search">
+                          {{ tech.name }}
+                    </ui-select-choices>
+
+                </ui-select>
+            </div>
+
+            <div class="form-group">
+                <label>Keywords</label>
+
+                <keywords-typeahead keyword-parent-object="assetState.currentAsset"></keywords-typeahead>
+            </div>
+
+            <div class="form-group required">
+                <label id="description">DESCRIPTION</label>
+                <br>
+                <textarea msd-elastic rows="3" ng-model="assetState.currentAsset.shortDescription" required="true"></textarea>
+            </div>
+
+            <hr class="dashed">
+
+            <div class="form-actions split">
+                <section>
+                    <button class="btn btn-primary" type="submit" ng-disabled="!componentSettingsForm.$valid">
+                        <span>Save</span>
+                        <span ng-if="ComponentSettings.isWorking"><i class="fa fa-spinner fa-spin"></i></span>
+                        <span ng-if="ComponentSettings.isFinishedWorking"><i class="fa fa-thumbs-up"></i></span>
+                    </button>
+                </section>
+
+                <section>
+                    <a class="btn btn-link" ng-click="ComponentSettings.delete()">Delete</a>
+                </section>
+            </div>
+
+        </form>
+
+    </section>
+
+    <section>
+
+        <connected-items-list></connected-items-list>
+
+    </section>
+
+</div>

@@ -1,0 +1,74 @@
+<br><br>
+
+<div class="blank-slate-tab">
+    <i class="fa fa-exclamation-triangle"></i>
+
+    <section>
+        <p>Profiles have been converted to groups so editing profiles is disabled. Please edit the <strong><a ui-sref="groups.groupDetail({id: 'wwt-profile:' + ProfileDetail.profile.id})">group</a></strong> instead. <strong><a ng-href="{{ aboutProfileGroupConversionUrl }}" target="_blank">More info.</a></strong></p>
+    </section>
+</div>
+
+<!-- Profile editing now happens via the group...keeping this around for a bit
+     for reference.
+<div class="single-column" ng-if="ProfileDetail.isDeveloper">
+    <form name="editProfileForm" ng-submit="ProfileSettings.updateProfile()">
+
+        <div class="form-group required">
+            <label>NAME</label>
+
+            <input ng-model="ProfileDetail.profile.name" ng-disabled="ProfileSettings.disableDeleteProfile()"
+                   placeholder="Sales Rep" required />
+        </div>
+
+        <div class="form-group required">
+            <label>DESCRIPTION</label>
+
+            <textarea msd-elastic rows="3" ng-model="ProfileDetail.profile.description" required></textarea>
+        </div>
+
+        <div class="form-group inline-switch-group">
+            <section>
+                <label>
+                    All Internal Users?
+                     <i class="fa fa-question-circle"
+                        uib-popover="This will give this profile to all internal users. Note that this happens on a scheduled job so it may take some time to effect."
+                        popover-trigger="mouseenter"
+                        popover-popup-delay="300"
+                        popover-append-to-body="true"></i></label>
+            </section>
+
+            <section>
+                <div class="switch">
+                    <input type="checkbox"
+                           id="allInternalUsersCheckbox"
+                           ng-model="ProfileDetail.profile.allInternalUsersFlag"
+                           ng-disabled="ProfileSettings.disableDeleteProfile()"
+                           ng-true-value="'Y'"
+                           ng-false-value="'N'">
+                        <label for="allInternalUsersCheckbox">
+                            <span></span>
+                        </label>
+                    </input>
+                </div>
+            </section>
+        </div>
+
+        <hr class="dashed">
+
+        <div class="form-actions split">
+            <section>
+                <button class="btn btn-primary" ng-disabled="!editProfileForm.$valid"> Save
+                     <i class="fa fa-spinner fa-spin" ng-if="ProfileSettings.isUpdatingProfile"></i>
+                     <i class="fa fa-thumbs-up" ng-if="ProfileSettings.hasUpdatedProfile"></i>
+                </button>
+            </section>
+
+            <section>
+                <a class="btn btn-link" ng-click="ProfileSettings.deleteProfile()" ng-if="!ProfileSettings.disableDeleteProfile()">Delete</a>
+            </section>
+        </div>
+    </form>
+</div>
+-->
+
+<br><br>

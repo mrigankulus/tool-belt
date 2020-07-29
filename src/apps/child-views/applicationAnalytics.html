@@ -1,0 +1,88 @@
+<br>
+
+<div class="columns">
+
+    <section ng-if="ApplicationAnalytics.hasGAConnection()">
+        <div class="nav nav-pills">
+            <li ui-sref="applicationDetail.analytics.pageViews" ui-sref-active="active">
+                <a class="clickable">
+                    Page Views
+                </a>
+            </li>
+
+            <li ui-sref="applicationDetail.analytics.events" ui-sref-active="active">
+                <a class="clickable">
+                    Events
+                </a>
+            </li>
+        </div>
+    </section>
+
+    <section class="pull-right">
+        <ui-select ng-model="ApplicationAnalytics.selectedProfile"
+                   ng-if="Application.canEditApps && ApplicationAnalytics.hasGAConnection()"
+                   ui-select-focus-input
+                   ng-change="ApplicationAnalytics.linkProfile($select.selected)"
+                   class="no-select2 edit-ga-profile-select">
+
+            <ui-select-match>
+                 {{ $select.selected.profileName }}
+            </ui-select-match>
+
+            <ui-select-choices repeat="profile in ApplicationAnalytics.availableProfiles | filter: $select.search">
+                <span ng-bind-html="profile.profileName | highlight: $select.search"></span>
+            </ui-select-choices>
+
+        </ui-select>
+    </section>
+</div>
+
+<br style="clear: both;"><br>
+
+<div class="blank-slate-tab error allow-ng-animate default-animation" ng-if="ApplicationAnalytics.showChartError">
+    <i class="fa fa-warning"></i>
+
+    <section>
+        <h2>Error Loading Analytics</h2>
+        <p>Sorry, there was an error loading your analytics.</p>
+        <p>We're working on it!</p>
+    </section>
+</div>
+
+<section ng-class="{'ga-profile-selection': Application.canEditApps}" ng-if="(!ApplicationAnalytics.hasGAConnection() && ApplicationAnalytics.availableProfiles) || ApplicationAnalytics.isEditingGAProfile">
+
+    <section ng-if="Application.canEditApps">
+        <p class="text-center">
+            Select a view from google analytics to get started. <i class="fa fa-spinner fa-spin" ng-if="ApplicationAnalytics.isLoadingReports"></i>
+        </p>
+
+        <ui-select ng-model="ApplicationAnalytics.selectedProfile"
+                   ui-select-focus-input
+                   ng-change="ApplicationAnalytics.linkProfile($select.selected)">
+
+            <ui-select-match>
+                 {{ $select.selected.profileName }}
+            </ui-select-match>
+
+            <ui-select-choices repeat="profile in ApplicationAnalytics.availableProfiles | filter: $select.search">
+                <span ng-bind-html="profile.profileName | highlight: $select.search"></span>
+            </ui-select-choices>
+
+        </ui-select>
+        <br><br><br>
+    </section>
+
+    <section ng-if="!Application.canEditApps">
+        <div class="blank-slate-tab" ng-if="!Application.canEditApps && Application.permissionsHaveLoaded">
+            <i class="fa fa-lock"></i>
+
+            <section>
+                <p>No analytics profile has been selected for this app. It looks like you do not have sufficient <strong>permissions</strong> to select one. Please <a ng-if="Application.getRepoURL()" ng-href="{{ Application.getRepoURL() }}" target="_blank">open an issue</a> <span ng-if="Application.getRepoURL()">or</span> contact the service desk to request permission.</p>
+            </section>
+        </div>
+    </section>
+</section>
+
+<div class="primary-loader" ng-class="{active: ApplicationAnalytics.isLongLoad}"><i class="fa fa-spinner fa-spin"></i></div>
+
+<ui-view></ui-view>

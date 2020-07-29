@@ -1,0 +1,72 @@
+<a class="btn btn-link"
+   ng-if="!EventTypePlayground.requiredTokenData.embeds"
+   ng-click="EventTypePlayground.requiredTokenData.embeds = {}">
+
+    <i class="fa fa-plus"></i> Embeds
+</a>
+
+<section ng-if="EventTypePlayground.requiredTokenData.embeds">
+    <hr class="dashed">
+
+    <p>Add rich previews to your events. <br>This is beta and currently only works with activity feeds.</p>
+
+    <!-- metaDataGroups -->
+    <article ng-repeat="metaGroup in EventTypePlayground.requiredTokenData.embeds.metaDataGroups" style="padding: 10px; border: 1px solid #ccc; margin-bottom: 10px;">
+        <div class="form-group">
+            <label>Title <small>(Optional)</small></label>
+            <input ng-model="metaGroup.title">
+        </div>
+
+        <section class="panel panel-default">
+            <div class="panel-heading">Data</div>
+
+            <ul class="list-group">
+                <li class="list-group-item columns with-padding" ng-repeat="item in metaGroup.data">
+                    <div class="form-group" style="padding-left: 0">
+                        <label>Title</label>
+                        <input ng-model="item.title" placeholder="Data Title">
+                    </div>
+
+                    <div class="form-group" style="padding-right: 0">
+                        <label>Value (comma separate to list)</label>
+                        <input ng-list="," ng-model="item.value" placeholder="Data Value (comma separate to list)">
+                    </div>
+                </li>
+            </ul>
+
+            <div class="panel-body">
+                <a class="btn btn-primary btn-sm" ng-click="metaGroup.data.push({})">
+                    <i class="fa fa-plus"></i> Add Data Group
+                </a>
+            </div>
+        </section>
+    </article>
+
+    <a class="btn btn-link btn-sm" ng-click="EventTypePlayground.addMetaGroup()">
+        <i class="fa fa-plus"></i> Add a Meta Group
+    </a>
+
+    <br>
+
+
+    <!-- Charts -->
+    <article class="panel panel-default" ng-repeat="chart in EventTypePlayground.requiredTokenData.embeds.charts">
+        <div class="panel-heading">Chart</div>
+
+        <div class="panel-body">
+            <div class="form-group">
+                <label>Labels</label>
+                <input ng-list="," ng-model="chart.labels">
+            </div>
+
+            <div class="form-group">
+                <label>Data</label>
+                <input ng-list="," ng-model="chart.data">
+            </div>
+        </div>
+    </article>
+
+    <a class="btn btn-link btn-sm" ng-click="EventTypePlayground.addAChart()">
+        <i class="fa fa-plus"></i> Add a Chart
+    </a>
+</section>
