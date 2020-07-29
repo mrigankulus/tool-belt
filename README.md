@@ -9,3 +9,6 @@ Uses the [dev-assets-api](https://github.wwt.com/custom-apps/dev-assets-api), al
 
 ## To Run the App Locally
 `npm install`, then `grunt serve`
+
+
+Defunct, code imported to WWT server access
